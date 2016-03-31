@@ -1,0 +1,521 @@
+/*
+ * Base structure
+ */
+
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body {
+    padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/*
+ * 顶部导航栏
+ * Hide default border to remove 1px line.
+ */
+
+.navbar-fixed-top {
+    border: 0;
+}
+
+
+/*
+ * 顶部导航栏左侧的图标链接
+ */
+
+.navbar-header > a > img {
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+
+/* ：用户下拉列表 */
+
+.nav-ul {
+    float: right;
+}
+
+
+/*
+ * 左侧导航栏
+ */
+
+
+/* Hide for mobile, show later */
+
+.sidebar {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+
+/* 侧边导航 */
+
+.nav-sidebar {
+    margin-right: -21px;
+    /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+@media (max-width: 768px) {
+    .nav-sidebar li {
+        /* 小尺寸时，单倍行间距(字体尺寸一倍) */
+        line-height: 1;
+    }
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 40px;
+}
+
+
+/* 链接分类--大类目 */
+
+.sidebar > li {
+    margin-right: -21px;
+    margin-left: -20px;
+    padding-left: 20px;
+    list-style-type: none;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.nav-sidebar > li > a:hover {
+    color: #fff;
+    background-color: #428bca;
+}
+
+
+/* 以下部分用来定义导航栏左侧滚动条样式 */
+
+
+/* 滚动条整体部分，其中的属性有width,height,background,border（就和一个块级元素一样）等。 */
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+    background-color: white;
+    display: auto;
+}
+
+
+/*滚动条里面可以拖动的那部分*/
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgb(188, 188, 188);
+}
+
+
+/*
+ * 内容显示区域
+ */
+
+.main {
+    /*width: 100%;*/
+    /*height: 100%;*/
+    padding: 0 20px 70px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /*background-color: #D8D8D8;*/
+}
+
+@media (min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+
+.main .desc {
+    width: 100%;
+    height: 45px;
+    line-height: 20px;
+    text-align: left;
+    padding-top: 10px;
+    /*font-weight: bolder;*/
+    font-size: 20px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/* 字体图标离右边字体的间距 */
+
+i {
+    margin-right: 5px;
+}
+
+
+/* 设置禁止点击链接的样式 */
+
+
+/* css适用最佳匹配原则 */
+
+
+/*
+*  <li><a class="link1">字体颜色</a></li>
+*  a {
+        color: red;
+    } 
+    li a {
+        color: blue;
+    }
+    在这种情况下，“字体颜色会是蓝色(blue)”
+*/
+
+.dropdown-menu li a[disabled] {
+    cursor: default;
+    color: rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+}
+
+.dropdown-menu li a[disabled]:hover {
+    cursor: pointer;
+}
+
+
+/* 首页 -- 概览*/
+
+.echart-dsp {
+    height: 200px;
+}
+
+
+/* 计算 -- 实例 */
+
+.form-btn {
+    float: right;
+}
+
+
+/* 网络与安全 -- 网络 -- 网络详情页面 子网*/
+
+.col-btn {
+    padding-left: 60px;
+}
+
+.col-bottom {
+    margin-bottom: 10px;
+}
+
+
+/* 网络与安全 -- 网络 -- 端口详情页面 */
+
+.td-divider {
+    width: 2px;
+    border: 1px solid #eee;
+}
+
+
+/* 网络与安全 -- 路由器页面 -- 新建 -- 模态框 */
+
+
+/* :左侧 -- 表单 */
+
+.modal-body .form-item {
+    padding: 25px;
+}
+
+
+/* :左侧 -- 表单 */
+
+.modal-body .form-left {
+    padding-left: 15px;
+}
+
+
+/* :右侧 -- 表格 */
+
+.modal-body .table-title {
+    padding-top: 5px;
+    padding-bottom: 15px;
+    border-top: 0;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.modal-body .table-td-left,
+.modal-body .table-td-right {
+    border-top: 0;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.modal-body .table-td-right {
+    text-align: right;
+    font-weight: bold;
+}
+
+.modal-body .table .table-button {
+    text-align: center;
+}
+
+.table .table-button .table-btn {
+    margin-top: 10px;
+}
+
+.modal-body .table-td-right .td-text {
+    color: orange;
+}
+
+
+/* 网络与安全 -- 安全组 -- 模态框 -- 下拉列表 */
+
+.modal-body .btn-group .rule-select-area {
+    position: absolute;
+    margin-left: 15px;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 550px;
+}
+
+.rule-select-area .rule-protocols dt,
+.rule-select-area .protocols-up dt,
+.rule-select-area .protocols-up dd span {
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.rule-protocols dd,
+.rule-select-area .protocols-up dd {
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    padding: 5px 20px;
+    border: 1px solid #eee;
+    font-size: 14px;
+}
+
+.rule-protocols dd a:hover,
+.protocols-up dd a:hover {
+    text-decoration: none;
+}
+
+.protocols-up dt {
+    margin-top: 10px;
+}
+
+.protocols-up dd {
+    width: 47%;
+}
+
+.protocols-up dd span {
+    font-size: 13px;
+}
+
+.text-warning {
+    color: red !important;
+}
+
+/* 网络与安全　-- 浮动IP页面 -- 模态框 -- "*" 颜色 */
+
+.modal-body .span-stand {
+    color: orange;
+}
+
+.modal-body .span-left {
+    margin-left: -25px;
+}
+
+
+/* 网络与安全 -- 网络页面 -- "搜索"字体图标在输入框右侧内部 */
+
+.input-addon {
+    margin-left: -25px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+td .span-sub {
+    margin-right: 5px;
+    font-weight: bolder;
+}
+
+tfoot .tfoot-dsp {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* 主机监控页面 */
+
+#loading_monitor {
+    position: absolute;
+    width: 300px;
+    top: 150px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+}
+
+#background_monitor {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    filter: alpha(opacity=100);
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+
+/* ：单个图表的高度 */
+
+#loading {
+    position: absolute;
+    width: 300px;
+    top: 150px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+}
+
+.background {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    filter: alpha(opacity=100);
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.monitor-chart {
+    height: 300px;
+    /*background-color: #333*/
+}
+
+
+/* ：设备多选列表 */
+
+.main .desc .monitor-device {
+    margin-top: -15px;
+    margin-left: 30%;
+    width: 8%;
+    display: inline;
+}
+
+
+/* 网络与安全 -- 防火墙 -- 首页右侧按钮列表 */
+
+.li-btn {
+    margin-top: 5px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    float: right;
+    /*display: block;*/
+    list-style-type: none;
+}
+
+
+/* 网络与安全 -- 防火墙 -- 防火墙详情 */
+
+.tr-text th {
+    vertical-align: top;
+}
+
+.tr-text li {
+    list-style-type: none;
+}
+
+
+/* 网络与安全  -- 防火墙 -- 模态框 -- 添加防火墙*/
+
+.modal-size {
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.modal-input {
+    /*width: 100%;*/
+}
+
+.modal-span {
+    padding: 5px;
+    display: inline-block;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+.modal-tab {
+    height: 300px;
+}
+
+.btn-tooltip {
+    padding: 0 1px 0 1px
+}
+
+.info-circle {
+    margin-right: 0
+}
+
+.modal-body div p {
+    font-size: 12px;
+}
+/* 网络 密钥 模态框 */
+
+
+/* 模态框标题居中 -- 模态框公共属性*/
+
+.modal-center {
+    text-align: center;
+}
+
+.modal-right {
+    float: right;
+    color: rgba(0,0,0,0.5);
+}
+
+/* ：文本域 */
+
+.modal-body .form-textarea {
+    width: 35%;
+    margin-left: 15px;
+}
+
+
+/* ：下拉列表 */
+
+.modal-body .form-select {
+    margin-left: 15px;
+}

@@ -1,0 +1,89 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- 实例 -->
+    <div class="desc">网络详情: <span id="project_name">project01-net01</span></div>
+    <!-- 网络概况表格 -->
+    <table>
+        <tbody>
+            <tr>
+                <td colspan="2">网络概况</td>
+            </tr>
+            <tr>
+                <th class="col-md-2">名称</th>
+                <td id="net_name"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">ID</th>
+                <td id="net_id"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">项目ID</th>
+                <td id="net_proId"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">状态</th>
+                <td id="net_status"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">管理员状态</th>
+                <td id="net_managerStatus"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">共享的</th>
+                <td id="net_shared"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">外部网络</th>
+                <td id="net_outNet"></td>
+            </tr>
+            <tr>
+                <th class="col-md-2">MTU</th>
+                <td id="net_mtu"></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <!-- 子网表格 -->
+    <table class="table table-striped sub_netInfo">
+        <!-- <strong>子网</strong> -->
+        <div class="row col-bottom">
+            <div class="col-md-9">子网</div>
+            <div class="col-md-3 col-btn">
+                <button type="button" class="btn btn-primary" disabled tabindex="1"><span class="fa fa-plus-square"></span> 创建子网</button>
+                <button type="button" class="btn btn-danger" disabled tabindex="1"><span class="fa fa-times"></span> 删除子网 </button>
+            </div>
+        </div>
+        <thead>
+            <tr class="active">
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th>名称</th>
+                <th>网络地址</th>
+                <th>IP版本</th>
+                <th>网关IP</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr class="active tfoot-dsp">
+                <td colspan="6">Displaying <span id="item_count">1</span> items</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!-- 端口表格 -->
+    <table class="table table-striped port_infos">
+        <!-- <strong>子网</strong> -->
+        <strong>端口</strong>
+        <thead>
+            <tr class="active">
+                <th>名称</th>
+                <th>固定IP</th>
+                <th>连接设备</th>
+                <th>状态</th>
+                <th>管理员状态</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>

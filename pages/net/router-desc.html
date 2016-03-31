@@ -1,0 +1,174 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">路由详情</div>
+    <div class="row">
+        <li class="li-btn">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm">设置网关</button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">编辑路由</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a>编辑路由</a></li>
+                    <li><a class="text-warning">删除路由</a></li>
+                </ul>
+            </div>
+        </li>
+    </div>
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"><a data-target="#abstract" data-toggle="tab">概况</a></li>
+        <li><a data-target="#interface" data-toggle="tab">接口</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <!-- 概况 -->
+        <div class="tab-pane fade in active" id="abstract">
+            <table>
+                <tbody>
+                    <tr>
+                        <th class="col-md-5">名称</th>
+                        <td>name1</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">ID</th>
+                        <td>ID_Nubmer</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">项目ID</th>
+                        <td>项目ID_Number</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">状态</th>
+                        <td>运行中</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">管理员状态</th>
+                        <td>上</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">外部网关</th>
+                        <td>无</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 接口 -->
+        <div class="tab-pane fade" id="interface">
+            <div class="row">
+                <li class="li-btn">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_create_interface"><i class="fa fa-plus-square"></i>增加接口</button>
+                </li>
+            </div>
+            <div>
+                <table class="table table-striped instance_info">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox">
+                            </th>
+                            <th>名称</th>
+                            <th>固定IP</th>
+                            <th>状态</th>
+                            <th>类型</th>
+                            <th>管理员状态</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td><a href="network_firewall_strategy_desc.html">test-policy03</a></td>
+                            <td></td>
+                            <td>ALLOW_HTTP</td>
+                            <td>False</td>
+                            <td>False</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm">编辑接口</button>
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">切换下拉菜单</span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">删除策略</a></li>
+                                        <li><a data-toggle="modal" data-target="#modal_set_strategy">修改策略</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="active tfoot-dsp">
+                            <!-- <td colspan="2">这里有两列</td> -->
+                            <td colspan="8">Displaying <span id="item_count">1</span> items</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- 模态框 -->
+            <!-- 模态框 新建防火墙 -->
+            <div id="modal_create_interface" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-size">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">增加接口</h4>
+                        </div>
+                        <div class="modal-body modal-input">
+                            <div class="row">
+                                <form role="form" class="col-md-7">
+                                    <div class="form-group">
+                                        <label class="control-lable">子网<span class="span-stand"> *</span></label>
+                                        <select class="form-control">
+                                            <option>子网1</option>
+                                            <option>子网2</option>
+                                            <option>子网3</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-lable">IP地址(可选)
+                                            <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="Example popover"><i class="fa fa-info-circle info-circle"></i></button>
+                                        </label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-lable">名称
+                                            <span class="span-stand"> *</span>
+                                        </label>
+                                        <input type="text" class="form-control" placeholder="project01-router03">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-lable">路由id
+                                            <span class="span-stand"> *</span>
+                                        </label>
+                                        <input type="text" class="form-control" placeholder="id-nubmer">
+                                    </div>
+                                </form>
+                                <div class="col-md-5">
+                                    <h4>说明:</h4>
+                                    <p>
+                                        你可以将一个指定的子网连接到路由器
+                                    </p>
+                                    <p>
+                                        被创建接口的默认IP地址是被选用子网的网关。在此你可以指定接口的另一个IP地址。你必须从上述列表中选择一个子网，这个指定的IP地址应属于该子网
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" class="btn btn-primary">增加接口</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal -->
+            </div>
+        </div>
+    </div>
+</div>

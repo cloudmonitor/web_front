@@ -1,0 +1,512 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">管理安全组规则 :<span class="securitys_group_Id"></span></div>
+    <div id="myTabContent" class="tab-content">
+        <!-- 防火墙 -->
+        <div class="tab-pane fade in active" id="abstract">
+            <div class="row">
+                <li class="li-btn">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_create_firewall"><i class="fa fa-plus-square"></i>添加规则</button>
+                    <button type="button" class="btn btn-danger delete_rule_multi" disabled><i class="fa fa-times"></i>删除规则</button>
+                </li>
+            </div>
+            <div>
+                <table class="table table-striped fireWallRule_info">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox">
+                            </th>
+                            <th>方向</th>
+                            <th>以太网类型(EtherType)</th>
+                            <th>IP协议</th>
+                            <th>端口范围</th>
+                            <th>远端IP前缀</th>
+                            <th>远端安全组</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tfoot class="rule_footer"></tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- 模态框 -->
+        <!-- 模态框 新建规则 -->
+        <div id="modal_create_firewall" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">添加规则</h4>
+                    </div>
+                    <div class="modal-body modal-input">
+                        <div class="row">
+                            <form role="form" class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-lable ">规则<span class="span-stand"> *</span></label>
+                                    <select class="form-control select_rule">
+                                        <option value="tcp">TCP</option>
+                                        <option value="udp">UDP</option>
+                                        <option value="acmp">ACMP</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable ">方向</label>
+                                    <select class="form-control director">
+                                        <option value="ingress">入口</option>
+                                        <option value="outgress">出口</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">打开端口<span class="span-stand"> *</span></label>
+                                    <select class="form-control port_selected">
+                                        <option value="port">端口</option>
+                                        <option value="port_range">端口范围</option>
+                                    </select>
+                                </div>
+                                <div class="form-group port_div">
+                                    <label class="control-lable port_value">端口
+                                        <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="输入大于1小于65535的整数"><i class="fa fa-info-circle info-circle"></i></button>
+                                    </label>
+                                    <input type="text" class="form-control port_text">
+                                </div>
+                                <div class="form-group port_min_div" hidden>
+                                    <label class="control-lable port_value">起始端口号端口
+                                        <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="输入大于1小于65535的整数"><i class="fa fa-info-circle info-circle"></i></button>
+                                    </label>
+                                    <input type="text" class="form-control portmin_text">
+                                </div>
+                                <div class="form-group port_max_div" hidden>
+                                    <label class="control-lable port_value">终止端口号
+                                        <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="输入大于1小于65535的整数"><i class="fa fa-info-circle info-circle"></i></button>
+                                    </label>
+                                    <input type="text" class="form-control portmax_text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">远程
+                                        <span class="span-stand"> *</span>
+                                        <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="限选远程^.^"><i class="fa fa-info-circle info-circle"></i></button>
+                                    </label>
+                                    <select class="form-control">
+                                        <option value="cidr">CIDR</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">CIDR
+                                        <button class="btn btn-sm btn-tooltip badge" data-placement="top" data-toggle="tooltip" title="Example popover"><i class="fa fa-info-circle info-circle"></i></button>
+                                    </label>
+                                    <input type="text" class="form-control CIDR_val" placeholder="0.0.0.0/0">
+                                </div>
+                            </form>
+                            <div class="col-md-6">
+                                <h4>说明:</h4>
+                                <p>云主机可以关联安全组，组中的规则定义了允许哪些访问到达被关联的云主机。安全组由以下三个主要组件组成:</p>
+                                <p><strong>规则：</strong>你可以指定期望的规则模板或者使用定制的规则，选项有定制的TCP规则、定制UDP规则或定制ICMP规则。</p>
+                                <p><strong>打开端口/端口范围:</strong>你选择的TCP和UDP规则可能会打开一个或一组端口.选择“端口范围”将为你提供开始和结束端口的范围.对于ICMP规则你需要指定ICMP类型和所提供的空间里面的代码</p>
+                                <p><strong>远程：</strong>你必指定允许通过该规则的来访源。可以通过以下两种方式实现:IP地址黑名单(CIDR)或者源地址组(安全组)。如果选择一个安全组作为来访源源地址，则该安全组中的任何云主机实例都被允许使用该规则访问任一其他云主机</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary create_rule" data-dismiss="modal">
+                            创建
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </div>
+        <!--         模态框 新建防火墙
+<div id="modal_create_firewall" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-size">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title modal-center" id="myModalLabel">添加防火墙</h4>
+            </div>
+            <div class="modal-body modal-input">
+                <form role="form">
+                    <span class="alert alert-warning modal-span">
+                                    基于策略创建防火墙;策略必须被选定,其他域为可选。
+                                </span>
+                    <div class="form-group">
+                        <label class="control-lable">名称</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-lable">描述</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-lable">策略<span class="span-stand"> *</span></label>
+                        <br>
+                        <input type="text" class="form-control">
+                        <select class="form-control">
+                            <option>策略1</option>
+                            <option>策略2</option>
+                            <option>策略3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-lable">管理员状态<span class="span-stand"> *</span></label>
+                        <br>
+                        <input type="text" class="form-control">
+                        <select class="form-control">
+                            <option>上</option>
+                            <option>中</option>
+                            <option>下</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer modal-center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary">
+                    创建
+                </button>
+            </div>
+        </div>
+        /.modal-content
+    </div>
+    /.modal
+</div> -->
+        <!-- 模态框 修改防火墙 -->
+        <div id="modal_set_firewall" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title modal-center" id="myModalLabel">修改防火墙</h4>
+                    </div>
+                    <div class="modal-body modal-input">
+                        <form role="form">
+                            <span class="alert alert-warning modal-span">
+                                            基于策略创建防火墙;策略必须被选定,其他域为可选。
+                                        </span>
+                            <div class="form-group">
+                                <label class="control-lable">名称</label>
+                                <input type="text" class="form-control" value="name1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">描述</label>
+                                <input type="text" class="form-control" value="desc1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">策略<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control">
+                                    <option>策略1</option>
+                                    <option>策略2</option>
+                                    <option>策略3</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">关联路由</label>
+                                <input type="text" class="form-control" placeholder="这个功能待完成">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">管理员状态<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control">
+                                    <option>上</option>
+                                    <option>中</option>
+                                    <option>下</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer modal-center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            提交
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </div>
+        <!-- 模态框 增加策略 -->
+        <div id="modal_create_strategy" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title modal-center" id="myModalLabel">增加策略</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="myTab" class="nav nav-tabs">
+                            <li class="active"><a href="#add_strategy" data-toggle="tab">增加策略<span class="span-stand"> *</span></a></li>
+                            <li><a href="#strategy_rule" data-toggle="tab">规则</a></li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content modal-tab">
+                            <!-- 增加策略 -->
+                            <form class="tab-pane in active" id="add_strategy" role="form">
+                                <span class="alert alert-warning modal-span">
+                                                    使用一个按序的防火墙规则列表来创建防火墙策略。<br>
+                                                    此处必须指定一个策略名称。在规则”规则“选项卡下按顺序来添加防火墙规则。
+                                                </span>
+                                <div class="form-group">
+                                    <label class="control-lable">名称<span class="span-stand"> *</span></label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">描述</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">
+                                        <input type="checkbox"> 共享的</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">
+                                        <input type="checkbox"> 已审计</label>
+                                </div>
+                            </form>
+                            <!-- 规则 -->
+                            <form class="tab-pane" id="strategy_rule" role="form">
+                                <span class="alert alert-warning modal-span">
+                                                    使用一个按序的防火墙规则列表来创建防火墙策略。<br>
+                                                    此处必须指定一个策略名称。在规则”规则“选项卡下按顺序来添加防火墙规则。
+                                            </span>
+                                <div class="form-group">
+                                    <label class="control-lable">选定的规则</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">可用的规则</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer modal-center">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                添加
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal -->
+            </div>
+        </div>
+        <!-- 模态框 修改策略 -->
+        <div id="modal_set_strategy" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title modal-center" id="myModalLabel">修改策略</h4>
+                    </div>
+                    <div class="modal-body modal-input">
+                        <form role="form">
+                            <!--                  <span class="alert alert-warning modal-span">
+                                            基于策略创建防火墙;策略必须被选定,其他域为可选。
+                                        </span> -->
+                            <div class="form-group">
+                                <label class="control-lable">名称</label>
+                                <input type="text" class="form-control" value="name1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">描述</label>
+                                <input type="text" class="form-control" value="desc1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">规则<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control">
+                                    <option selected="">规则1</option>
+                                    <option>规则2</option>
+                                    <option>规则3</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer modal-center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            提交
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+        <!-- 模态框 添加规则 -->
+        <div id="modal_create_rule" class="modal fade showCreatRules" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title modal-center " id="myModalLabel">添加规则</h4>
+                    </div>
+                    <div class="modal-body modal-input">
+                        <form role="form">
+                            <span class="alert alert-warning modal-span">
+                                            创建防火墙规则。必须指定协议和动作，其他域可选。
+                                        </span>
+                            <div class="form-group">
+                                <label class="control-lable">名称</label>
+                                <input type="text" class="form-control rule_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">描述</label>
+                                <input type="text" class="form-control rule_desc">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable ">协议<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control rule_protocol">
+                                    <option selected value="tcp">TCP</option>
+                                    <option value="udp">UDP</option>
+                                    <option value="icmp">ICMP</option>
+                                    <option value="any">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">动作<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control rule_control">
+                                    <option selected value="allow">允许</option>
+                                    <option value="deny">拒绝</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">源IP地址/子网</label>
+                                <input type="text" class="form-control rule_sourceIP">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">目的IP地址/子网</label>
+                                <input type="text" class="form-control rule_destinationIP">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">源端口/端口范围</label>
+                                <input type="text" class="form-control rule_sourcePort">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">目的端口/端口范围</label>
+                                <input type="text" class="form-control rule_destinationPort">
+                            </div>
+                            <div class="form-control">
+                                <label class="control-lable">
+                                    <input type="checkbox" class="rule_share" value="1"> 共享的</label>
+                                &nbsp;
+                                <label class="control-lable">
+                                    <input type="checkbox" checked class="rule_active" value="2"> 激活</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer modal-center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary creatFirewallRule" data-dismiss="modal">
+                            创建
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </div>
+        <!-- 模态框 修改规则 -->
+        <div id="modal_set_rule" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-size">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title modal-center" id="myModalLabel">修改规则</h4>
+                    </div>
+                    <div class="modal-body modal-input">
+                        <form role="form">
+                            <div class="form-group">
+                                <label class="control-lable">名称</label>
+                                <input type="text" class="form-control" value="name1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">描述</label>
+                                <input type="text" class="form-control" value="desc1">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">协议<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control">
+                                    <option selected>TCP</option>
+                                    <option>UDP</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">动作<span class="span-stand"> *</span></label>
+                                <br>
+                                <!-- <input type="text" class="form-control"> -->
+                                <select class="form-control">
+                                    <option selected>允许</option>
+                                    <option>拒绝</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">源IP地址/子网</label>
+                                <input type="text" class="form-control" value="src_ip">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">目的IP地址/子网</label>
+                                <input type="text" class="form-control" value="dst_ip">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">源端口/端口范围</label>
+                                <input type="text" class="form-control" value="src_port">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">目的端口/端口范围</label>
+                                <input type="text" class="form-control" value="dst_port">
+                            </div>
+                            <div class="form-control">
+                                <label class="control-lable">
+                                    <input type="checkbox"> 共享的</label>
+                                &nbsp;
+                                <label class="control-lable">
+                                    <input type="checkbox" checked> 激活</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer modal-center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            创建
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal -->
+        </div>
+    </div>
+</div>

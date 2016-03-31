@@ -1,0 +1,45 @@
+<div class="main" style="margin-left:225px;padding-bottom:10px">
+<div class="desc">网络拓扑</div>
+</div>
+<div class="col-sm-1" style="width:15%;top:20px;left:16%">
+    <!-- 绘图区  -->
+    <div id="pics_show" style="width: 30%;overflow:hidden;background:#FFF8DC" title="">
+        <div class="">
+            <div id="toolbar"></div>
+        </div>
+    </div>
+</div>
+<!-------- layout -------->
+<div id="content" class="easyui-layout">
+    <div region="center" style="overflow: hidden;padding: 0px;">
+        <div id="centerTabs" class="easyui-tabs" border="false" style="top:20%;height:720px;padding-left: 10px;">
+            <div title="网络拓扑图" id="container" border="false"></div>
+        </div>
+    </div>
+</div>
+<!-- <div id="infoDialog" style="display: none">
+    <div id="infoContent"></div>
+</div> -->
+<!-- 点击提示信息 -->
+<button type="button" class="btn btn-primary btn-lg showInfoButton" data-toggle="modal" data-target="#myModal">
+</button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="modal-title deviceTitle_Info" id="myModalLabel">Modal title</span>
+      </div>
+      <div class="modal-body devicebodyInfo">
+
+      </div>
+      <div class="modal-footer ">
+        <span class="footer_str" style="float:left"></span>
+        <button type="button" class="btn btn-default close_model_toupu" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary  delete_device" data-dismiss="modal" >delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

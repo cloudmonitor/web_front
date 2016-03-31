@@ -1,0 +1,123 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">安全组</div>
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" name="refresh"><i class="fa fa-refresh"></i></button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-square"></i>新建</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default "  id="update_info"  ><i class="fa fa-pencil-square-o "></i>修改</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default sg_del" ><i class="fa fa-trash"></i>删除</button>
+        </div>
+    </form>
+    <br>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title modal-center" id="myModalLabel">
+                                    新建安全组策略
+                                </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizon" role="form">
+                        <div class="form-group">
+                            <label for="firewall_name" class="col-sm-3 control-lable">安全组名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control sg_name" id="firewall_name" placeholder='汉字、字母、数字及"_"，"-"，"@"，"." 组成'>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label for="firewall_desc" class="col-sm-3 control-lable">安全组描述</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control sg_desc" id="firewall_desc" placeholder="建议描述使用场景或简略协议端口信息">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group form-left btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">+添加安全组规则 <span class="caret"></span></button>
+                            <div class="dropdown-menu rule-select-area" role="menu">
+                                <div class="rule-protocols">
+                                    <dl>
+                                        <dt>请选择协议 :</dt>
+                                        <dd><a href="javascript:void(0)" data_value="Any">Any</a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">ICMP</a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">TCP</a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">UDP</a></dd>
+                                    </dl>
+                                </div>
+                                <br>
+                                <div class="protocols-up">
+                                    <dl class="clearfix">
+                                        <dt>按上层协议快速选择 :</dt>
+                                        <dd><a href="javascript:void(0)" data_value="Any">FTP<span>(TCP默认端口21)</span></a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">SSH<span>(TCP默认端口22)</span></a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">HTTP<span>(TCP默认端口80)</span></a></dd>
+                                        <dd><a href="javascript:void(0)" data_value="Any">HTTPS<span>(TCP默认端口443)</span></a></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>协议</th>
+                                    <th>端口</th>
+                                    <th>源IP</th>
+                                    <th>行为</th>
+                                    <th>绑定主机</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <h5>你还没有添加安全组规则</h5>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer modal-center">
+                    <button type="button" class="btn btn-default close_temp" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary createSgInfo" data-dismiss="modal">
+                        确定
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <table class="table table-striped security_info">
+        <thead>
+            <tr class="active">
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class=""></tbody>
+         <tfoot class="rule_footer"></tfoot>
+    </table>
+</div>

@@ -1,0 +1,110 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">密钥</div>
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" name="refresh"><i class="fa fa-refresh"></i></button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-square"></i>新建</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" disabled><i class="fa fa-pencil-square-o"></i>修改</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" disabled><i class="fa fa-trash"></i>查看详情</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" disabled><i class="fa fa-trash"></i>删除</button>
+        </div>
+    </form>
+    <br>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title modal-center" id="myModalLabel">
+                                    创建密钥
+                                </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizon" role="form">
+                        <div class="form-group form-middle">
+                            <label for="key_name" class="col-sm-3 control-lable">密钥名称
+                                <font color="red">*</font>:
+                            </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="key_name">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-lable">创建方式：</label>
+                            <div class="col-sm-9">
+                                <label>
+                                    <input type="radio" value="create_new" checked="checked" name="key_way">创建新密钥对时
+                                </label>
+                                <label>
+                                    <input type="radio" value="import_old" name="key_way">导入已有公钥
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="firewall_desc" class="col-sm-3 control-lable">密钥类型：</label>
+                            <!-- <div class="col-sm-9"> -->
+                            <select class="form-select">
+                                <option value="RSA" selected="selected">RSA</option>
+                                <option value="DSA">DSA</option>
+                            </select>
+                            <!-- </div> -->
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-lable">密钥备注：</label>
+                            <textarea class="form-textarea" name="remark"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        确定
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th>密钥名称</th>
+                <th>加密方式</th>
+                <th>密钥描述</th>
+                <th>创建时间</th>
+                <th>绑定状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td><i>*</i>常规</td>
+                <td>开放TCP 22、3389，UDP 3389，ICMP</td>
+                <td>2015-03-12 17:20:02</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
