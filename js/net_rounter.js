@@ -24,6 +24,7 @@ var router_len = 0;
 $(".create_router").click(function() {
     $(".create_router_name").val("");
     $(".outNet_selected").empty();
+    $(".outNet_selected").append(' <option value="test" selected>选择外网</option>');
     $.ajax({
         type: "GET",
         url: config["host"] + "/extnet?token=" + window.localStorage.token,
