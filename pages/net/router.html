@@ -1,147 +1,71 @@
 <!-- 内容显示界面 -->
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="desc">路由</div>
-    <form class="form-inline" role="form">
+    <form class="form-inline form-btn" role="form">
         <div class="form-group">
-            <button type="button" class="btn btn-primary" name="refresh"><i class="fa fa-refresh"></i></button>
+            <input id="search-input" type="text" class="form-control" placeholder="Filter" tabindex="1">
+            <label for="search-input" class="control-label input-addon"><i class="fa fa-search"></i></label>
         </div>
+        &nbsp;
         <div class="form-group">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-square"></i>新购IP</button>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-default disabled"><i class="fa fa-pencil-square-o"></i>修改</button>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-default disabled"><i class="fa fa-lock"></i>绑定</button>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-default disabled"><i class="fa fa-unlock"></i>解绑</button>
-        </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                更多操作 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#myModal" class="active" data-toggle="modal">调整带宽</a></li>
-                <li><a href="#">另一个功能</a></li>
-                <li><a href="#">其他</a></li>
-            </ul>
+            <button type="button" class="btn btn-primary create_router" tabindex="1" data-toggle="modal" data-target="#modal_create_router"><span class="fa fa-plus-square"></span> 创建路由</button>
+            <button type="button" class="btn btn-danger delete_router" disabled tabindex="1"><span class="fa fa-times"></span> 删除路由</button>
         </div>
     </form>
     <br>
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <br>
+    <!-- 模态框 创建路由 -->
+    <div id="modal_create_router" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content modal-size">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title modal-center" id="myModalLabel">
-                                    新建路由器
-                                </h4>
+                    <h4 class="modal-title modal-center" id="myModalLabel">新建路由</h4>
                 </div>
-                <div class="modal-body row">
-                    <div class="col-sm-8">
-                        <form class="form-horizon" role="form">
-                            <div class="form-group form-item">
-                                <label class="col-sm-3 control-lable">名称
-                                    <font color="orange">*</font>
-                                </label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="router_name" placeholder='以字母开头，仅包含字母、数字或中划线的3-40个字符'>
+                <div class="modal-body">
+                    <div id="myupdateTabContent" class="tab-content">
+                        <div class="tab-pane in active" id="update_fireWall">
+                            <!-- 增加策略 -->
+                            <form role="form">
+                                <div class="form-group">
+                                    <label class="control-lable">路由名称<span class="span-stand"> *</span></label>
+                                    <input type="text" class="form-control update_fireWall_name">
                                 </div>
-                            </div>
-                            <!-- <br> -->
-                            <!-- <br> -->
-                            <div class="form-group form-item">
-                                <label class="col-sm-3 control-lable">类型</label>
-                                <div class="col-sm-9 col-md-9">
-                                    <label>
-                                        <input type="radio" checked>&nbsp;公网
-                                    </label>
+                                <div class="form-group">
+                                    <label class="control-lable">管理员状态<span class="span-stand"> *</span></label>
+                                    <br>
+                                    <!-- <input type="text" class="form-control"> -->
+                                    <select class="form-control update_manager_status">
+                                        <option value="true">上</option>
+                                        <option value="false">下</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="form-group form-item">
-                                <label class="col-sm-3 control-lable">IP地址</label>
-                                <div class="col-sm-9 col-md-9 btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                        请选择公网IP <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">IP地址1</a></li>
-                                        <li><a href="#">IP地址1</a></li>
-                                        <li><a href="#">IP地址1</a></li>
-                                    </ul>
+                                <div class="form-group">
+                                    <label class="control-lable">外部网络<span class="span-stand"> *</span></label>
+                                    <br>
+                                    <!-- <input type="text" class="form-control"> -->
+                                    <select class="form-control update_fireWall_policys_selected">
+                                        <option>选择外网</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="form-group form-item">
-                                <label class="col-sm-3 control-lable">带宽</label>
-                                <div class="col-sm-5 input-group form-left">
-                                    <input type="text" class="form-control">
-                                    <span class="input-group-addon">MBPS</span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-4 table-responsive">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" class="table-title">购买详情</td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">实例名</td>
-                                    <td class="table-td-right"></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">实例类型</td>
-                                    <td class="table-td-right">公网</td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">计费类型</td>
-                                    <td class="table-td-right">按宽带计费</td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">浮动IP</td>
-                                    <td class="table-td-right"></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">宽带</td>
-                                    <td class="table-td-right">1 <span>Mbps</span></td>
-                                </tr>
-                                <tr>
-                                    <!-- 我是产品分割线 -->
-                                    <td colspan="2"></td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">实例价格</td>
-                                    <td class="table-td-right"><span class="td-text">0.08</span> 元/时</td>
-                                </tr>
-                                <tr>
-                                    <td class="table-td-left">浮动IP价格</td>
-                                    <td class="table-td-right"><span class="td-text">0.04</span> 元/时</td>
-                                </tr>
-                                <tr class="table-button">
-                                    <td colspan="2">
-                                        <button type="button" class="btn btn-primary table-btn">
-                                            提交订单
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            </form>
+                            <!-- 规则 -->
+                        </div>
+                        <div class="modal-footer modal-center">
+                            <button type="button" class="btn btn-default updateFireWall_cancel" data-dismiss="modal">取消
+                            </button>
+                            <button type="button" class="btn btn-primary update_FireWall_OK" data-dismiss="modal">
+                                添加
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <!--<div class="modal-footer modal-center">
-                                <button type="button" class="btn btn-primary">
-                                    提交订单
-                                </button>
-                            </div> -->
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal -->
         </div>
-        <!-- /.modal -->
     </div>
     <table class="table table-striped rounter_info">
         <thead>

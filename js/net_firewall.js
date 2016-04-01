@@ -791,7 +791,6 @@ $(".create_fireWallButton").click(function() {
                         str += "<option value='" + allPolicys[i].id + "''>" + allPolicys[i].name + "</option>"
                     }
                     $(".fireWall_policys_selected").append(str);
-
                     //-------------设置路由
                     var allRounters = JSON.parse(localStorage.router_temp)['routers'];
                     str = "";
@@ -800,15 +799,29 @@ $(".create_fireWallButton").click(function() {
                         flag = 0;
                         for (var k = 0; k < router_router_ids.length; k++) {
                             router_ids = router_router_ids[k]['router_ids'];
-                            for (var j = 0; j < router_ids.length; j++) {
-                                if (router_ids[j] != allRounters[i].id) {
-                                    if (flag == 0 && k == (router_router_ids.length - 1) && j == (router_ids.length - 1)) {
-                                        str += '<label class="control-lable">' +
-                                            '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
-                                            '</input></label><br/>';
+                            console.log("----->" + k);
+                            if (router_ids.length != 0) {
+                                for (var j = 0; j < router_ids.length; j++) {
+                                    if (flag == 0 && router_ids[j] != allRounters[i].id) {
+                                        if (k == (router_router_ids.length - 1) && j == (router_ids.length - 1)) {
+                                            str += '<label class="control-lable">' +
+                                                '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                                '</input></label><br/>';
+                                        }
+                                    } else {
+                                        flag = 1;
+                                        break;
                                     }
-                                } else {
-                                    flag = 1;
+                                }
+                            } else {
+                                if (flag == 1) {
+                                    break;
+                                } else if (k != (router_router_ids.length - 1)) {
+                                    continue;
+                                } else if (k == (router_router_ids.length - 1)) {
+                                    str += '<label class="control-lable">' +
+                                        '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                        '</input></label><br/>';
                                 }
                             }
                         }
@@ -865,6 +878,7 @@ $(".addFireWall_OK").click(function() {
 //-------删除防火墙
 //------------单删
 $(document).on("click", ".delete_fireWallSimple", function() {
+    var routerStr = $(this).attr("name");
     var id = $(this).attr("id");
     if ($(this).attr("name") != "") {
         router_FreeNum += routerStr.split(",").length;
@@ -883,7 +897,7 @@ $(".delete_fireWalls").click(function() {
     var json_array = '{"firewall_ids":[';
     $(".fireWall_check:checked").each(function() {
         if ($(this).attr("name") != "") {
-            router_FreeNum += routerStr.split(",").length;
+            router_FreeNum += $(this).attr("name").split(",").length;
         }
         if (json_array != '{"firewall_ids":[')
             json_array += ',"' + $(this).attr("id") + '"';
@@ -996,8 +1010,9 @@ $(".update_FireWall_OK").click(function() {
     });
 
 });
-//---------更新关联路由
+//---------更新关联路由----删除
 $(document).on("click", ".delete_fireWallRouter", function() {
+    $(".routers_updatecheckBox").empty();
     var curr_fireWallId = $(this).attr("id");
     var curr_fireWall;
     $.ajax({
@@ -1063,15 +1078,105 @@ $(document).on("click", ".delete_fireWallRouter", function() {
                     url: config["host"] + "/firewall/update/" + curr_fireWallId + "?token=" + window.localStorage.token,
                     success: function(data) {
                         //console.log(data);
-                         window.location.reload();
+                        window.location.reload();
                     }
                 });
             });
         }
     });
 });
+//---------更新关联路由----添加
+$(document).on("click", ".add_fireWallRouter", function() {
+    $(".routers_updatecheckBox").empty();
+    var curr_fireWallId = $(this).attr("id");
+    var curr_fireWall;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/firewalls?token=" + window.localStorage.token,
+        success: function(data) {
+            var router_router_ids = JSON.parse(data)['firewalls'];
+            for (var m = 0; m < router_router_ids.length; m++) {
+                var fireWall = router_router_ids[m];
+                if (fireWall.id == curr_fireWallId) {
+                    curr_fireWall = fireWall;
+                    break;
+                }
+            }
+            var str = "";
+            //-------------设置路由
+            var allRounters = JSON.parse(localStorage.router_temp)['routers'];
+            str = "";
+            var flag = 0;
+            for (var i = 0; i < allRounters.length; i++) {
+                flag = 0;
+                for (var k = 0; k < router_router_ids.length; k++) {
+                    router_ids = router_router_ids[k]['router_ids'];
+                    if (router_ids.length != 0) {
+                        for (var j = 0; j < router_ids.length; j++) {
+                            if (flag == 0 && router_ids[j] != allRounters[i].id) {
+                                if (k == (router_router_ids.length - 1) && j == (router_ids.length - 1)) {
+                                    str += '<label class="control-lable">' +
+                                        '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                        '</input></label><br/>';
+                                }
+                            } else {
+                                flag = 1;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (flag == 1) {
+                            break;
+                        } else if (k != (router_router_ids.length - 1)) {
+                            continue;
+                        } else if (k == (router_router_ids.length - 1)) {
+                            str += '<label class="control-lable">' +
+                                '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                '</input></label><br/>';
+                        }
+                    }
+                }
+            }
+            $(".routers_updatecheckBox").append(str);
+            //----------更新路由提交
+            $(".updateFireWallRouter_OK").click(function() {
+                var fire_create = {
+                    "firewall": {
+                        "admin_state_up": true,
+                        "firewall_policy_id": null,
+                        "description": "",
+                        "name": "",
+                        "router_ids": []
+                    }
+                };
+                /*                curr_fireWall['router_ids'] = new Array();*/
+                var temp = curr_fireWall['router_ids'].length;
+                //  console.log(curr_fireWall);
+                $(".fireWall_routers:checked").each(function() {
+                    curr_fireWall['router_ids'][temp++] = $(this).val();
 
+                });
+                // console.log(temp);
+                delete curr_fireWall.status;
+                delete curr_fireWall.id;
+                delete curr_fireWall.tenant_id
+                fire_create['firewall'] = curr_fireWall;
+                //console.log(JSON.stringify(fire_create));
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify(fire_create),
+                    contentType: "application/json",
+                    url: config["host"] + "/firewall/update/" + curr_fireWallId + "?token=" + window.localStorage.token,
+                    success: function(data) {
+                        //console.log(data);
+                        window.location.reload();
+                    }
+                });
 
+            });
+        }
+    });
+});
 
 //---------列出防火墙
 function setFireWallList(data, routerStr, policyStr, i) {
@@ -1087,11 +1192,11 @@ function setFireWallList(data, routerStr, policyStr, i) {
         '<span class="sr-only">切换下拉菜单</span>' +
         '</button>' +
         '<ul class="dropdown-menu" role="menu">' +
-        '<li class="delete_fireWallSimple" id="' + data.id + '" name="'+routerStr+'"><a href="javascript:void(0)" >删除防火墙</a></li>';
+        '<li class="delete_fireWallSimple" id="' + data.id + '" name="' + routerStr + '"><a href="javascript:void(0)" >删除防火墙</a></li>';
     if (router_FreeNum > 0)
         str += '<li class="add_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><a href="javascript:void(0)">添加路由</a></li>';
     if (routerStr != "")
-        str += '<li class="delete_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><a href="javascript:void(0)">删除路由</a></li>';
+        str += '<li class="delete_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><font color="red"><a href="javascript:void(0)">删除路由</a></font></li>';
     str += '</ul>' +
         '</div>' +
         '</td>' +
