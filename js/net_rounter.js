@@ -20,7 +20,7 @@ $(function() {
 });
 var router_len = 0;
 
-//------------创建路由
+//------------------------------------创建路由----start
 $(".create_router").click(function() {
     $(".create_router_name").val("");
     $(".outNet_selected").empty();
@@ -38,9 +38,7 @@ $(".create_router").click(function() {
             $(".outNet_selected").append(str);
         }
     });
-
 });
-
 $(".createRouter_OK").click(function() {
     //--------------提交前对数据的处理
     var name = $(".create_router_name").val();
@@ -89,9 +87,29 @@ $(".createRouter_OK").click(function() {
             $(".Router_footer").append(footer_str);
         }
     });
-
-
 });
+//------------------------------------创建路由----end
+//------------------------------------删除路由-----start
+$(document).on('change', ".router_check", function() {
+    if ($(".router_check:checked").length == 0)
+        $(".delete_router").attr("disabled", true);
+    else
+        $(".delete_router").attr("disabled", false);
+});
+
+
+//------------------------------------删除路由-----end
+function setList(data, out_net) {
+    var str = "<tr><td><input type='checkbox' class='router_check' id='" + data.id + "'></td><td><a href='#'>" + data.name + "</a></td><td>" + data.status + "</td><td>" + out_net + "</td>" +
+        "<td>" + data.admin_state_up +
+        "</td><td><div class='btn-group'><button type='button' class='btn btn-default btn-sm'>" +
+        "创建快照" +
+        "</button><button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><span class='caret'></span><span class='sr-only'>" +
+        "切换下拉菜单" + "</span></button><ul class='dropdown-menu' role='menu'><li><a href='#'>" +
+        "功能" + "</a></li><li><a href='#'>" + "另一个功能" + "</a></li><li><a href='#'>" + "其他" +
+        "</a></li></ul></div></td></tr>";
+    $(".rounter_info").append(str);
+}
 
 function rount_netInfo(networks) {
     $.ajax({
@@ -127,16 +145,4 @@ function dealRouterInfo(rounter, networks) {
     } else {
         setList(rounter, "-");
     }
-}
-
-function setList(data, out_net) {
-    var str = "<tr><td><input type='checkbox'></td><td><a href='#'>" + data.name + "</a></td><td>" + data.status + "</td><td>" + out_net + "</td>" +
-        "<td>" + data.admin_state_up +
-        "</td><td><div class='btn-group'><button type='button' class='btn btn-default btn-sm'>" +
-        "创建快照" +
-        "</button><button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><span class='caret'></span><span class='sr-only'>" +
-        "切换下拉菜单" + "</span></button><ul class='dropdown-menu' role='menu'><li><a href='#'>" +
-        "功能" + "</a></li><li><a href='#'>" + "另一个功能" + "</a></li><li><a href='#'>" + "其他" +
-        "</a></li></ul></div></td></tr>";
-    $(".rounter_info").append(str);
 }
