@@ -145,20 +145,25 @@ function deleteAjax_routerInfo(json_array) {
 //----------------设置网关
 var router_id;
 $(document).on('click', ".setExtNet", function() {
+    // alert($(".setoutNet_selected option").length);
     router_id = $(this).attr("id");
     $(".setoutNet_selected").empty();
     $(".setoutNet_selected").append(' <option value="test" >选择网络</option>');
+
+    // alert("?: "+$(".setoutNet_selected option").length);
     $.ajax({
         type: "GET",
         url: config["host"] + "/extnet?token=" + window.localStorage.token,
         success: function(data) {
-            console.log(data);
+            // console.log(data);
             var ext_nets = JSON.parse(data)['ext_net'];
             var str = "";
+            // console.log(">>>>>>>>>>>>>>>>>");
             for (var i = 0; i < ext_nets.length; i++) {
                 str += "<option name='" + ext_nets[i].name + "' value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
             }
             $(".setoutNet_selected").append(str);
+            //alert($(".setoutNet_selected option").length);
         }
     });
     $(".router_name").val($(this).attr("name"));
@@ -185,8 +190,10 @@ $(document).on('click', ".addExtNet_ok", function() {
         contentType: "application/json",
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
-            var name = $(".setoutNet_selected").find("option:selected").text();
+/*            var name = $(".setoutNet_selected").find("option:selected").text();
             $("td[id='" + router_id + "']").text(name);
+            $(".setoutNet_selected").empty();*/
+            window.location.reload();
         }
     });
 });
@@ -248,7 +255,7 @@ $(".editRouter_ok").click(function() {
 
 function setList(data, out_net) {
     var str = "<tr><td><input type='checkbox' class='router_check' id='" + data.id + "'></td>" +
-        "<td><a href='#'>" + data.name + "</a></td>" +
+        "<td><a href='#/net/routerDesc?" + data.id + "&"+out_net+"'>" + data.name + "</a></td>" +
         "<td>" + data.status + "</td>" +
         "<td id='" + data.id + "'>" + out_net + "</td>" +
         "<td>" + data.admin_state_up +
@@ -286,8 +293,8 @@ function rount_netInfo(networks) {
 
 function dealRouterInfo(rounter, networks) {
     //----名称的处理
-    if(rounter.name=="")
-        rounter.name="("+rounter.id.substr(0,13)+")";
+    if (rounter.name == "")
+        rounter.name = "(" + rounter.id.substr(0, 13) + ")";
     //---管理员状态
     if (rounter.admin_state_up == true)
         rounter.admin_state_up = "上";

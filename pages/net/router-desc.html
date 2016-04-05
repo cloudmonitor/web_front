@@ -3,15 +3,28 @@
     <div class="desc">路由详情</div>
     <div class="row">
         <li class="li-btn">
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">设置网关</button>
+            <div class="btn-group setNetDiv">
+                <button type="button" class="btn btn-default btn-sm setExtNet" data-toggle='modal' data-target='#modal_edit_extNetdesc'>设置网关</button>
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                     <span class="sr-only">编辑路由</span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a>编辑路由</a></li>
-                    <li><a class="text-warning">删除路由</a></li>
+                    <li class="edit_routerdesc" data-toggle='modal' data-target='#modal_edit_routerdesc'><a href="javascript:void(0)">编辑路由</a></li>
+                    <li class=""><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
+                </ul>
+            </div>
+            <div class="btn-group delNetDiv">
+                <button type="button" class="btn btn-default btn-sm" style='background:#CD3333'>
+                    <font color='white'>清除网关</font>
+                </button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">编辑路由</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="edit_routerdesc" data-toggle='modal' data-target='#modal_edit_routerdesc'><a href="javascript:void(0)">编辑路由</a></li>
+                    <li><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
                 </ul>
             </div>
         </li>
@@ -27,27 +40,50 @@
                 <tbody>
                     <tr>
                         <th class="col-md-5">名称</th>
-                        <td>name1</td>
+                        <td class="routerDesc_name">name1</td>
                     </tr>
                     <tr>
                         <th class="col-md-5">ID</th>
-                        <td>ID_Nubmer</td>
+                        <td class="routerDesc_id">ID_Nubmer</td>
                     </tr>
                     <tr>
                         <th class="col-md-5">项目ID</th>
-                        <td>项目ID_Number</td>
+                        <td class="routerDesc_proId">项目ID_Number</td>
                     </tr>
                     <tr>
                         <th class="col-md-5">状态</th>
-                        <td>运行中</td>
+                        <td class="routerDesc_status">运行中</td>
                     </tr>
                     <tr>
                         <th class="col-md-5">管理员状态</th>
-                        <td>上</td>
+                        <td class="routerDesc_managerStatus">上</td>
+                    </tr>
+                    <tr class="extnet_tr">
+                        <th class="col-md-5">外部网关</th>
+                        <td class="routerDesc_extNet">无</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="extnet_table">
+                <br/>
+                <B class="extnet_table"><font size="4px">外部网关</font></B>
+                <br/>
+                <tbody>
+                    <tr>
+                        <th class="col-md-5">网络名称</th>
+                        <td class="extnet_netname"></td>
                     </tr>
                     <tr>
-                        <th class="col-md-5">外部网关</th>
-                        <td>无</td>
+                        <th class="col-md-5">网络ID</th>
+                        <td class="extnet_netid"></td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">额外固定IP</th>
+                        <td class="extnet_extfixIP"></td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-5">SNAT</th>
+                        <td class="extnet_snat"></td>
                     </tr>
                 </tbody>
             </table>
@@ -170,5 +206,101 @@
                 <!-- /.modal -->
             </div>
         </div>
+    </div>
+    <!-- 设置网关 -->
+    <div id="modal_edit_extNetdesc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-size">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">设置网关</h4>
+                </div>
+                <div class="modal-body modal-input">
+                    <div class="row">
+                        <form role="form" class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-lable ">外部网络<span class="span-stand"> *</span></label>
+                                <select class="form-control setoutNetdesc_selected">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">路由名称
+                                    <span class="span-stand"> *</span></label>
+                                <input type="text" class="form-control router_namedesc" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">路由id
+                                    <span class="span-stand"> *</span></label>
+                                <input type="text" class="form-control router_iddesc" disabled>
+                            </div>
+                        </form>
+                        <div class="col-md-6">
+                            <h4>说明:</h4>
+                            <br/> 你可以将一个指定的外部网络连接到路由器.外部网络将作为路由器的默认路由同时将扮演外部连接网关的角色
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default setExtNetdesc_cancel" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary setExtNetdesc_ok" data-dismiss="modal">
+                        设置网关
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <!-- 模态框 编辑路由 -->
+    <div id="modal_edit_routerdesc" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-size">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">编辑路由</h4>
+                </div>
+                <div class="modal-body modal-input">
+                    <div class="row">
+                        <form role="form" class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-lable">名称
+                                    <span class="span-stand"> *</span></label>
+                                <input type="text" class="form-control edit_router_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable ">管理员状态<span class="span-stand"> *</span></label>
+                                <select class="form-control managerStatus_selected">
+                                    <option value="up">上</option>
+                                    <option value="down">下</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-lable">ID
+                                    <span class="span-stand"> *</span></label>
+                                <input type="text" class="form-control edit_router_id" disabled>
+                            </div>
+                        </form>
+                        <div class="col-md-6">
+                            <h4>说明:</h4>
+                            <br/> 你可以在这里更新路由的属性
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default editRouter_cancel" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary editRouter_ok" data-dismiss="modal">
+                        保存
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
     </div>
 </div>

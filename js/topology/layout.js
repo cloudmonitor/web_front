@@ -18,7 +18,6 @@ $(function() {
             data: [
                 { id: 'router', name: 'ROUTER', image: './icon/device/router.png', width: 42, height: 42 },
                 { id: 'server', name: 'server', image: './icon/device/server.png', width: 42, height: 42 },
-                { id: 'extnet', name: 'extnet', image: './icon/device/extnet.png', width: 42, height: 42 },
                 { id: 'network', name: 'network', image: './icon/device/network.png', width: 42, height: 42 }
             ]
         }

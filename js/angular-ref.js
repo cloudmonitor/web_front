@@ -74,6 +74,11 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/router.html',
             controller: 'routerCtrl'
         })
+        // 网络 -- 路由器详情
+        .when('/net/routerDesc', {
+            templateUrl: 'pages/net/router-desc.html',
+            controller: 'routerDescCtrl'
+        })
         // 网络 -- 浮动IP
         .when('/net/floatingIP', {
             templateUrl: 'pages/net/floatingIP.html',
@@ -152,7 +157,7 @@ myApp.controller('instanceCtrl', function($scope) {
 });
 
 myApp.controller('instanceDesc', function($scope) {
-     $scope.$parent.loadScript('js/lib/moment.min.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/lib/moment.min.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/instance_desc.js', 'text/javascript', 'utf-8');
     $("head title").text("实例");
@@ -236,6 +241,13 @@ myApp.controller('routerCtrl', function($scope) {
     $scope.$parent.loadScript('js/net_rounter.js', 'text/javascript', 'utf-8');
     $("head title").text("路由器");
 });
+// 网络与安全 -- 路由器
+myApp.controller('routerDescCtrl', function($scope) {
+    $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/net_rounter_desc.js', 'text/javascript', 'utf-8');
+    $("head title").text("路由器");
+});
+
 // 网络与安全 -- 浮动IP
 myApp.controller('floatingIP', function($scope) {
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');

@@ -80,6 +80,7 @@ function getDevice_info(tenantname) {
                 success: function(data) {
                     // var data = JSON.parse(data);
                     // console.log(data);
+                    localStorage.limits=data;
                     draw_charts(data);
                 },
                 error: function(data) {
