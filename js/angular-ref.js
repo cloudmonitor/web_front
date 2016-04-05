@@ -30,104 +30,125 @@ myApp.config(function($routeProvider) {
 
     // 默认加载的主页  计算--概览
         .when('/', {
-
+            cache: false,
             templateUrl: 'pages/compute/abstract.html',
             controller: 'abstractCtrl'
         })
         // 计算 -- 概览
         .when('/compute/abstract', {
+            cache: false,
             templateUrl: 'pages/compute/abstract.html',
             controller: 'abstractCtrl'
         })
         // 计算 -- 实例
         .when('/compute/instance', {
+            cache: false,
             templateUrl: 'pages/compute/instance.html',
             controller: 'instanceCtrl'
         })
         // 计算 -- 实例详情
         .when('/compute/instance-desc', {
+            cache: false,
             templateUrl: 'pages/compute/instance-desc.html',
             controller: 'instance-descCtrl'
         })
         // 网络 -- 拓扑
         .when('/net/topology', {
+            cache: false,
             templateUrl: 'pages/net/topology.html',
             controller: 'topologyCtrl'
         })
         // 网络 -- 网络
         .when('/net/net', {
+            cache: false,
             templateUrl: 'pages/net/net.html',
             controller: 'netCtrl'
         })
         // 网络 -- 安全组
         .when('/net/secGroup', {
+            cache: false,
             templateUrl: 'pages/net/secGroup.html',
             controller: 'secGroupCtrl'
         })
         // 网络 -- 防火墙
         .when('/net/firewall', {
+            cache: false,
             templateUrl: 'pages/net/firewall.html',
             controller: 'firewallCtrl'
         })
         // 网络 -- 路由器
         .when('/net/router', {
+            cache: false,
             templateUrl: 'pages/net/router.html',
             controller: 'routerCtrl'
         })
         // 网络 -- 路由器详情
         .when('/net/routerDesc', {
+            cache: false,
             templateUrl: 'pages/net/router-desc.html',
             controller: 'routerDescCtrl'
         })
         // 网络 -- 浮动IP
         .when('/net/floatingIP', {
+            cache: false,
             templateUrl: 'pages/net/floatingIP.html',
             controller: 'aboutController'
         })
         // 主机监控
         .when('/monitor', {
+            cache: false,
             templateUrl: 'pages/host/monitor.html',
             controller: 'monitorCtrl'
         })
         // 信息 -- 基本信息
         .when('/info/base-info', {
+            cache: false,
             templateUrl: 'pages/info/base-info.html',
             controller: 'base-infoCtrl'
         })
         // 信息 -- 账户信息
         .when('/info/account-info', {
+            cache: false,
             templateUrl: 'pages/info/account-info.html',
             controller: 'account-infoCtrl'
         })
         .when('/compute/instance_desc', {
+            cache: false,
             templateUrl: 'pages/compute/instance_desc.html',
             controller: 'instanceDesc'
         })
         .when('/net/net-desc', {
+            cache: false,
             templateUrl: 'pages/net/net-desc.html',
             controller: 'netDesc'
         })
         .when('/net/subnet-desc', {
+            cache: false,
             templateUrl: 'pages/net/subnet-desc.html',
             controller: 'subnetDesc'
         })
         .when('/net/port-desc', {
+            cache: false,
             templateUrl: 'pages/net/port-desc.html',
             controller: 'portnetDesc'
         })
         .when('/net/firewall-desc', {
+            cache: false,
             templateUrl: 'pages/net/firewall-desc.html',
             controller: 'firewallDesc'
         })
         .when('/net/firewall-strategy-desc', {
+            cache: false,
             templateUrl: 'pages/net/firewall-strategy-desc.html',
             controller: 'firewallstrategyDesc'
         })
         .when('/net/firewall-ruleDesc', { //----有问题1111
+            cache: false,
             templateUrl: 'pages/net/firewall-ruleDesc.html',
             controller: 'firewallruleDesc'
         })
         .when('/net/secGroup_desc', { //----有问题1111
+            cache: false,
             templateUrl: 'pages/net/secGroup_desc.html',
             controller: 'secGroupDesc'
         })
@@ -137,7 +158,13 @@ myApp.config(function($routeProvider) {
 
     // $locationProvider.html5Mode(true);
 });
-
+myApp.run(function($rootScope, $templateCache) {  
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
+        if (typeof(current) !== 'undefined'){  
+            $templateCache.remove(current.templateUrl);  
+        }  
+    });  
+});
 // 计算 -- 概览页面js
 myApp.controller('abstractCtrl', function($scope) {
 

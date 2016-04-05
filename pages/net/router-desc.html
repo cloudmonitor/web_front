@@ -11,11 +11,11 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li class="edit_routerdesc" data-toggle='modal' data-target='#modal_edit_routerdesc'><a href="javascript:void(0)">编辑路由</a></li>
-                    <li class=""><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
+                    <li class="delete_routerdescSimple"><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
                 </ul>
             </div>
             <div class="btn-group delNetDiv">
-                <button type="button" class="btn btn-default btn-sm" style='background:#CD3333'>
+                <button type="button" class="btn btn-default btn-sm delExtNetdesc" style='background:#CD3333'>
                     <font color='white'>清除网关</font>
                 </button>
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -24,7 +24,7 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li class="edit_routerdesc" data-toggle='modal' data-target='#modal_edit_routerdesc'><a href="javascript:void(0)">编辑路由</a></li>
-                    <li><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
+                    <li class="delete_routerdescSimple"><a href="javascript:void(0)" class="text-warning">删除路由</a></li>
                 </ul>
             </div>
         </li>
@@ -90,11 +90,16 @@
         </div>
         <!-- 接口 -->
         <div class="tab-pane fade" id="interface">
-            <div class="row">
-                <li class="li-btn">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_create_interface"><i class="fa fa-plus-square"></i>增加接口</button>
-                </li>
-            </div>
+
+            <form class="form-inline form-btn" role="form">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary addport" data-toggle="modal" data-target="#modal_create_interface"><i class="fa fa-plus-square"></i>增加接口</button>
+                    <button type="button" class="btn btn-danger deleteport" disabled tabindex="1"><span class="fa fa-times"></span> 删除接口</button>
+                </div>
+            </form>
+            <br>
+            <br>
+
             <div>
                 <table class="table table-striped instance_info">
                     <thead>
@@ -110,36 +115,33 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                            <td><a href="network_firewall_strategy_desc.html">test-policy03</a></td>
-                            <td></td>
-                            <td>ALLOW_HTTP</td>
-                            <td>False</td>
-                            <td>False</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-sm">编辑接口</button>
-                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">切换下拉菜单</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">删除策略</a></li>
-                                        <li><a data-toggle="modal" data-target="#modal_set_strategy">修改策略</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody class="port_descbody">
+                        <!--                         <tr>
+    <td>
+        <input type="checkbox">
+    </td>
+    <td><a href="network_firewall_strategy_desc.html">test-policy03</a></td>
+    <td></td>
+    <td>ALLOW_HTTP</td>
+    <td>False</td>
+    <td>False</td>
+    <td>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm">编辑接口</button>
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">切换下拉菜单</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">删除策略</a></li>
+                <li><a data-toggle="modal" data-target="#modal_set_strategy">修改策略</a></li>
+            </ul>
+        </div>
+    </td>
+</tr> -->
                     </tbody>
-                    <tfoot>
-                        <tr class="active tfoot-dsp">
-                            <!-- <td colspan="2">这里有两列</td> -->
-                            <td colspan="8">Displaying <span id="item_count">1</span> items</td>
-                        </tr>
+                    <tfoot class="port_footer">
+
                     </tfoot>
                 </table>
             </div>
@@ -159,10 +161,8 @@
                                 <form role="form" class="col-md-7">
                                     <div class="form-group">
                                         <label class="control-lable">子网<span class="span-stand"> *</span></label>
-                                        <select class="form-control">
-                                            <option>子网1</option>
-                                            <option>子网2</option>
-                                            <option>子网3</option>
+                                        <select class="form-control port_subNetselected">
+                                            <option>选择子网</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -172,16 +172,16 @@
                                         <input type="text" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-lable">名称
+                                        <label class="control-lable">路由名称
                                             <span class="span-stand"> *</span>
                                         </label>
-                                        <input type="text" class="form-control" placeholder="project01-router03">
+                                        <input type="text" class="form-control inteface_name" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-lable">路由id
                                             <span class="span-stand"> *</span>
                                         </label>
-                                        <input type="text" class="form-control" placeholder="id-nubmer">
+                                        <input type="text" class="form-control inteface_id"  disabled>
                                     </div>
                                 </form>
                                 <div class="col-md-5">
@@ -196,9 +196,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                            <button type="button" class="btn btn-default addInteface_cancel" data-dismiss="modal">取消
                             </button>
-                            <button type="button" class="btn btn-primary">增加接口</button>
+                            <button type="button" class="btn btn-primary addInteface_OK">增加接口</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -270,11 +270,11 @@
                             <div class="form-group">
                                 <label class="control-lable">名称
                                     <span class="span-stand"> *</span></label>
-                                <input type="text" class="form-control edit_router_name">
+                                <input type="text" class="form-control edit_routerdesc_name">
                             </div>
                             <div class="form-group">
                                 <label class="control-lable ">管理员状态<span class="span-stand"> *</span></label>
-                                <select class="form-control managerStatus_selected">
+                                <select class="form-control managerStatusdesc_selected">
                                     <option value="up">上</option>
                                     <option value="down">下</option>
                                 </select>
@@ -282,7 +282,7 @@
                             <div class="form-group">
                                 <label class="control-lable">ID
                                     <span class="span-stand"> *</span></label>
-                                <input type="text" class="form-control edit_router_id" disabled>
+                                <input type="text" class="form-control edit_routerdesc_id" disabled>
                             </div>
                         </form>
                         <div class="col-md-6">
@@ -292,9 +292,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default editRouter_cancel" data-dismiss="modal">取消
+                    <button type="button" class="btn btn-default editRouterdesc_cancel" data-dismiss="modal">取消
                     </button>
-                    <button type="button" class="btn btn-primary editRouter_ok" data-dismiss="modal">
+                    <button type="button" class="btn btn-primary editRouterdesc_ok" data-dismiss="modal">
                         保存
                     </button>
                 </div>

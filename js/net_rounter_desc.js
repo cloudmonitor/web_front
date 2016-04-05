@@ -1,3 +1,4 @@
+var portList_len = 0;
 $(function() {
     //------------------概况start
     var id_extNet = window.location.href.split("?")[1];
@@ -8,6 +9,7 @@ $(function() {
         type: "GET",
         url: config["host"] + "/routers?token=" + window.localStorage.token,
         success: function(data) {
+           // console.log(data);
             var rounters = JSON.parse(data)['routers'];
             for (var i = 0; i < rounters.length; i++) {
                 if (rounters[i].id == id) {
@@ -43,9 +45,28 @@ $(function() {
                 }
                 $(".extnet_snat").text(extgatewall_info.enable_snat ? "激活" : "未激活");
             }
+            //------------------接口start
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
+                success: function(data) {
+                   // console.log(data);
+                    var ports = JSON.parse(data)['ports'];
+                    for (var i = 0; i < ports.length; i++) {
+                        var port = ports[i];
+                        sertPortList(port);
+                    }
+                    portList_len = ports.length;
+                    var footerStr = '<tr class="active tfoot-dsp">' +
+                        '<td colspan="8">Displaying <span id="item_count">' + portList_len + '</span> items</td></tr>';
+                    $(".port_footer").append(footerStr);
+                }
+            });
+            //------------------接口end
         }
     });
     //------------------概况end
+
     //-----------------设置网关start
     var router_id;
     $(".setExtNet").click(function() {
@@ -70,7 +91,6 @@ $(function() {
         });
     });
     $(document).on('click', ".setExtNetdesc_ok", function() {
-
         var router_temp = {
             "router": {
                 "external_gateway_info": {
@@ -101,14 +121,16 @@ $(function() {
     //-----------编辑路由
     $(document).on('click', ".edit_routerdesc", function() {
         router_id = $(".routerDesc_id").text();
-        $(".edit_router_id").val(router_id);
-        $(".edit_router_name").val($(".routerDesc_name").text());
-        if (infos[1] == "上")
-            $(".managerStatus_selected option[value='up']").attr("selected");
-        else
-            $(".managerStatus_selected option[value='down']").attr("selected");
+        $(".edit_routerdesc_id").val(router_id);
+        $(".edit_routerdesc_name").val($(".routerDesc_name").text());
+        // alert($(".routerDesc_managerStatus").text());
+        if ($(".routerDesc_managerStatus").text() == "上") {
+            $(".managerStatusdesc_selected option[value='up']").attr("selected", true);
+        } else {
+            $(".managerStatusdesc_selected option[value='down']").attr("selected", true);
+        }
     });
-    $(".editRouter_ok").click(function() {
+    $(".editRouterdesc_ok").click(function() {
         var router_temp = {
             "router": {
                 "name": "",
@@ -116,8 +138,8 @@ $(function() {
             }
         };
         var router = router_temp['router'];
-        router.name = $(".edit_router_name").val();
-        if ($(".managerStatus_selected").val() == "up")
+        router.name = $(".edit_routerdesc_name").val();
+        if ($(".managerStatusdesc_selected").val() == "up")
             router.admin_state_up = true;
         else
             router.admin_state_up = false;
@@ -130,8 +152,137 @@ $(function() {
                 window.location.reload();
             }
         });
-
     });
     //------------------编辑路由end
+});
+
+//---------添加接口
+$(".addport").click(function() {
+
+    $(".inteface_id").val($(".routerDesc_id").text());
+    $(".inteface_name").val($(".routerDesc_name").text());
+    $(".port_subNetselected").empty();
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
+        success: function(data) {
+          console.log(data);
+          
+        }
+    });
 
 });
+$(".addInteface_OK").click(function() {
+
+    var port_create = {
+        "port": {
+            "network_id": "a87cc70a-3e15-4acf-8205-9b711a3531b7",
+            "name": "private-port",
+            "admin_state_up": true
+        }
+    }
+
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(port_create),
+        contentType: "application/json",
+        url: config["host"] + "/router/"++"/add_router_interface?token=" + window.localStorage.token,
+        success: function(data) {
+
+        }
+    });
+});
+//---------删除接口
+$(document).on("change", ".port_check", function() {
+    if ($(".port_check:checked").length != 0) {
+        $(".deleteport").attr("disabled", false);
+    } else {
+        $(".deleteport").attr("disabled", true);
+    }
+});
+//-----多删
+$(".deleteport").click(function() {
+    var port_ids = [];
+    var i = 0;
+    $(".port_check:checked").each(function() {
+        port_ids[i++] = $(this).attr("id");
+    });
+    deleteAjax("'" + port_ids + "'");
+});
+//----单删
+$(document).on("click", ".deletePortSimple", function() {
+    deleteAjax("['" + $(this).attr("id") + "']");
+});
+
+function deleteAjax(data) {
+    $.ajax({
+        type: "POST",
+        data: data,
+        contentType: "application/json",
+        url: config["host"] + "/router/"++"/remove_router_interface?token=" + window.localStorage.token,
+        success: function(data) {
+            window.location.reload();
+        }
+    });
+}
+
+function sertPortList(data) {
+    var str = '<tr>' +
+        '<td><input type="checkbox" class="port_check" id="' + data.id + '"></td>' +
+        '<td><a href="network_firewall_strategy_desc.html">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
+        '<td>' + data.fixed_ips[0].ip_address + '</td>' +
+        '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
+        '<td>' + (data['binding:vnic_type'] == 'normal' ? "内部接口" : "外部接口") + '</td>' +
+        '<td>' + (data.admin_state_up ? "上" : "下") + '</td>' +
+        '<td>' +
+        '<div class="btn-group">' +
+        '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data.id + '">删除接口</button>' +
+        '</div>' +
+        '</td>' +
+        '</tr>';
+
+    $(".port_descbody").append(str);
+}
+//------------清除网关
+$(document).on('click', ".delExtNetdesc", function() {
+    router_id = $(".routerDesc_id").text();
+    if (confirm("确定清除网关？") == true) {
+        var router_temp = {
+            "router": {
+                "external_gateway_info": null
+            }
+        };
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(router_temp),
+            contentType: "application/json",
+            url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
+            success: function(data) {
+                window.location.reload();
+            }
+        });
+    }
+});
+
+//------单删
+$(document).on('click', ".delete_routerdescSimple", function() {
+    var id = $(".routerDesc_id").text();
+    var json_array = '{"router_ids":["' + id + '"]}';
+    deleteAjax_routerInfo(json_array);
+});
+
+function deleteAjax_routerInfo(json_array) {
+    console.log(json_array);
+    $.ajax({
+        type: "POST",
+        data: json_array,
+        contentType: "application/json",
+        url: config["host"] + "/router/delete?token=" + window.localStorage.token,
+        success: function(data) {
+            window.location.href = "#/net/router";
+        },
+        error: function(data) {
+            alert("error!");
+        }
+    });
+}

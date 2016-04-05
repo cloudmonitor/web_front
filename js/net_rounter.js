@@ -224,9 +224,9 @@ $(document).on('click', ".edit_router", function() {
     var infos = $(this).attr("name").split(":");
     $(".edit_router_name").val(infos[0]);
     if (infos[1] == "上")
-        $(".managerStatus_selected option[value='up']").attr("selected");
+        $(".managerStatus_selected option[value='up']").attr("selected",true);
     else
-        $(".managerStatus_selected option[value='down']").attr("selected");
+        $(".managerStatus_selected option[value='down']").attr("selected",true);
 });
 $(".editRouter_ok").click(function() {
     var router_temp = {
