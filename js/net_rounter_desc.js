@@ -182,7 +182,7 @@ $(".addInteface_OK").click(function() {
         }
     }
 
-    $.ajax({
+/*    $.ajax({
         type: "POST",
         data: JSON.stringify(port_create),
         contentType: "application/json",
@@ -190,7 +190,7 @@ $(".addInteface_OK").click(function() {
         success: function(data) {
 
         }
-    });
+    });*/
 });
 //---------删除接口
 $(document).on("change", ".port_check", function() {
@@ -215,7 +215,7 @@ $(document).on("click", ".deletePortSimple", function() {
 });
 
 function deleteAjax(data) {
-    $.ajax({
+/*    $.ajax({
         type: "POST",
         data: data,
         contentType: "application/json",
@@ -223,7 +223,7 @@ function deleteAjax(data) {
         success: function(data) {
             window.location.reload();
         }
-    });
+    });*/
 }
 
 function sertPortList(data) {
