@@ -103,21 +103,23 @@ $(".subnet_check").change(function() {
 //-------------创建网络
 $(".create_networkOk").click(function() {
     var network_json;
-    var net_name = $(".Createnetwork_name").val();
-    var net_managerStatus = $(".Createnetwork_managerStatus").val();
-    alert($(".create_subnetwork").prop("checked"));
-    if (!$(".create_subnetwork").prop("checked")) {
-        var network = {
+    var net_managerStatus;
+    var net_name = $(".createnetwork_name").val();
+    if ($(".subnet_mangerStatuscheck").prop("checked"))
+        net_managerStatus = true;
+    else
+        net_managerStatus = false;
+    if (!$(".subnet_check").prop("checked")) {
+        var network = [{
             "network": {
                 "name": "",
                 "admin_state_up": true
             }
-        };
+        }];
         if (net_name != "")
-            network['network'].name = net_name;
-        network['network'].admin_state_up = net_managerStatus == "up" ? true : false;
-        network_json = "[" + JSON.stringify(network) + "]";
-        createNetAjax(network_json);
+            network[0]['network'].name = net_name;
+        network[0]['network'].admin_state_up = net_managerStatus;
+        createNetAjax(network);
     } else {
         var netWork_info = [{
             "network": {
@@ -126,35 +128,44 @@ $(".create_networkOk").click(function() {
             }
         }, {
             "subnet": {
-                "network_id": "d32019d3-bc6e-4319-9c1d-6722fc136a22",
+                "name": "",
                 "ip_version": 4,
-                "cidr": "10.0.0.1"
+                "cidr": ""
             }
         }];
         var network = netWork_info[0]['network'];
         var subnet = netWork_info[1]['subnet'];
         if (net_name != "")
             network.name = net_name;
-        network.admin_state_up = net_managerStatus == "up" ? true : false;
+        else
+            network.name="";
+        network.admin_state_up = net_managerStatus;
         //--------校验子网信息
-        var subnet_name = $(".createSubnet_name").val();
-        var subnet_addr = $(".createSubnet_addr").val();
-        var subnet_IPselected = $(".createSubnet_IPselected").val();
-        if (!$(".createSubnet_gatewallDisabled").is(":checked"))
-            var subnet_name = $(".createSubnet_gateWayIP").val();
-        if (subnet_name == "" || subnet_addr == "") {
-            alert("名称和地址为必填项！");
+        var subnet_name = $(".subnet_name").val();
+        //---获取子网的地址
+        var object = $(".radio_subnetaddr:checked");
+        console.log($(".radio_subnetaddr:checked"));
+        var num_1 = object.parent().siblings().eq(0).val();
+        var num_2 = object.parent().siblings().eq(2).val();
+        var num_3 = object.parent().siblings().eq(4).val();
+        var num_4 = object.parent().siblings().eq(6).val();
+        var num_5 = object.parent().siblings().eq(8).val();
+        var str_ip = num_1 + "." + num_2 + "." + num_3 + "." + num_4 + "/" + num_5;
+        subnet.name = subnet_name;
+        subnet.cidr = str_ip;
+        if (subnet_name == "") {
+            alert("请填写子网名称和地址！");
         } else {
-
+            createNetAjax(netWork_info);
         }
-
     }
 });
 
 function createNetAjax(network_json) {
+    console.log(JSON.stringify(network_json));
     $.ajax({
         type: "POST",
-        data: network_json,
+        data: JSON.stringify(network_json),
         contentType: "application/json",
         url: config['host'] + "/network/create?token=" + window.localStorage.token,
         success: function(data) {
