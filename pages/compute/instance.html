@@ -29,7 +29,7 @@
         </div>
         &nbsp;
         <div class="form-group">
-            <button type="button" class="btn btn-primary"><span class="fa fa-cloud-upload"></span> 启动云主机</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#start-host" type="button"><span class="fa fa-cloud-upload"></span> 启动云主机</button>
             <button type="button" class="btn btn-primary">终止实例</button>
         </div>
         &nbsp;
@@ -53,17 +53,6 @@
             </div>
         </div>
     </form>
-<!--     <ul style="list-style-type: none;display: inline-flex;">
-        <li>
-            <button type="button" class="btn btn-primary">筛选</button>
-        </li>
-        <li>
-            <button type="button" class="btn btn-primary">筛选</button>
-        </li>
-        <li>
-            <button type="button" class="btn btn-primary">筛选</button>
-        </li>
-    </ul> -->
     <br>
     <br>
     <table class="table table-striped instance_info">
@@ -84,35 +73,218 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <!-- <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                            <td><a href="computer_instance_desc.html">tenan01-cirros01</a></td>
-                            <td>10.0.10.5</td>
-                            <td>m1.small</td>
-                            <td>-</td>
-                            <td>运行中</td>
-                            <td>nova</td>
-                            <td>无</td>
-                            <td>运行中</td>
-                            <td>1周，6日</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-sm">创建快照</button>
-                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">切换下拉菜单</span>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">功能</a></li>
-                                        <li><a href="#">另一个功能</a></li>
-                                        <li><a href="#">其他</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody> -->
     </table>
+</div>
+<!-- 模态框 ：　启动云主机-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="start-host" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">启动云主机</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-target="#detail" data-toggle="tab">详情<span class="span-stand"> *</span> </a>
+                    </li>
+                    <li><a data-target="#security-access" data-toggle="tab">访问 ＆ 安全</a></li>
+                    <li>
+                        <a data-target="#network" data-toggle="tab">网络<span class="span-stand"> *</span></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <!-- 详情 -->
+                    <div class="tab-pane fade in active" id="detail">
+                        <div class="row">
+                            <form role="form" class="col-md-6">
+                                <p></p>
+                                <div class="form-group">
+                                    <label class="control-lable">可用域<span class="span-stand"> *</span></label>
+                                    <select class="form-control">
+                                        <option>规则1</option>
+                                        <option>规则2</option>
+                                        <option>规则3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">云主机名称<span class="span-stand"> *</span></label>
+                                    <input class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">云主机类型<span class="span-stand"> *</span></label>
+                                    <select class="form-control">
+                                        <option>端口1</option>
+                                        <option>端口2</option>
+                                        <option>端口3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">云主机数量<span class="span-stand"> *</span></label>
+                                    <input class="form-control" placeholder="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-lable">云主机启动源
+                                        <span class="span-stand"> *</span>
+                                    </label>
+                                    <select class="form-control">
+                                        <option>远程1</option>
+                                        <option>远程2</option>
+                                        <option>远程3</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <div class="col-md-6">
+                                <h5>指定创建云主机的详细信息</h5>
+                                <p>详细说明启动云书记的情况，下面的图表显示此项目所使用的资源和关联的项目配额</p>
+                                <table>
+                                    <caption>说明</caption>
+                                    <tr>
+                                        <th class="table-td-left">名称</th>
+                                        <td class="table-td-right">Firstname</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-td-left">虚拟内核</th>
+                                        <td class="table-td-right">Anna</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-td-left">根磁盘</th>
+                                        <td class="table-td-right">Debbie</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-td-left">临时磁盘</th>
+                                        <td class="table-td-right">John</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-td-left">磁盘总计</th>
+                                        <td class="table-td-right">John</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-td-left">内存</th>
+                                        <td class="table-td-right">John</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h4>项目限制</h4>
+                                <small><strong>云主机数量</strong><span class="modal-right">10中的4已使用</span></small>
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
+                                        <span class="sr-only">40% 完成</span>
+                                    </div>
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
+                                        <span class="sr-only">30% 完成（信息）</span>
+                                    </div>
+                                </div>
+                                <!-- 分割线 -->
+                                <small><strong>虚拟CPU数量</strong><span class="modal-right">20中的4已使用</span></small>
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
+                                        <span class="sr-only">40% 完成</span>
+                                    </div>
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
+                                        <span class="sr-only">30% 完成（信息）</span>
+                                    </div>
+                                </div>
+                                <!-- 分割线 -->
+                                <small><strong>内存总计</strong><span class="modal-right">51200中3584已使用</span></small>
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
+                                        <span class="sr-only">40% 完成</span>
+                                    </div>
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
+                                        <span class="sr-only">30% 完成（信息）</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 访问　＆　安全 -->
+                    <div class="tab-pane fade" id="security-access">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <h5><lable　for="key-value">值对</lable></h5>
+                                    <select class="form-control">
+                                        <option>key-value1</option>
+                                        <option>key-value2</option>
+                                    </select>
+                                    <button class="btn btn-default"><span class="fa fa-plus"></span></button>
+                                </p>
+                                <p>
+                                    <h5>安全组</h5>
+                                    <ul>
+                                        <li>
+                                            <label class="control-lable">
+                                                <input type="checkbox">test</label>
+                                        </li>
+                                        <li>
+                                            <label class="control-lable">
+                                                <input type="checkbox">test</label>
+                                        </li>
+                                        <li>
+                                            <label class="control-lable">
+                                                <input type="checkbox">test</label>
+                                        </li>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>通过密钥对、防火墙、和其它机制控制你的云主机权限</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 网络 -->
+                    <div class="tab-pane fade" id="network">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <h5>已选择的网络</h5>
+                                    <div class="alert alert-info"></div>
+                                </p>
+                                <p>
+                                    <h5>可用网络</h5>
+                                    <div class="alert alert-success">
+                                        <div class="net-item">
+                                            <span>
+                                                    project01-net01
+                                                </span>
+                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
+                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
+                                        </div>
+                                        <div class="net-item">
+                                            <span>
+                                                    project01-net01
+                                                </span>
+                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
+                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
+                                        </div>
+                                        <div class="net-item">
+                                            <span>
+                                                    project01-net01
+                                                </span>
+                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
+                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
+                                        </div>
+                                    </div>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p></p>
+                                <p>请选择要添加的网络，可以通过按钮添加也可以拖动添加，你还可以拖动已经添加的网络来改变NIC的顺序。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">运行</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
 </div>

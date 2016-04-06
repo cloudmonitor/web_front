@@ -217,9 +217,75 @@ i {
 }
 
 
-/* 网络与安全 -- 网络 -- 网络详情页面 子网*/
+/*　启动云主机：详情　*/
+
+#start-host .modal-dialog ,
+#create-net .modal-dialog
+{
+    width: 500px
+}
+
+#start-host table {
+    border: 1px dashed #eee
+}
+
+
+/*　启动云主机：访问　＆　安全　*/
+
+#security-access select {
+    width: 80%;
+    display: inline;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#security-access button {
+    margin-left: -5px;
+    margin-bottom: 2px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#security-access ul li {
+    list-style: none;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#security-access ul li input {
+    margin-right: 3px;
+}
+
+
+/*　启动云主机：网路*/
+
+.net-item {
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+    border: 1px solid #eee;
+    background-color: white;
+    color: rgba(0,0,0,0.8);
+}
+
+.net-item .shadow-span {
+    color: rgba(0,0,0,0.5);
+}
+
+.net-item button {
+    float: right;
+    margin-right: 3px;
+}
+
+
+/* 网络与安全 */
+
+
+/* :网络 :网络详情页面 子网*/
 
 .col-btn {
+    float: right;
+    margin-right: 3px;
+    margin-bottom: 3px;
     padding-left: 60px;
 }
 
@@ -272,8 +338,8 @@ i {
 }
 
 .modal-body .table-td-right {
-    text-align: right;
-    font-weight: bold;
+    text-align: left;
+    /*font-weight: bold;*/
 }
 
 .modal-body .table .table-button {
@@ -337,6 +403,7 @@ i {
 .text-warning {
     color: red !important;
 }
+
 
 /* 网络与安全　-- 浮动IP页面 -- 模态框 -- "*" 颜色 */
 
@@ -446,6 +513,10 @@ tfoot .tfoot-dsp {
     list-style-type: none;
 }
 
+.li-btn-bottom {
+    margin-bottom: -10px
+}
+
 
 /* 网络与安全 -- 防火墙 -- 防火墙详情 */
 
@@ -492,6 +563,8 @@ tfoot .tfoot-dsp {
 .modal-body div p {
     font-size: 12px;
 }
+
+
 /* 网络 密钥 模态框 */
 
 
@@ -503,8 +576,9 @@ tfoot .tfoot-dsp {
 
 .modal-right {
     float: right;
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
+
 
 /* ：文本域 */
 
