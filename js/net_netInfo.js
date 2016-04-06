@@ -62,10 +62,45 @@ $(function() {
     });
 
 });
-//-------------创建网络
+//0-32  16-31
+//------------创建网络面板的控制--start
 $(".create_networkCancel").click(function() {
-    $(".Createnetwork_name").val("");
+    if (!flag) {
+        $(".info_pic").removeClass("fa fa-angle-double-up");
+        $(".info_pic").addClass("fa fa-angle-double-down");
+        $(".subnet_multi").slideToggle();
+        flag = true;
+    }
+    $("createnetwork_name").val("");
+    $("subnet_name").val("");
+    $(".subnet_check").prop("checked", true);
+    $(".subnet_mangerStatuscheck").prop("checked", true);
 });
+//--------是否显示子网详细
+var flag = true;
+$(".choose_subnet").click(function() {
+    $(".subnet_multi").slideToggle();
+    if (flag) {
+        $(".info_pic").removeClass("fa fa-angle-double-down");
+        $(".info_pic").addClass("fa fa-angle-double-up");
+        flag = false;
+    } else {
+        $(".info_pic").removeClass("fa fa-angle-double-up");
+        $(".info_pic").addClass("fa fa-angle-double-down");
+        flag = true;
+    }
+});
+//-------是否显示子网
+$(".subnet_check").change(function() {
+    if ($(".subnet_check").is(":checked")) {
+        $(".subNet_infos").fadeToggle();
+    } else {
+        $(".subNet_infos").fadeToggle();
+    }
+});
+
+//------------创建网络面板的控制--end
+//-------------创建网络
 $(".create_networkOk").click(function() {
     var network_json;
     var net_name = $(".Createnetwork_name").val();
@@ -187,15 +222,15 @@ $(".edite_networkOk").click(function() {
     };
     net['network'].name = name;
     net['network'].admin_state_up = (status == "up" ? true : false);
-    updateNetAjax(net,id)
+    updateNetAjax(net, id)
 });
 
-function updateNetAjax(net,id) {
+function updateNetAjax(net, id) {
     $.ajax({
         type: "POST",
         data: JSON.stringify(net),
         contentType: "application/json",
-        url: config['host'] + "/network/update/"+id+"?token=" + window.localStorage.token,
+        url: config['host'] + "/network/update/" + id + "?token=" + window.localStorage.token,
         success: function(data) {
             window.location.reload();
         }
