@@ -9,7 +9,7 @@
         </div>
         &nbsp;
         <div class="form-group">
-            <button type="button" class="btn btn-primary"  tabindex="1"><span class="fa fa-plus-square"></span> 创建网络</button>
+            <button type="button" class="btn btn-primary" tabindex="1" data-toggle="modal" data-target="#create-net"><span class="fa fa-plus-square"></span> 创建网络</button>
             <button type="button" class="btn btn-danger" disabled tabindex="1"><span class="fa fa-times"></span> 删除网络</button>
         </div>
     </form>
@@ -30,4 +30,142 @@
             </tr>
         </thead>
     </table>
+</div>
+<!-- 模态框：创建网络 -->
+<div class="modal fade" id="create-net">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">创建网络</h4>
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- 导航面板 -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#network" aria-controls="home" role="tab" data-toggle="tab">网络</a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#subnet" aria-controls="tab" role="tab" data-toggle="tab">子网</a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#subnet-desc" aria-controls="tab" role="tab" data-toggle="tab">子网详情</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- 网络 -->
+                        <div role="tabpanel" class="tab-pane active" id="network">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label for="net-name">网络名称</label>
+                                            <input type="text" class="form-control" id="net-name" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="admin-state">管理员状态</label>
+                                            <select name="" id="input" class="form-control" required="required">
+                                                <option value="up">上</option>
+                                                <option value="down">中</option>
+                                                <option value="">下</option>
+                                            </select>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="">创建子网
+                                            </label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <p>创建新网络。另外，关联到网络的子网在下一面板中被创建。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 子网 -->
+                        <div role="tabpanel" class="tab-pane" id="subnet">
+                            <p></p>
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <strong>注意：</strong> 指定“网络地址”，“地址资源池”或者清空“创建子网”的复选框。
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label for="subnet-name">子网名称</label>
+                                            <input type="text" class="form-control" id="subnet-name" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="net-addr">网络地址</label>
+                                            <input type="text" class="form-control" id="net-addr" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="admin-state">IP版本</label>
+                                            <select name="" id="input" class="form-control" required="required">
+                                                <option value="ipv4">IPv4</option>
+                                                <option value="ipv6">IPv6</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="gateway">网关IP</label>
+                                            <input type="text" class="form-control" id="gateway" placeholder="">
+                                        </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="">禁用网关
+                                            </label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <p>创建网络关联的子网。点击“子网详情”标签可以进行高级配置。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 子网详情 -->
+                        <div role="tabpanel" class="tab-pane" id="subnet-desc">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <form role="form">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="" checked="true">激活DHCP
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ip-addr-pool">分配地址池</label>
+                                            <textarea name="" id="ip-addr-pool" class="form-control" rows="3" required="required"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="dns-service">DNS域名解析服务</label>
+                                            <textarea name="" id="dns-service" class="form-control" rows="3" required="required"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="host-route">主机路由</label>
+                                            <textarea name="" id="host-route" class="form-control" rows="3" required="required"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <p></p>
+                                    <p>为子网指定扩展属性</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">创建</button>
+            </div>
+        </div>
+    </div>
 </div>
