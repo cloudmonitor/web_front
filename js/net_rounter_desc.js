@@ -50,7 +50,6 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
                 success: function(data) {
-                    // console.log(data);
                     var ports = JSON.parse(data)['ports'];
                     for (var i = 0; i < ports.length; i++) {
                         var port = ports[i];
@@ -158,7 +157,6 @@ $(function() {
 
 //---------添加接口
 $(".addport").click(function() {
-
     $(".inteface_id").val($(".routerDesc_id").text());
     $(".inteface_name").val($(".routerDesc_name").text());
     $(".port_subNetselected").empty();
@@ -228,31 +226,39 @@ $(document).on("change", ".port_check", function() {
 });
 //-----多删
 $(".deleteport").click(function() {
-    var port_ids = { "subnet_id": [] };
-    var i = 0;
-    /*     {
+    var i = 0; 
+    var router_ports={
+        "router_ports": [{
             "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
-        }*/
+        }, {
+            "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
+        }]
+    }
     $(".port_check:checked").each(function() {
-        port_ids['subnet_id'][i++] = $(this).attr("id");
+        router_ports['router_ports'][i++]['subnet_id'] = $(this).attr("id");
     });
-    deleteAjax(port_ids);
+
+    deleteAjax(router_ports);
 });
 //----单删
 $(document).on("click", ".deletePortSimple", function() {
-    router_id = $(".routerDesc_id").text();
-    var port_ids = { "subnet_id": [] };
-    port_ids['subnet_id'][0] = router_id;
-    deleteAjax(port_ids);
+    var router_ports={
+        "router_ports": [{
+            "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
+        }]
+    }
+    router_ports['router_ports'][0]['subnet_id'] = $(this).attr("id");
+    deleteAjax(router_ports);
 });
 
 function deleteAjax(data) {
+    router_id = $(".routerDesc_id").text();
     console.log(JSON.stringify(data));
     $.ajax({
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json",
-        url: config["host"] + "/port/delete?token=" + window.localStorage.token,
+        url: config["host"] + "/router/" + router_id + "/remove_router_interface?token=" + window.localStorage.token,
         success: function(data) {
             window.location.reload();
         }
@@ -261,7 +267,7 @@ function deleteAjax(data) {
 
 function sertPortList(data) {
     var str = '<tr>' +
-        '<td><input type="checkbox" class="port_check" id="' + data.id + '"></td>' +
+        '<td><input type="checkbox" class="port_check" id="' + data['fixed_ips'][0]['subnet_id'] + '"></td>' +
         '<td><a href="network_firewall_strategy_desc.html">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
         '<td>' + data.fixed_ips[0].ip_address + '</td>' +
         '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
@@ -269,7 +275,7 @@ function sertPortList(data) {
         '<td>' + (data.admin_state_up ? "上" : "下") + '</td>' +
         '<td>' +
         '<div class="btn-group">' +
-        '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data.id + '">删除接口</button>' +
+        '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data['fixed_ips'][0]['subnet_id'] + '">删除接口</button>' +
         '</div>' +
         '</td>' +
         '</tr>';
