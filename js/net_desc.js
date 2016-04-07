@@ -6,7 +6,7 @@ $(function() {
         var id_num = (window.location.href.split('?')[1]).split('&')[0];
         var status_id = decodeURI(window.location.href.split('?')[1]).split('&')[1];
         var manager_status = status_id.split("id_start")[0];
-        var id_net = status_id.split("id_start")[1];
+        id_net = status_id.split("id_start")[1];
         var netInfo = JSON.parse(localStorage.net_tempInfo)['networks'][id_num];
         //---------显示网络信息
         setNetInfo(netInfo, manager_status);
@@ -278,6 +278,10 @@ $(".subnet_opengateway").change(function() {
         $(".creategateway_adrr").attr("disabled", false);
 });
 $(document).on("click", ".add_subnetInfo", function() {
+    setNetselect();
+});
+
+function setNetselect() {
     $(".private_selected").empty();
     $(".private_selected").append('<option value="test">选择私有网络</option>');
     var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
@@ -288,9 +292,10 @@ $(document).on("click", ".add_subnetInfo", function() {
         str += '<option value="' + server.id + '">' + server.name + '</option>';
     }
     $(".private_selected").append(str);
-});
+}
 //---------创建子网
 $(".create_subnetworkOk").click(function() {
+    update_flag = false;
     //------子网名称
     var sub_name = $(".createsubnet_name").val();
     //------私有网络ID
@@ -377,11 +382,21 @@ $(".create_subnetworkOk").click(function() {
 
 function createSubnetAJAX(subnet) {
     console.log(JSON.stringify(subnet));
+    var url_info;
+    if (update_flag)
+        url_info = "/subnet/create";
+    else {
+        delete subnet['subnet'].cidr;
+        delete subnet['subnet'].ip_version;
+        delete subnet['subnet'].network_id;
+        url_info = "/subnet/update/" + subnet_tempid;
+    }
+    update_flag = false;
     $.ajax({
         type: "POST",
         data: JSON.stringify(subnet),
         contentType: "application/json",
-        url: config['host'] + "/subnet/create?token=" + window.localStorage.token,
+        url: config['host'] + url_info + "?token=" + window.localStorage.token,
         success: function(data) {
             if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
                 console.log(data);
@@ -394,13 +409,87 @@ function createSubnetAJAX(subnet) {
     });
 }
 
+//-------------编辑子网
+var update_flag = false;
+var subnet_tempid;
+$(document).on("click", ".eidt_subnetInfo", function() {
+    update_flag = true;
+    var curr_id = this.id;
+    subnet_tempid = this.id;
+    var subnets = JSON.parse(localStorage.subnets_tempInfo)['subnets'];
+    var subnet;
+    for (var i = 0; i < subnets.length; i++) {
+        if (subnets[i].id == curr_id) {
+            subnet = subnets[i];
+            break;
+        }
+    }
+    $(".createsubnet_name").val(subnet.name);
+    setNetselect();
+    $(".private_selected option[value='" + id_net + "']").attr("selected", true);
+    $(".private_selected").attr("disabled",true);
+    var temp_cidr = subnet.cidr;
+    if (temp_cidr != "") {
+        var num = temp_cidr.split(".")[0];
+        if (num == "192") {
+            $("#ip_1").attr("checked", true);
+            $("#ip_2").attr("checked", false);
+            $("#ip_3").attr("checked", false);
+            $("#ip1").val(temp_cidr.split(".")[2]);
+        } else if (num == "10") {
+            $(".createchoose_subnet").click();
+            $("#ip_1").attr("checked", false);
+            $("#ip_2").attr("checked", true);
+            $("#ip_3").attr("checked", false);
+            $("#ip2_1").val(temp_cidr.split(".")[1]);
+            $("#ip2_2").val(temp_cidr.split(".")[2]);
+            $("#ip2_3").val(temp_cidr.split("/")[0].split(".")[3]);
+            $("#ip2_4").val(temp_cidr.split("/")[1]);
+        } else {
+            $(".createchoose_subnet").click();
+            $("#ip_1").attr("checked", false);
+            $("#ip_2").attr("checked", false);
+            $("#ip_3").attr("checked", true);
+            $("#ip3_1").val(temp_cidr.split(".")[1]);
+            $("#ip3_2").val(temp_cidr.split(".")[2]);
+            $("#ip3_3").val(temp_cidr.split("/")[0].split(".")[3]);
+            $("#ip3_4").val(temp_cidr.split("/")[1]);
+        }
+        $("#ip1").attr("disabled", true);
+        $("#ip2_1").attr("disabled", true);
+        $("#ip2_2").attr("disabled", true);
+        $("#ip2_3").attr("disabled", true);
+        $("#ip2_4").attr("disabled", true);
+        $("#ip3_1").attr("disabled", true);
+        $("#ip3_2").attr("disabled", true);
+        $("#ip3_3").attr("disabled", true);
+        $("#ip3_4").attr("disabled", true);
+    }
+    $(".creategateway_adrr").val(subnet.gateway_ip);
+    var pool_arr = subnet.allocation_pools;
+    var pool_str = "";
+    for (var i = 0; i < pool_arr.length; i++) {
+        var pool = pool_arr[i];
+        pool_str += pool.start + "," + pool.end + "\n";
+    }
+    if (pool_str != "")
+        $(".Addrpool").val(pool_str);
+    var dns_arr = subnet.dns_nameservers;
+    var dns_str = "";
+    for (var i = 0; i < dns_str.length; i++) {
+        dns_str += dns_str[i] + "\n";
+    }
+    if (dns_str != "")
+        $(".DNSserver").val(dns_str);
+});
+
 function set_subNet(data, i) {
     var str = '<tbody><tr><td><input type="checkbox" class="sub_checks" id="' + data.id + '"></td>' +
         '<td><a href="#/net/subnet-desc?' + i + '">' + data.name + '</a>' +
         '</td><td>' + data.cidr +
         '</td><td>' + 'ipv' + data.ip_version +
         '</td><td>' + data.gateway_ip +
-        '</td><td><div class="btn-group"><button type="button" class="btn btn-default btn-sm">编辑子网</button>' +
+        '</td><td><div class="btn-group"><button type="button" id="' + data.id + '" class="btn btn-default btn-sm eidt_subnetInfo" data-toggle="modal" data-target="#add-subnet">编辑子网</button>' +
         '<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>' +
         '<span class="sr-only">切换下拉菜单</span>' +
         '</button>' +
