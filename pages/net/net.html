@@ -10,7 +10,7 @@
         &nbsp;
         <div class="form-group">
             <button type="button" class="btn btn-primary" tabindex="1" data-toggle="modal" data-target="#create-net"><span class="fa fa-plus-square"></span> 创建网络</button>
-            <button type="button" class="btn btn-danger" disabled tabindex="1"><span class="fa fa-times"></span> 删除网络</button>
+            <button type="button" class="btn btn-danger delete_nets" disabled tabindex="1"><span class="fa fa-times"></span> 删除网络</button>
         </div>
     </form>
     <br>
@@ -62,19 +62,18 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label for="net-name">网络名称</label>
-                                            <input type="text" class="form-control" id="net-name" placeholder="">
+                                            <input type="text" class="form-control Createnetwork_name" id="net-name">
                                         </div>
                                         <div class="form-group">
                                             <label for="admin-state">管理员状态</label>
-                                            <select name="" id="input" class="form-control" required="required">
+                                            <select name="" id="input" class="form-control Createnetwork_managerStatus" required="required">
                                                 <option value="up">上</option>
-                                                <option value="down">中</option>
-                                                <option value="">下</option>
+                                                <option value="down">下</option>
                                             </select>
                                         </div>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" value="">创建子网
+                                                <input type="checkbox" class="create_subnetwork" checked>创建子网
                                             </label>
                                         </div>
                                     </form>
@@ -98,26 +97,26 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label for="subnet-name">子网名称</label>
-                                            <input type="text" class="form-control" id="subnet-name" placeholder="">
+                                            <input type="text" class="form-control createSubnet_name" id="subnet-name" placeholder="">
                                         </div>
                                         <div class="form-group">
                                             <label for="net-addr">网络地址</label>
-                                            <input type="text" class="form-control" id="net-addr" placeholder="">
+                                            <input type="text" class="form-control createSubnet_addr" id="net-addr" placeholder="">
                                         </div>
                                         <div class="form-group">
                                             <label for="admin-state">IP版本</label>
-                                            <select name="" id="input" class="form-control" required="required">
+                                            <select name="" id="input" class="form-control createSubnet_IPselected" required="required">
                                                 <option value="ipv4">IPv4</option>
                                                 <option value="ipv6">IPv6</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="gateway">网关IP</label>
-                                            <input type="text" class="form-control" id="gateway" placeholder="">
+                                            <input type="text" class="form-control createSubnet_gateWayIP" id="gateway" placeholder="">
                                         </div>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" value="">禁用网关
+                                                <input class="createSubnet_gatewallDisabled" type="checkbox">禁用网关
                                             </label>
                                         </div>
                                     </form>
@@ -163,8 +162,59 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">创建</button>
+                <button type="button" class="btn btn-default create_networkCancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary create_networkOk">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框：创建网络 -->
+<div class="modal fade" id="edite-net">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">编辑网络</h4>
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- 导航面板 -->
+                    <div class="tab-content">
+                        <!-- 网络 -->
+                        <div role="tabpanel" class="tab-pane active" id="network">
+                            <div class="row">
+                                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                    <p></p>
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label for="net-name">名称*</label>
+                                            <input type="text" class="form-control editenetwork_name" id="net-name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="net-name">ID*</label>
+                                            <input type="text" class="form-control editenetwork_id" id="net-name" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="admin-state">管理员状态</label>
+                                            <select name="" id="input" class="form-control editenetwork_managerStatus" required="required">
+                                                <option value="up">上</option>
+                                                <option value="down">下</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <p></p>
+                                    <p>创建新网络。另外，关联到网络的子网在下一面板中被创建。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default edite_networkCancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary edite_networkOk">创建</button>
             </div>
         </div>
     </div>

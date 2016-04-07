@@ -263,9 +263,12 @@ function myCtrl($scope) {
 
 function floatingIPCtrl($scope, $http) {
     $("head title").text("浮动IP");
-    // 变量初始化
+    // ip 数目
     $scope.item_count = 0;
+    // 分配IP按钮默认启用
     $scope.disAlloc = false;
+    // 关联浮动IP按钮默认启用
+    $scope.associateClick = false;
     // 确定某个value值在对象数组中的位置，返回所在的下表
     var findValueIndex = function(key, value, objArray) {
         var array = $.grep(objArray, function(obj) {
@@ -477,7 +480,12 @@ function floatingIPCtrl($scope, $http) {
             console.info("要关联的IP: ", response.data);
             $scope.ipItems = response.data.disassociate_port;
             console.info("要显示的IP: ", $scope.ipItems);
-            $scope.hasFixed_ip = $scope.ipItems[0].id;
+            if ($scope.ipItems.length === 0) {
+                $scope.associateClick = true;
+            } else {
+                $scope.hasFixed_ip = $scope.ipItems[0].id;
+                $scope.associateClick = false;
+            }
             console.info("第一选项: ", $scope.hasFixed_ip);
             // 提交 关联
             $scope.associateBtn = function() {
@@ -500,12 +508,9 @@ function floatingIPCtrl($scope, $http) {
                     var fixed_ip = response.data.floatingip.fixed_ip_address;
                     console.info("关联成功固定IP地址：　", fixed_ip);
                     $("#associateModal").modal('hide');
-                    for (var i = 0, len = $scope.item_count; i < len; i++) {
-                        if ($scope.items[i].floating_ip_address === ip) {
-                            $scope.items[i].fixed_ip_address = fixed_ip;
-                            break;
-                        }
-                    }
+                    var index = findValueIndex("floating_ip_address", ip, $scope.items);
+                    console.info("index :", index);
+                    $scope.items[index].fixed_ip_address = fixed_ip;
                 }, function(response) {
                     // 请求失败
                     console.error("关联失败：　", response.statusText);
@@ -587,6 +592,7 @@ function floatingIPCtrl($scope, $http) {
                     console.warn("IP释放失败")
                 }
                 $("#freeFloatIpModal").modal('hide');
+                updateProcessBar();
             }, function(response) {
                 // 请求失败
                 console.error("请求失败");

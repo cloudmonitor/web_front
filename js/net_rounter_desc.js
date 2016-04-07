@@ -9,7 +9,7 @@ $(function() {
         type: "GET",
         url: config["host"] + "/routers?token=" + window.localStorage.token,
         success: function(data) {
-           // console.log(data);
+            // console.log(data);
             var rounters = JSON.parse(data)['routers'];
             for (var i = 0; i < rounters.length; i++) {
                 if (rounters[i].id == id) {
@@ -50,7 +50,6 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
                 success: function(data) {
-                   // console.log(data);
                     var ports = JSON.parse(data)['ports'];
                     for (var i = 0; i < ports.length; i++) {
                         var port = ports[i];
@@ -158,39 +157,64 @@ $(function() {
 
 //---------添加接口
 $(".addport").click(function() {
-
     $(".inteface_id").val($(".routerDesc_id").text());
     $(".inteface_name").val($(".routerDesc_name").text());
     $(".port_subNetselected").empty();
     $.ajax({
         type: "GET",
-        url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
+        url: config["host"] + "/routers/disconnect_subnet?token=" + window.localStorage.token,
         success: function(data) {
-          console.log(data);
-          
+            var subnets = JSON.parse(data)['subnets'];
+            if (subnets.length == 0)
+                $(".port_subNetselected").append('<option>没有可用的子网</option>');
+            else {
+                $(".port_subNetselected").append('<option value="test">选择子网</option>');
+            }
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/networks?token=" + window.localStorage.token,
+                success: function(data) {
+                    var networks = JSON.parse(data)['networks'];
+                    for (var i = 0; i < subnets.length; i++) {
+                        var subnet = subnets[i];
+                        var port_name = subnet.name;
+                        var port_cidr = subnet.cidr;
+                        var net_id = subnet.network_id;
+                        var net_name = "";
+                        for (var j = 0; j < networks.length; j++) {
+                            if (net_id == networks[j].id) {
+                                net_name = networks[j].name;
+                                break;
+                            }
+                        }
+                        var option = '<option value="' + subnet.id + '">' + net_name + ':' + port_cidr + "(" + port_name + ")" + '</option>'
+                        $(".port_subNetselected").append(option);
+                    }
+                }
+            });
         }
     });
-
 });
 $(".addInteface_OK").click(function() {
-
+    router_id = $(".routerDesc_id").text();
     var port_create = {
-        "port": {
-            "network_id": "a87cc70a-3e15-4acf-8205-9b711a3531b7",
-            "name": "private-port",
-            "admin_state_up": true
-        }
+        "subnet_id": ""
+    }
+    if ($(".port_subNetselected").val() != "test") {
+        port_create.subnet_id = $(".port_subNetselected").val();
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(port_create),
+            contentType: "application/json",
+            url: config["host"] + "/router/" + router_id + "/add_router_interface?token=" + window.localStorage.token,
+            success: function(data) {
+                location.reload();
+            }
+        });
+    } else {
+        alert("子网字段必选！");
     }
 
-    $.ajax({
-        type: "POST",
-        data: JSON.stringify(port_create),
-        contentType: "application/json",
-        url: config["host"] + "/router/"++"/add_router_interface?token=" + window.localStorage.token,
-        success: function(data) {
-
-        }
-    });
 });
 //---------删除接口
 $(document).on("change", ".port_check", function() {
@@ -202,24 +226,39 @@ $(document).on("change", ".port_check", function() {
 });
 //-----多删
 $(".deleteport").click(function() {
-    var port_ids = [];
-    var i = 0;
+    var i = 0; 
+    var router_ports={
+        "router_ports": [{
+            "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
+        }, {
+            "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
+        }]
+    }
     $(".port_check:checked").each(function() {
-        port_ids[i++] = $(this).attr("id");
+        router_ports['router_ports'][i++]['subnet_id'] = $(this).attr("id");
     });
-    deleteAjax("'" + port_ids + "'");
+
+    deleteAjax(router_ports);
 });
 //----单删
 $(document).on("click", ".deletePortSimple", function() {
-    deleteAjax("['" + $(this).attr("id") + "']");
+    var router_ports={
+        "router_ports": [{
+            "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
+        }]
+    }
+    router_ports['router_ports'][0]['subnet_id'] = $(this).attr("id");
+    deleteAjax(router_ports);
 });
 
 function deleteAjax(data) {
+    router_id = $(".routerDesc_id").text();
+    console.log(JSON.stringify(data));
     $.ajax({
         type: "POST",
-        data: data,
+        data: JSON.stringify(data),
         contentType: "application/json",
-        url: config["host"] + "/router/"++"/remove_router_interface?token=" + window.localStorage.token,
+        url: config["host"] + "/router/" + router_id + "/remove_router_interface?token=" + window.localStorage.token,
         success: function(data) {
             window.location.reload();
         }
@@ -228,7 +267,7 @@ function deleteAjax(data) {
 
 function sertPortList(data) {
     var str = '<tr>' +
-        '<td><input type="checkbox" class="port_check" id="' + data.id + '"></td>' +
+        '<td><input type="checkbox" class="port_check" id="' + data['fixed_ips'][0]['subnet_id'] + '"></td>' +
         '<td><a href="network_firewall_strategy_desc.html">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
         '<td>' + data.fixed_ips[0].ip_address + '</td>' +
         '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
@@ -236,7 +275,7 @@ function sertPortList(data) {
         '<td>' + (data.admin_state_up ? "上" : "下") + '</td>' +
         '<td>' +
         '<div class="btn-group">' +
-        '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data.id + '">删除接口</button>' +
+        '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data['fixed_ips'][0]['subnet_id'] + '">删除接口</button>' +
         '</div>' +
         '</td>' +
         '</tr>';
