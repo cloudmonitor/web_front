@@ -1,20 +1,37 @@
+var sub_list_len = 0;
 $(function() {
-    var flag=window.location.href.indexOf("&");
+    var flag = window.location.href.indexOf("&");
     //-----从网络进入的情况
-    if (flag>=0) {
+    if (flag >= 0) {
         var id_num = (window.location.href.split('?')[1]).split('&')[0];
-        var manager_status = decodeURI(window.location.href.split('?')[1]).split('&')[1];
-
-        var subnetInfos = localStorage.subnetInfo;
+        var status_id = decodeURI(window.location.href.split('?')[1]).split('&')[1];
+        var manager_status = status_id.split("id_start")[0];
+        var id_net = status_id.split("id_start")[1];
         var netInfo = JSON.parse(localStorage.net_tempInfo)['networks'][id_num];
-
         //---------显示网络信息
         setNetInfo(netInfo, manager_status);
 
         //-------子网
-        var sunNetInfos = JSON.parse(subnetInfos);
-        for (var i = 0; i < sunNetInfos.length; i++)
-            set_subNet(sunNetInfos[i], sunNetInfos[i].id);
+        var networks = JSON.parse(localStorage.net_tempInfo)['networks'];
+        var curr_subnetids;
+        for (var j = 0; j < networks.length; j++) {
+            if (networks[j].id == id_net) {
+                curr_subnetids = networks[j]['subnets'];
+                break;
+            }
+        }
+        var subnets = JSON.parse(localStorage.subnets_tempInfo)['subnets'];
+        for (var i = 0; i < subnets.length; i++) {
+            var subnet = subnets[i];
+            for (var k = 0; k < curr_subnetids.length; k++) {
+                if (curr_subnetids[k] == subnet.id) {
+                    set_subNet(subnet, subnet.id);
+                }
+            }
+        }
+        sub_list_len = curr_subnetids.length;
+        var str_footer = '<td colspan="6">Displaying <span id="item_count">' + sub_list_len + '</span> items</td>';
+        $(".sub_netInfo_footer").append(str_footer);
 
         //------端口
         $.ajax({
@@ -109,6 +126,9 @@ $(function() {
                         var sunNetInfos = JSON.parse(subnetInfoTemp);
                         for (var i = 0; i < sunNetInfos.length; i++)
                             set_subNet(sunNetInfos[i], sunNetInfos[i].id);
+                        sub_list_len = sunNetInfos.length;
+                        var str_footer = '<td colspan="6">Displaying <span id="item_count">' + sub_list_len + '</span> items</td>';
+                        $(".sub_netInfo_footer").append(str_footer);
                         //------------------------------------                      
                         //----------------端口
                         $.ajax({
