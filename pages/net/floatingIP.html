@@ -24,29 +24,30 @@
         <tbody>
             <tr ng-repeat="x in items">
                 <td>
-                    <input type="checkbox" ng-click="changeState()" ng-checked="itemChecked">
-                    <ip ng-hide="true">{{ x.ip }}</ip>
-                    <id ng-hide="true">{{ x.id }}</id>
+                    <input type="checkbox" ng-click="changeState()" ng-checked="itemChecked" ip="{{ x.floating_ip_address }}" id="{{ x.id }}">
                 </td>
                 <td>
-                    <a href="#/compute/instance-desc" ng-bind="x.ip"></a>
+                    {{ x.floating_ip_address }}
                 </td>
-                <td ng-bind="x.fixed_ip"></td>
-                <td ng-bind="x.pool"></td>
+                <td ng-if="x.fixed_ip_address">{{ x.fixed_ip_address }}</td>
+                <td ng-if="!x.fixed_ip_address">-</td>
+                <td ng-bind="x.name"></td>
+                <!-- 下面两个td是一个组 -->
                 <td ng-bind="x.status"></td>
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm">关联</button>
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#associateModal" ng-click="relIPBtn($event)" ng-if="!x.fixed_ip_address" ip="{{ x.floating_ip_address }}" id="{{ x.id }}">关联</button>
+                        <button type="button" class="btn btn-default btn-sm text-red" data-toggle="modal" data-target="#disassociateModal" ng-click="disAssociateBtn($event)" ng-if="x.fixed_ip_address" ip="{{ x.floating_ip_address }}" id="{{ x.id }}">解除绑定</button>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a>释放浮动IP</a></li>
+                            <li><a class="text-red" href="" data-toggle="modal" data-target="#freeFloatIpModal" ng-click="freeFloatIPBtn($event)" ip="{{ x.floating_ip_address }}" id="{{ x.id }}">释放浮动IP</a></li>
                         </ul>
                     </div>
                 </td>
             </tr>
-            <tr ng-show="noItemNotice">
+            <tr ng-if="!item_count">
                 <td class="text-center" colspan="6">没有可显示的项目</td>
             </tr>
         </tbody>
@@ -57,7 +58,7 @@
         </tfoot>
     </table>
 </div>
-<!-- 模态框(Modal) 释放浮动IP确认-->
+<!-- 模态框(Modal) 释放多个浮动IP确认-->
 <div class="modal fade" id="delete-confirm" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -65,12 +66,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel">
-                                    确认删除吗
-                    </h4>
+                <h4 class="modal-title" id="myModalLabel">确认删除吗</h4>
             </div>
             <div class="modal-body">
-                <p>一旦一个floating IP释放，就无法保证再一次将同一个IP分配给它了你将要删除的的ＩＰ如下:</p>
+                <p>一旦floating IP释放，就无法保证再一次将同一个IP分配给它
+                    <br>你将要删除的的IP如下:</p>
                 <ul>
                     <li ng-repeat="x in ipDeletes">{{x}}</li>
                 </ul>
@@ -102,8 +102,8 @@
                         <form role="form">
                             <div class="form-group">
                                 <label>资源池<span class="span-stand"> *</span></label>
-                                <select class="form-control" ng-model="resName">
-                                    <option ng-repeat="x in resLists" value=" {{ x.name }} ">{{ x.name }}</option>
+                                <select class="form-control" ng-model="floating_network_id">
+                                    <option ng-repeat="x in resLists" value=" {{ x.id }} ">{{ x.name }}</option>
                                 </select>
                             </div>
                         </form>
@@ -125,12 +125,87 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消
-                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" ng-click="allocIP()" ng-disabled="disAlloc">分配IP</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal -->
+</div>
+<!-- 模态框(Modal) 关联-->
+<div class="modal fade" id="associateModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">管理浮动IP的关联</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <h5><lable>IP 地址:<span class="span-stand"> *</span></lable></h5>
+                            <input class="form-control" ng-value="curFloatingIp" disabled>
+                        </p>
+                        <p>
+                            <h5><lable　for="key-value">待连接的端口:<span class="span-stand"> *</span></lable></h5>
+                            <select class="form-control" ng-model=" hasFixed_ip ">
+                                <option ng-repeat="x in ipItems" value="{{ x.id }}">{{ x.fixed_ips[0].ip_address }}</option>
+                            </select>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>请为选中的的云主机或端口选择要绑定的IP地址</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="associateBtn()">关联</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 释放单个浮动IP -->
+<div class="modal fade" id="freeFloatIpModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">确认释放吗</h4>
+            </div>
+            <div class="modal-body">
+                <p>一旦floating IP释放，就无法保证再一次将同一个IP分配给它
+                    <br>你将要删除的的IP如下:</p>
+                <ul>
+                    <li ng-bind="freeFloatingIP"></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteOneIP()">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="disassociateModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">解除绑定</h4>
+            </div>
+            <div class="modal-body">
+                <p>你要要解除绑定的IP如下:
+                    <ul>
+                        <li ng-bind="disassociateIP"></li>
+                    </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" ng-click="disAssociate()">解除绑定</button>
+            </div>
+        </div>
+    </div>
 </div>
