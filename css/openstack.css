@@ -220,7 +220,10 @@ i {
 #create-net .modal-dialog {
     width: 500px
 }
-
+#create-subnet .modal-dialog
+{
+    width: 600px
+}
 #start-host table {
     border: 1px dashed #eee
 }

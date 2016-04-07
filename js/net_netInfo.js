@@ -62,27 +62,64 @@ $(function() {
     });
 
 });
-//-------------创建网络
+//0-32  16-31
+//------------创建网络面板的控制--start
 $(".create_networkCancel").click(function() {
-    $(".Createnetwork_name").val("");
+    if (!flag) {
+        $(".info_pic").removeClass("fa fa-angle-double-up");
+        $(".info_pic").addClass("fa fa-angle-double-down");
+        $(".subnet_multi").slideToggle();
+        flag = true;
+    }
+    $("createnetwork_name").val("");
+    $("subnet_name").val("");
+    $(".subnet_check").prop("checked", true);
+    $(".subnet_mangerStatuscheck").prop("checked", true);
 });
+//--------是否显示子网详细
+var flag = true;
+$(".choose_subnet").click(function() {
+    $(".subnet_multi").slideToggle();
+    if (flag) {
+        $(".info_pic").removeClass("fa fa-angle-double-down");
+        $(".info_pic").addClass("fa fa-angle-double-up");
+        flag = false;
+    } else {
+        $(".info_pic").removeClass("fa fa-angle-double-up");
+        $(".info_pic").addClass("fa fa-angle-double-down");
+        flag = true;
+    }
+});
+//-------是否显示子网
+$(".subnet_check").change(function() {
+    if ($(".subnet_check").is(":checked")) {
+        $(".subNet_infos").fadeToggle();
+    } else {
+        $(".subNet_infos").fadeToggle();
+    }
+});
+
+//------------创建网络面板的控制--end
+//-------------创建网络
 $(".create_networkOk").click(function() {
     var network_json;
-    var net_name = $(".Createnetwork_name").val();
-    var net_managerStatus = $(".Createnetwork_managerStatus").val();
-    alert($(".create_subnetwork").prop("checked"));
-    if (!$(".create_subnetwork").prop("checked")) {
-        var network = {
+    var net_managerStatus;
+    var net_name = $(".createnetwork_name").val();
+    if ($(".subnet_mangerStatuscheck").prop("checked"))
+        net_managerStatus = true;
+    else
+        net_managerStatus = false;
+    if (!$(".subnet_check").prop("checked")) {
+        var network = [{
             "network": {
                 "name": "",
                 "admin_state_up": true
             }
-        };
+        }];
         if (net_name != "")
-            network['network'].name = net_name;
-        network['network'].admin_state_up = net_managerStatus == "up" ? true : false;
-        network_json = "[" + JSON.stringify(network) + "]";
-        createNetAjax(network_json);
+            network[0]['network'].name = net_name;
+        network[0]['network'].admin_state_up = net_managerStatus;
+        createNetAjax(network);
     } else {
         var netWork_info = [{
             "network": {
@@ -91,35 +128,44 @@ $(".create_networkOk").click(function() {
             }
         }, {
             "subnet": {
-                "network_id": "d32019d3-bc6e-4319-9c1d-6722fc136a22",
+                "name": "",
                 "ip_version": 4,
-                "cidr": "10.0.0.1"
+                "cidr": ""
             }
         }];
         var network = netWork_info[0]['network'];
         var subnet = netWork_info[1]['subnet'];
         if (net_name != "")
             network.name = net_name;
-        network.admin_state_up = net_managerStatus == "up" ? true : false;
+        else
+            network.name = "";
+        network.admin_state_up = net_managerStatus;
         //--------校验子网信息
-        var subnet_name = $(".createSubnet_name").val();
-        var subnet_addr = $(".createSubnet_addr").val();
-        var subnet_IPselected = $(".createSubnet_IPselected").val();
-        if (!$(".createSubnet_gatewallDisabled").is(":checked"))
-            var subnet_name = $(".createSubnet_gateWayIP").val();
-        if (subnet_name == "" || subnet_addr == "") {
-            alert("名称和地址为必填项！");
+        var subnet_name = $(".subnet_name").val();
+        //---获取子网的地址
+        var object = $(".radio_subnetaddr:checked");
+        console.log($(".radio_subnetaddr:checked"));
+        var num_1 = object.parent().siblings().eq(0).val();
+        var num_2 = object.parent().siblings().eq(2).val();
+        var num_3 = object.parent().siblings().eq(4).val();
+        var num_4 = object.parent().siblings().eq(6).val();
+        var num_5 = object.parent().siblings().eq(8).val();
+        var str_ip = num_1 + "." + num_2 + "." + num_3 + "." + num_4 + "/" + num_5;
+        subnet.name = subnet_name;
+        subnet.cidr = str_ip;
+        if (subnet_name == "") {
+            alert("请填写子网名称和地址！");
         } else {
-
+            createNetAjax(netWork_info);
         }
-
     }
 });
 
 function createNetAjax(network_json) {
+    console.log(JSON.stringify(network_json));
     $.ajax({
         type: "POST",
-        data: network_json,
+        data: JSON.stringify(network_json),
         contentType: "application/json",
         url: config['host'] + "/network/create?token=" + window.localStorage.token,
         success: function(data) {
@@ -187,21 +233,167 @@ $(".edite_networkOk").click(function() {
     };
     net['network'].name = name;
     net['network'].admin_state_up = (status == "up" ? true : false);
-    updateNetAjax(net,id)
+    updateNetAjax(net, id)
 });
 
-function updateNetAjax(net,id) {
+function updateNetAjax(net, id) {
     $.ajax({
         type: "POST",
         data: JSON.stringify(net),
         contentType: "application/json",
-        url: config['host'] + "/network/update/"+id+"?token=" + window.localStorage.token,
+        url: config['host'] + "/network/update/" + id + "?token=" + window.localStorage.token,
         success: function(data) {
             window.location.reload();
         }
     });
 }
+//---------------创建子网面板配置
+var sub1_flag = true;
+$(".createchoose_subnet").click(function() {
+    $(".createsubnet_multi").slideToggle();
+    if (sub1_flag) {
+        $(".info_pic2").removeClass("fa fa-angle-double-down");
+        $(".info_pic2").addClass("fa fa-angle-double-up");
+        sub1_flag = false;
+    } else {
+        $(".info_pic2").removeClass("fa fa-angle-double-up");
+        $(".info_pic2").addClass("fa fa-angle-double-down");
+        sub1_flag = true;
+    }
+});
+var sub2_flag = true;
+$(".showmoresubnetInfo").click(function() {
+    $(".showMoreInfo").slideToggle();
+    if (sub2_flag) {
+        $(".info_pic3").removeClass("fa fa-angle-double-down");
+        $(".info_pic3").addClass("fa fa-angle-double-up");
+        sub2_flag = false;
+    } else {
+        $(".info_pic3").removeClass("fa fa-angle-double-up");
+        $(".info_pic3").addClass("fa fa-angle-double-down");
+        sub2_flag = true;
+    }
+});
+$(".subnet_opengateway").change(function() {
+    if (!$(".subnet_opengateway").is(":checked"))
+        $(".creategateway_adrr").attr("disabled", true);
+    else
+        $(".creategateway_adrr").attr("disabled", false);
+});
+$(document).on("click", ".create_subnet", function() {
+    $(".private_selected").empty();
+    $(".private_selected").append('<option value="test">选择私有网络</option>');
+    var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
+    var server;
+    var str = "";
+    for (var i = 0; i < servers.length; i++) {
+        server = servers[i];
+        str += '<option value="' + server.id + '">' + server.name + '</option>';
+    }
+    $(".private_selected").append(str);
+});
+//---------创建子网
+$(".create_subnetworkOk").click(function() {
+    //------子网名称
+    var sub_name = $(".createsubnet_name").val();
+    //------私有网络ID
+    var private_net = $(".private_selected").val();
+    //---获取子网的地址
+    var object = $(".createradio_subnetaddr:checked");
+    var num_1 = object.parent().siblings().eq(0).val();
+    var num_2 = object.parent().siblings().eq(2).val();
+    var num_3 = object.parent().siblings().eq(4).val();
+    var num_4 = object.parent().siblings().eq(6).val();
+    var num_5 = object.parent().siblings().eq(8).val();
+    var str_ip = num_1 + "." + num_2 + "." + num_3 + "." + num_4 + "/" + num_5;
+    //------------开启网关判断
+    var gateWay;
+    if ($(".subnet_opengateway").prop("checked")) {
+        gateWay = $(".creategateway_adrr").val();
+    }
+    //--------DHCP
+    var dhcp;
+    if ($(".subnet_openDHCP").prop("checked")) {
+        dhcp = true;
+    } else {
+        dhcp = false;
+    }
 
+    //--------数据提交
+    var subnet = {
+        "subnet": {
+            "name": "",
+            "network_id": "",
+            "ip_version": 4,
+            "cidr": "10.0.0.1",
+            "gateway_ip": "",
+            "enable_dhcp": false,
+            "allocation_pools": [],
+            "dns_nameservers": []
+        }
+    }
+    var subnetInfo = subnet['subnet'];
+    if (sub_name == "") {
+        alert("子网名称必填！");
+        return;
+    }
+    subnetInfo.name = sub_name;
+    if (private_net == "test") {
+        alert("请选择私有网络！");
+        return;
+    }
+    subnetInfo.network_id = private_net;
+    subnetInfo.cidr = str_ip;
+    if (gateWay == "")
+        delete subnetInfo.gateway_ip;
+    else
+        subnetInfo.gateway_ip = gateWay;
+    subnetInfo.enable_dhcp = dhcp;
+    //--------地址池
+    if ($(".Addrpool").val() != "") {
+        var arr = $(".Addrpool").val().split("\n");
+
+        var temp_arr = [];
+        var temp;
+        var object = { "start": "", "end": "" };
+        for (var i = 0; i < arr.length; i++) {
+            temp = arr[i].split(",");
+            if (temp.length % 2 != 0) {
+                alert("地址池起始地址有误！");
+                return;
+            }
+            object.start = temp[0];
+            object.end = temp[1];
+            temp_arr[i] = object;
+        }
+        subnetInfo.allocation_pools = temp_arr;
+    }
+    //--------DNS服务
+    if ($(".DNSserver").val() != "") {
+        var arr = $(".DNSserver").val().split("\n");
+        for (var i = 0; i < arr.length; i++) {
+            subnetInfo.dns_nameservers[i] = arr[i];
+        }
+    }
+    createSubnetAJAX(subnet);
+});
+
+function createSubnetAJAX(subnet) {
+    console.log(JSON.stringify(subnet));
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(subnet),
+        contentType: "application/json",
+        url: config['host'] + "/subnet/create?token=" + window.localStorage.token,
+        success: function(data) {
+            if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
+                console.log(data);
+                alert("请检查子网配置格式！");
+            } else
+                window.location.reload();
+        }
+    });
+}
 
 function setList(data, i, status) {
     var str = "<tbody><tr><td><input type='checkbox' class='net_check' id='" + data.id + "'></td><td><a href='#/net/net-desc?" + i + "&" + status + "'>" + data.name + "</a></td><td>" + data.subnets + "</td><td>" + data.shared + "</td>" +
@@ -210,7 +402,7 @@ function setList(data, i, status) {
         "<button type='button'id='" + data.id + "' name='" + data.name + "' status='" + data.admin_state_up + "' class='btn btn-default btn-sm edite_net_class' data-toggle='modal' data-target='#edite-net'>" + "编辑网络" + "</button>" +
         "<button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><span class='caret'></span><span class='sr-only'>" + "切换下拉菜单" + "</span></button>" +
         "<ul class='dropdown-menu' role='menu'>" +
-        "<li><a href='javascript:void(0)'>" + "增加子网" + "</a></li>" +
+        "<li class='create_subnet' data-toggle='modal' data-target='#create-subnet'><a href='javascript:void(0)'>" + "增加子网" + "</a></li>" +
         "<li class='deleteNetSimple' id='" + data.id + "'><a href='javascript:void(0)'><font color='red'>" + "删除网络" + "</font></a></li>" +
         "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
