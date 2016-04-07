@@ -99,6 +99,7 @@ $(function() {
                         break;
                     }
                 }
+                id_net=id;
                 //---------显示子网
                 $.ajax({
                     type: "GET",
@@ -108,22 +109,21 @@ $(function() {
                         //-----------------------------------
                         var subnets = servers['networks'][curr_net]['subnets'];
 
-                        var subnet_Info = "[";
+                        var subnet_Info = [];
+                        var temp_i=0;
                         for (var j = 0; j < subnets.length; j++) {
                             // alert(subnets.length);
                             for (var k = 0; k < subnet_infos.length; k++) {
                                 //alert(subnets[i]+"=="+subnet_infos[j].id);
                                 if (subnets[j] == subnet_infos[k].id) {
+                                    console.error(subnet_Info);
                                     // alert(subnets[i]);
-                                    if (subnet_Info = "[")
-                                        subnet_Info += JSON.stringify(subnet_infos[k]);
-                                    else
-                                        subnet_Info += "," + JSON.stringify(subnet_infos[k]);
+                                    subnet_Info[temp_i++]=subnet_infos[k];
                                 }
                             }
                         }
-                        var subnetInfoTemp = subnet_Info + "]";
-                        var sunNetInfos = JSON.parse(subnetInfoTemp);
+                      console.error(">>>>>>>>>>.",subnet_Info);
+                        var sunNetInfos = subnet_Info;
                         for (var i = 0; i < sunNetInfos.length; i++)
                             set_subNet(sunNetInfos[i], sunNetInfos[i].id);
                         sub_list_len = sunNetInfos.length;
