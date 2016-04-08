@@ -48,6 +48,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/router.html',
             controller: 'routerCtrl'
         })
+        .when('/net/routerDesc', {
+            templateUrl: 'pages/net/router-desc.html',
+            controller: 'routerdescCtrl'
+        })
         // 网络 -- 浮动IP
         .when('/net/floatingIP', {
             templateUrl: 'pages/net/floatingIP.html',
@@ -208,6 +212,11 @@ myApp.controller('routerCtrl', function($scope) {
     $("head title").text("路由器");
 });
 
+myApp.controller('routerdescCtrl', function($scope) {
+    $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/net_rounter_desc.js', 'text/javascript', 'utf-8');
+    $("head title").text("路由器");
+});
 // 网络与安全 -- 浮动IP
 myApp.controller('floatingIPCtrl', floatingIPCtrl);
 
