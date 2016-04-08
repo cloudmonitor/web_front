@@ -263,40 +263,67 @@ function myCtrl($scope) {
 
 function floatingIPCtrl($scope, $http) {
     $("head title").text("浮动IP");
-    // 变量初始化
+    // ip 数目
     $scope.item_count = 0;
+    // 分配IP按钮默认启用
     $scope.disAlloc = false;
-
-    // 获得ip项目列表
-    $scope.getIPlists = function() {
-        var url = config.host + "/floatingips?token=" + window.localStorage.token;
-        $http.get(url).then(function(response) {
-            console.info("获取floating_ips:\n%o", response.data);
-            console.info("取回了数据条数", response.data.floating_ips.length);
-            $scope.items = response.data.floating_ips;
-            $scope.item_count = $scope.items.length;
-            $scope.item_desc = ($scope.item_count > 1) ? ("items") : ("item");
-            $scope.noItemNotice = ($scope.item_count) ? false : true;
-        }, function(response) {
-            console.error(response.statusText);
-            $scope.item_count = 0;
-            $scope.item_desc = "item";
-            $scope.noItemNotice = true;
+    // 关联浮动IP按钮默认启用
+    $scope.associateClick = false;
+    // 确定某个value值在对象数组中的位置，返回所在的下表
+    var findValueIndex = function(key, value, objArray) {
+        var array = $.grep(objArray, function(obj) {
+            return obj[key] === value;
         });
-    }();
-    // 获取资源池
+        var index = objArray.indexOf(array[0]);
+        return index;
+    };
+
+    // 获取资源池 (立即执行)
     $scope.getExtNet = function() {
-        var url = config.host + "/floatingips/extnet?token=" + window.localStorage.token;
+        var url = config.host + "/extnet?token=" + window.localStorage.token;
         $http.get(url).then(function(response) {
-            $scope.resLists = response.data.floating_ip_pools;
-            $scope.resName = $scope.resLists[0].name;
-            console.info("资源池%o", $scope.resLists);
+            $scope.resLists = response.data.ext_net;
+            console.info("资源池数据: ", response.data);
+            $scope.floating_network_id = $scope.resLists[0].id;
         }, function(response) {
             console.error("资源池获取失败", response.statusText);
             $scope.resLists = [{ "name": "-" }];
         });
 
     }();
+
+    // 获得ip项目列表
+    $scope.getIPlists = function() {
+        var url = config.host + "/floatingips?token=" + window.localStorage.token;
+        $http.get(url).then(function(response) {
+            var len = response.data.floatingips.length;
+            console.info("获取floating_ips:\n%o", response.data);
+            console.info("取回了数据条数", len);
+            // 将资源池的名字合并到ip列表中 
+            // data 是一个对象数组
+            var dataIP = response.data.floatingips;
+            var dataRes = $scope.resLists;
+            for (var i = 0, len; i < len; i++) {
+                for (var j = 0, len2 = dataRes.length; j < len2; j++) {
+                    if (dataIP[i].floating_network_id === dataRes[j].id) {
+                        dataIP[i].name = dataRes[j].name;
+                        break;
+                    } else {
+                        dataIP[i].name = '-';
+                    }
+                }
+            }
+            console.info("dataIP ", dataIP);
+            $scope.items = dataIP;
+            $scope.item_count = dataIP.length;
+            $scope.item_desc = (dataIP.length > 1) ? ("items") : ("item");
+        }, function(response) {
+            console.error(response.statusText);
+            $scope.item_count = 0;
+            $scope.item_desc = "item";
+        });
+    }();
+
     // 更新进度条  -- 页面初始化,分配浮动IP成功后
     var updateProcessBar = function() {
         var MULTI = $scope.MULTI;
@@ -307,17 +334,21 @@ function floatingIPCtrl($scope, $http) {
         // 设置模态框中进度条长度
         $("#widthBase").css("width", widthBase);
         $("#widthIncrease").css("width", widthIncrease);
+        // 设置剩余IP数目
+        console.info("$scope.totalIP :", $scope.totalIP);
+        $scope.maxFloatingIP = $scope.totalIP - $scope.item_count;
     };
     // 请求最大可用IP数目
-    $scope.getMaxTotalFloatingIps = function() {
+    $scope.totalIP = 0;
+    $scope.getMaxIp = function() {
         var url = config["host"] + "/limits?token=" + window.localStorage.token;
         $http.get(url).then(function(response) {
             // 请求成功
-            maxTotalFloatingIps = response.data.limits.absolute.maxTotalFloatingIps;
+            var maxTotalFloatingIps = response.data.limits.absolute.maxTotalFloatingIps;
             console.info("最大可用配额: ", maxTotalFloatingIps);
-            $scope.maxFloatingIP = maxTotalFloatingIps;
             $scope.MULTI = Math.round(100 / maxTotalFloatingIps);
             console.info("倍数:", $scope.MULTI);
+            $scope.totalIP = maxTotalFloatingIps;
             updateProcessBar();
         }, function(response) {
             // 请求失败
@@ -343,17 +374,18 @@ function floatingIPCtrl($scope, $http) {
         $scope.freeIP = !(checkedNum > 0);
         $scope.all = (checkedNum === $scope.item_count);
     };
-    // 释放IP 模态框
+    // 释放多个IP 模态框
     $scope.confirmDel = function() {
         $scope.ipDeletes = [];
         var ipDeletesIDs = [];
         var checkedItem = $("tbody input[type='checkbox']:checked");
         var checkedNum = checkedItem.length;
         for (var i = 0, checkedNum; i < checkedNum; i++) {
+            var obj = checkedItem[i];
             // 获取要删除条目的ip
-            $scope.ipDeletes.push($(checkedItem[i]).next().text());
+            $scope.ipDeletes.push($(obj).attr('ip'));
             // 获取要删除条目的id
-            ipDeletesIDs.push($(checkedItem[i]).next().next().text());
+            ipDeletesIDs.push($(obj).attr('id'));
         }
         // 向后台请求删除IP
         $scope.deleteIPs = function() {
@@ -371,7 +403,7 @@ function floatingIPCtrl($scope, $http) {
                 console.info("删除成功后返回的数据:%o", response.data);
                 // 删除成功   返回数据{"id1":202, "id2":200}
                 var delSucItems = $scope.items;
-                var SUCCESS = 202;
+                var SUCCESS = 204;
                 for (var i = 0, len = ipDeletesIDs.length; i < len; i++) {
                     var deleStat = response.data[ipDeletesIDs[i]];
                     if (deleStat === SUCCESS) {
@@ -385,6 +417,9 @@ function floatingIPCtrl($scope, $http) {
                 $scope.items = delSucItems;
                 $scope.item_count = $scope.items.length;
                 $("#delete-confirm").modal('hide');
+                $scope.all = false;
+                $scope.freeIP = true;
+                updateProcessBar();
             }, function(data) {
                 console.error("请求失败:", data.statusText);
             });
@@ -407,18 +442,161 @@ function floatingIPCtrl($scope, $http) {
                 headers: {
                     'Content-Type': "application/json",
                 },
-                data: JSON.stringify({ "pool": $scope.resName })
+                data: JSON.stringify({
+                    "floatingip": {
+                        "floating_network_id": $scope.floating_network_id
+                    }
+                })
             };
-            console.info("提交的数据:", $scope.resName);
+            console.info("提交的数据:", $scope.floating_network_id);
             $http(req).then(function(response) {
                 // 请求成功
                 console.info("分配成功:", response.data);
-                $scope.items.push(response.data);
+                var item = response.data.floatingip;
+                // 分配成功后返回一条数据，还需要整合资源池的name属性
+                var indexOfExt = findValueIndex("id", item.floating_network_id, $scope.resLists);
+                console.info("位置：", indexOfExt);
+                item.name = $scope.resLists[indexOfExt].name;
+                $scope.items.push(item);
                 $("#newIP").modal('hide');
+                $scope.item_count = $scope.items.length;
                 updateProcessBar();
             }, function(response) {
                 // 请求失败
             });
         };
-    }
+    };
+
+    // 关联IP 模态框
+    $scope.relIPBtn = function(event) {
+        var ip = $(event.target).attr('ip');
+        var id　 = $(event.target).attr('id');
+        console.info("当前IP: ", ip);
+        $scope.curFloatingIp = ip;
+        $scope.floating_ip_id = id;
+        var url = config.host + "/floatingips/disassociateport?token=" + window.localStorage.token;
+        $http.get(url).then(function(response) {
+            // 请求成功
+            console.info("要关联的IP: ", response.data);
+            $scope.ipItems = response.data.disassociate_port;
+            console.info("要显示的IP: ", $scope.ipItems);
+            if ($scope.ipItems.length === 0) {
+                $scope.associateClick = true;
+            } else {
+                $scope.hasFixed_ip = $scope.ipItems[0].id;
+                $scope.associateClick = false;
+            }
+            console.info("第一选项: ", $scope.hasFixed_ip);
+            // 提交 关联
+            $scope.associateBtn = function() {
+                var url = config.host + "/floatingips/associate/" + id + "?token=" + window.localStorage.token;
+                console.info("url ", url);
+                var req = {
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'Content-Type': "application/json",
+                    },
+                    data: JSON.stringify({
+                        "floatingip": {
+                            "port_id": $scope.hasFixed_ip
+                        }
+                    })
+                };
+                $http(req).then(function(response) {
+                    // 请求成功
+                    var fixed_ip = response.data.floatingip.fixed_ip_address;
+                    console.info("关联成功固定IP地址：　", fixed_ip);
+                    $("#associateModal").modal('hide');
+                    var index = findValueIndex("floating_ip_address", ip, $scope.items);
+                    console.info("index :", index);
+                    $scope.items[index].fixed_ip_address = fixed_ip;
+                }, function(response) {
+                    // 请求失败
+                    console.error("关联失败：　", response.statusText);
+                    $("#associateModal").modal('hide');
+                });
+            };
+        }, function(response) {
+            // 请求失败
+            console.error("端口获取失败: ", response.statusText);
+        });
+    };
+
+    // 解除关联 模态框
+    $scope.disAssociateBtn = function(event) {
+        var ip = $(event.target).attr('ip');
+        var id = $(event.target).attr('id');
+        $scope.disassociateIP = ip;
+        console.info("解除关联的id: ", id);
+        var url = config.host + "/floatingips/associate/" + id + "?token=" + window.localStorage.token;
+        var req = {
+            method: 'POST',
+            url: url,
+            headers: {
+                'Content-Type': "application/json",
+            },
+            data: JSON.stringify({
+                "floatingip": {
+                    "port_id": null
+                }
+            })
+        };
+        $scope.disAssociate = function() {
+            $http(req).then(function(response) {
+                // 请求成功
+                console.info("请求成功: ", response.data);
+                var index = findValueIndex("floating_ip_address", ip, $scope.items);
+                console.info("索引index: ", index);
+                $scope.items[index].fixed_ip_address = null;
+                $("#disassociateModal").modal('hide');
+            }, function(response) {
+                请求失败
+                console.error("请求失败 ", response.statusText);
+            });
+        };
+
+    };
+
+    // 释放单个浮动IP -- 删除浮动IP
+    $scope.freeFloatIPBtn = function(event) {
+        // 阻止链接的跳转
+        // event.preventDefault();
+        var ip = $(event.target).attr('ip');
+        var id　 = $(event.target).attr('id');
+        console.info("删除IP:", ip);
+        console.info("删除IP的ID: ", id);
+        $scope.freeFloatingIP = ip;
+        var url = config.host + "/floatingips/release?token=" + window.localStorage.token;
+        var req = {
+            method: 'POST',
+            url: url,
+            headers: {
+                'Content-Type': "application/json",
+            },
+            data: JSON.stringify({ "floating_ip_ids": new Array(id) })
+        };
+        console.info("request.data", { "floating_ip_ids": new Array(id) });
+        $scope.deleteOneIP = function() {
+            $http(req).then(function(response) {
+                // 请求成功
+                console.info("解关联成功：　", response.data);
+                var SUCCESS = 204;
+                if (response.data[id] === SUCCESS) {
+                    // IP释放成功
+                    $scope.items = $.grep($scope.items, function(obj) {
+                        return obj.id != id;
+                    });
+                    $scope.item_count = $scope.items.length;
+                } else {
+                    console.warn("IP释放失败")
+                }
+                $("#freeFloatIpModal").modal('hide');
+                updateProcessBar();
+            }, function(response) {
+                // 请求失败
+                console.error("请求失败");
+            });
+        };
+    };
 }
