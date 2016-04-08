@@ -1,3 +1,4 @@
+var flavors_local;
 $(function() {
     $.ajax({
         type: "GET",
@@ -63,9 +64,13 @@ $(".instance_startOriginSelect").change(function() {
     }
 
 });
+
 //--------启动云主机--信息准备阶段
 $(".start_cloudmonitor").click(function() {
     $(".instance_domanfree").empty();
+    $(".instance_imageSelect").empty();
+    $(".instance_typeselect").empty();
+    $(".instance_imageSelect").append('<option>选择镜像</option>');
     $(".instance_domanfree").append('<option>任何可用域</option>');
     $(".instance_name").val("");
     $(".imageDiv").hide();
@@ -78,24 +83,27 @@ $(".start_cloudmonitor").click(function() {
         url: config["host"] + "/os_availability_zone?token=" + window.localStorage.token,
         success: function(data) {
             var freeZoo = JSON.parse(data)['availabilityZoneInfo'];
-
-            $(".instance_domanfree").append();
+            var str = "";
+            for (var i = 0; i < freeZoo.length; i++) {
+                str += '<option value="' + freeZoo[i].zoneName + '">' + freeZoo[i].zoneName + '</option>';
+            }
+            $(".instance_domanfree").append(str);
         }
     });
     //-------云主机类型的获取
+    var flavors_str = "";
     $.ajax({
         type: "GET",
         url: config["host"] + "/flavors?token=" + window.localStorage.token,
         success: function(data) {
-
-        }
-    });
-    //--------主机的说明
-    $.ajax({
-        type: "GET",
-        url: config["host"] + "/flavors_detail/" + flavor_id + "?token=" + window.localStorage.token,
-        success: function(data) {
-
+            flavors_local = data;
+            var flavors = JSON.parse(data)['flavors'];
+            for (var i = 0; i < flavors.length; i++) {
+                var flavor = flavors[i];
+                flavors_str += '<option value="' + flavor.id + '">' + flavor.name + '</option>';
+            }
+            $(".instance_typeselect").append(flavors_str);
+            setflavorInfo(flavors[0]);
         }
     });
     //---------主机的限制
@@ -103,7 +111,21 @@ $(".start_cloudmonitor").click(function() {
         type: "GET",
         url: config["host"] + "/tenant_limits?token=" + window.localStorage.token,
         success: function(data) {
-
+            //totalInstancesUsed  maxTotalInstances
+            //totalCoresUsed maxTotalCores
+            //totalRAMUsed maxTotalRAMSize
+            var temp_info = JSON.parse(data)['limits']['absolute'];
+            setphoto(temp_info, 1);
+            //--------启动云主机--操作准备阶段
+            $(".instance_num").on("input", function() {
+                var num = new Number($(".instance_num").val());
+                var free_num = new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed);
+                if (num > free_num)
+                    $(".instance_num").val(free_num);
+                else if (num <= 0)
+                    $(".instance_num").val(1);
+                setphoto(temp_info, num);
+            });
         }
     });
     //-------镜像
@@ -111,10 +133,39 @@ $(".start_cloudmonitor").click(function() {
         type: "GET",
         url: config["host"] + "/images?token=" + window.localStorage.token,
         success: function(data) {
-
+            var images = JSON.parse(data)['images'];
+            var imag_str = "";
+            for (var i = 0; i < images.length; i++) {
+                var imag = images[i];
+                imag_str += '<option value="' + imag.id + '">' + imag.name + '</option>';
+            }
+            $(".instance_imageSelect").append(imag_str);
         }
     });
 
+    function setphoto(temp_info, num) {
+        //---------主机的设置
+        $(".flavor_num").text(temp_info.maxTotalInstances + "中的" + temp_info.totalInstancesUsed + "已使用");
+        $(".flavor_usednum").css("width", (new Number(temp_info.totalInstancesUsed) / new Number(temp_info.maxTotalInstances) * 100 + "%"));
+        $(".flavor_free").css("width", (num / new Number(temp_info.maxTotalInstances) * 100 + "%"));
+        //---------虚拟CPU数量
+        $(".virtual_cpunum").text(temp_info.maxTotalCores + "中的" + temp_info.totalCoresUsed + "已使用");
+        $(".virtual_usednum").css("width", (new Number(temp_info.totalCoresUsed) / new Number(temp_info.maxTotalCores) * 100 + "%"));
+        $(".virtual_free").css("width", (num / new Number(temp_info.maxTotalCores) * 100 + "%"));
+        //---------内存总计
+        $(".ram_num").text(temp_info.maxTotalRAMSize + "中的" + temp_info.totalRAMUsed + "已使用");
+        $(".ram_usednum").css("width", (new Number(temp_info.totalRAMUsed) / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
+        $(".ram_free").css("width", (num / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
+    }
+    //---------------设置云主机相应的设置
+    function setflavorInfo(flavor) {
+        $(".flavor_name").text(flavor.name);
+        $(".flavor_core").text(flavor.vcpus);
+        $(".flavor_rootdisk").text(flavor.disk + "GB");
+        $(".flavor_tempdisk").text(flavor['OS-FLV-EXT-DATA:ephemeral'] + "GB");
+        $(".flavor_disktotal").text(new Number(flavor.disk) + new Number(flavor['OS-FLV-EXT-DATA:ephemeral']) + "GB");
+        $(".flavor_ram").text(flavor.ram + "MB");
+    }
 });
 //----------启动云主机----提交信息
 
