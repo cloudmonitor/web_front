@@ -238,7 +238,7 @@ function setNetInfo(netInfo, manager_status) {
         $("#net_status").html("状态待补充");
     $("#net_managerStatus").html(manager_status);
     $("#net_shared").text(netInfo.shared);
-    $("#net_outNet").html(netInfo.port_security_enabled);
+    $("#net_outNet").text(netInfo['router:external']);
     if (netInfo.mtu == "0")
         $("#net_mtu").html("未知");
     else
@@ -509,20 +509,14 @@ function setPortInfo(data, fixed_ips_str, i) {
         '</a></td><td>' + fixed_ips_str + '</td>' +
         '<td>' + data.device_owner + '</td>' +
         '<td>' + data.status + '</td>' +
-        '<td>' + data.admin_state_up + '</td><td>' +
+        '<td>' + data.admin_state_up + '</td>'+
+/*        '<td>' +
         '<div class="btn-group">' +
         '<button type="button" class="btn btn-default btn-sm">编辑端口</button>' +
-        '<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">' +
-        '<span class="caret"></span>' +
-        '<span class="sr-only">切换下拉菜单</span>' +
+        '<button type="button" class="btn btn-default btn-sm >' +
         '</button>' +
-        '<ul class="dropdown-menu" role="menu">' +
-        '<li><a href="#">功能</a></li>' +
-        '<li><a href="#">另一个功能</a></li>' +
-        '<li><a href="#">其他</a></li>' +
-        '</ul>' +
         '</div>' +
-        '</td>' +
+        '</td>' +*/
         '</tr>' +
         '</tbody>';
     $(".port_infos").append(str);
