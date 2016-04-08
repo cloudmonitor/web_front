@@ -19,8 +19,8 @@ myApp.config(function($routeProvider) {
             controller: 'instanceCtrl'
         })
         // 计算 -- 实例详情
-        .when('/compute/instance-desc', {
-            templateUrl: 'pages/compute/instance-desc.html',
+        .when('/compute/instance_desc', {
+            templateUrl: 'pages/compute/instance_desc.html',
             controller: 'instance-descCtrl'
         })
         // 网络 -- 拓扑
@@ -67,10 +67,6 @@ myApp.config(function($routeProvider) {
         .when('/info/account-info', {
             templateUrl: 'pages/info/account-info.html',
             controller: 'account-infoCtrl'
-        })
-        .when('/compute/instance_desc', {
-            templateUrl: 'pages/compute/instance_desc.html',
-            controller: 'instanceDesc'
         })
         .when('/net/net-desc', {
             templateUrl: 'pages/net/net-desc.html',
@@ -347,7 +343,7 @@ function floatingIPCtrl($scope, $http) {
                                 dataIP[i].href = "";
                             } else {
                                 var indexOfIP = findValueIndex("id", dataIP[i].port_id, ports);
-                                dataIP[i].href = "#/compute/instance-desc?" + ports[indexOfIP].device_id;
+                                dataIP[i].href = "#/compute/instance_desc?" + ports[indexOfIP].device_id;
                             }
                         }
                     } else {
@@ -566,7 +562,7 @@ function floatingIPCtrl($scope, $http) {
                     var index = findValueIndex("floating_ip_address", ip, $scope.items);
                     console.info("index :", index);
                     $scope.items[index].fixed_ip_address = fixed_ip;
-                    $scope.items[index].href = "#/compute/instance-desc?" + device_id;
+                    $scope.items[index].href = "#/compute/instance_desc?" + device_id;
                 }, function(response) {
                     // 请求失败
                     console.error("关联失败：　", response.statusText);
