@@ -29,7 +29,7 @@
                 <td>
                     {{ x.floating_ip_address }}
                 </td>
-                <td ng-if="x.fixed_ip_address">{{ x.fixed_ip_address }}</td>
+                <td ng-if="x.fixed_ip_address"><a href="{{ x.href }}">{{ x.fixed_ip_address }}</a></td>
                 <td ng-if="!x.fixed_ip_address">-</td>
                 <td ng-bind="x.name"></td>
                 <!-- 下面两个td是一个组 -->
