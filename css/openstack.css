@@ -140,12 +140,9 @@ body {
  */
 
 .main {
-    /*width: 100%;*/
-    /*height: 100%;*/
     padding: 0 20px 70px 20px;
     overflow-y: auto;
     overflow-x: hidden;
-    /*background-color: #D8D8D8;*/
 }
 
 @media (min-width: 768px) {
@@ -219,9 +216,8 @@ i {
 
 /*　启动云主机：详情　*/
 
-#start-host .modal-dialog ,
-#create-net .modal-dialog
-{
+#start-host .modal-dialog,
+#create-net .modal-dialog {
     width: 500px
 }
 #create-subnet .modal-dialog
@@ -271,11 +267,11 @@ i {
     padding-bottom: 3px;
     border: 1px solid #eee;
     background-color: white;
-    color: rgba(0,0,0,0.8);
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .net-item .shadow-span {
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .net-item button {
@@ -420,6 +416,14 @@ i {
 
 .modal-body .span-left {
     margin-left: -25px;
+}
+
+#relIPModal .modal-dialog {
+    width: 500px;
+}
+
+.text-red {
+    color: red !important;
 }
 
 
