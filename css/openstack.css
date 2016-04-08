@@ -224,6 +224,10 @@ i {
 {
     width: 600px
 }
+#add-subnet .modal-dialog
+{
+    width: 600px
+}
 #start-host table {
     border: 1px dashed #eee
 }
