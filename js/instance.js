@@ -63,7 +63,7 @@ $(".instance_startOriginSelect").change(function() {
     }
 
 });
-//--------启动云主机
+//--------启动云主机--信息准备阶段
 $(".start_cloudmonitor").click(function() {
     $(".instance_domanfree").empty();
     $(".instance_domanfree").append('<option>任何可用域</option>');
@@ -72,7 +72,52 @@ $(".start_cloudmonitor").click(function() {
     $(".snapDiv").hide();
     $(".instance_startOriginSelect option[value='test']").attr("selected", true);
     $(".instance_num").val(1);
+    //--------可用域获取
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/os_availability_zone?token=" + window.localStorage.token,
+        success: function(data) {
+            var freeZoo = JSON.parse(data)['availabilityZoneInfo'];
+
+            $(".instance_domanfree").append();
+        }
+    });
+    //-------云主机类型的获取
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/flavors?token=" + window.localStorage.token,
+        success: function(data) {
+
+        }
+    });
+    //--------主机的说明
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/flavors_detail/" + flavor_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+
+        }
+    });
+    //---------主机的限制
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/tenant_limits?token=" + window.localStorage.token,
+        success: function(data) {
+
+        }
+    });
+    //-------镜像
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/images?token=" + window.localStorage.token,
+        success: function(data) {
+
+        }
+    });
+
 });
+//----------启动云主机----提交信息
+
 
 function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
     var str = "<tbody><tr><td><input type='checkbox'></td>" +
