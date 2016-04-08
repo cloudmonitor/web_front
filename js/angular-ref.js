@@ -292,6 +292,24 @@ function floatingIPCtrl($scope, $http) {
 
     }();
 
+    // $scope.getPorts = function() {
+    //     var url = config.host + "/ports?token=" + window.localStorage.token;
+    //     var ports;
+    //     $http.get(url).then(function(response){
+    //         // 请求成功
+    //         ports = response.data.ports;
+    //         console.info("自定义函数：", ports);
+    //     }, function(response){
+    //     });
+    //     console.info("ports = ", ports);
+    //     return ports;
+    // };
+
+    // $scope.test = function(){
+    //     var ports = $scope.getPorts();
+    //     console.info("call ports ", ports);
+    // }();
+
     // 获得ip项目列表
     $scope.getIPlists = function() {
         var url = config.host + "/floatingips?token=" + window.localStorage.token;
@@ -314,6 +332,35 @@ function floatingIPCtrl($scope, $http) {
                 }
             }
             console.info("dataIP ", dataIP);
+            // 获取端口href
+            $scope.getPortsID = function() {
+                var url = config.host + "/ports?token=" + window.localStorage.token;
+                $http.get(url).then(function(response) {
+                    var ports = response.data.ports;
+                    console.info("请求可用IP:", ports);
+                    len = ports.length;
+                    if (len != 0) {
+                        // 获取端口成功
+                        for (var i = 0, len1 = dataIP.length; i < len1; i++) {
+                            if (!dataIP[i].port_id) {
+                                // 没有固定IP地址
+                                dataIP[i].href = "";
+                            } else {
+                                var indexOfIP = findValueIndex("id", dataIP[i].port_id, ports);
+                                dataIP[i].href = "#/compute/instance-desc?" + ports[indexOfIP].device_id;
+                            }
+                        }
+                    } else {
+                        // 获取端口失败
+                        for (var i = 0, len = dataIP.length; i < len; i++) {
+                            dataIP[i].href = "";
+                        }
+                    }
+                }, function(response) {
+                    // 请求失败，返回空数组
+                });
+            }();
+            console.info("拼接href后：", dataIP);
             $scope.items = dataIP;
             $scope.item_count = dataIP.length;
             $scope.item_desc = (dataIP.length > 1) ? ("items") : ("item");
@@ -481,12 +528,19 @@ function floatingIPCtrl($scope, $http) {
             $scope.ipItems = response.data.disassociate_port;
             console.info("要显示的IP: ", $scope.ipItems);
             if ($scope.ipItems.length === 0) {
+                // 不存在待关联的IP
                 $scope.associateClick = true;
             } else {
+                // 存在待关联的IP
                 $scope.hasFixed_ip = $scope.ipItems[0].id;
                 $scope.associateClick = false;
             }
             console.info("第一选项: ", $scope.hasFixed_ip);
+            var indexOfID = findValueIndex("id", $scope.hasFixed_ip, $scope.ipItems);
+            if (indexOfID != (-1)) {
+                var device_id = $scope.ipItems[indexOfID].device_id;
+                console.info("device_id = ", device_id);
+            }
             // 提交 关联
             $scope.associateBtn = function() {
                 var url = config.host + "/floatingips/associate/" + id + "?token=" + window.localStorage.token;
@@ -505,12 +559,14 @@ function floatingIPCtrl($scope, $http) {
                 };
                 $http(req).then(function(response) {
                     // 请求成功
+                    console.info("关联成功的返回数据:\n", response.data);
                     var fixed_ip = response.data.floatingip.fixed_ip_address;
-                    console.info("关联成功固定IP地址：　", fixed_ip);
+                    console.info("关联成功固定IP地址：", fixed_ip);
                     $("#associateModal").modal('hide');
                     var index = findValueIndex("floating_ip_address", ip, $scope.items);
                     console.info("index :", index);
                     $scope.items[index].fixed_ip_address = fixed_ip;
+                    $scope.items[index].href = "#/compute/instance-desc?" + device_id;
                 }, function(response) {
                     // 请求失败
                     console.error("关联失败：　", response.statusText);
@@ -549,6 +605,7 @@ function floatingIPCtrl($scope, $http) {
                 var index = findValueIndex("floating_ip_address", ip, $scope.items);
                 console.info("索引index: ", index);
                 $scope.items[index].fixed_ip_address = null;
+                $scope.items[index].href = ""
                 $("#disassociateModal").modal('hide');
             }, function(response) {
                 请求失败
