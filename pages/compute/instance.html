@@ -29,7 +29,7 @@
         </div>
         &nbsp;
         <div class="form-group">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#start-host" type="button"><span class="fa fa-cloud-upload"></span> 启动云主机</button>
+            <button class="btn btn-primary start_cloudmonitor" data-toggle="modal" data-target="#start-host" type="button"><span class="fa fa-cloud-upload"></span> 启动云主机</button>
             <button type="button" class="btn btn-primary">终止实例</button>
         </div>
         &nbsp;
@@ -104,36 +104,46 @@
                                 <p></p>
                                 <div class="form-group">
                                     <label class="control-lable">可用域<span class="span-stand"> *</span></label>
-                                    <select class="form-control">
-                                        <option>规则1</option>
-                                        <option>规则2</option>
-                                        <option>规则3</option>
+                                    <select class="form-control instance_domanfree">
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-lable">云主机名称<span class="span-stand"> *</span></label>
-                                    <input class="form-control">
+                                    <input class="form-control instance_name">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-lable">云主机类型<span class="span-stand"> *</span></label>
-                                    <select class="form-control">
-                                        <option>端口1</option>
-                                        <option>端口2</option>
-                                        <option>端口3</option>
+                                    <select class="form-control instance_typeselect">
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-lable">云主机数量<span class="span-stand"> *</span></label>
-                                    <input class="form-control" placeholder="1">
+                                    <input class="form-control instance_num" value="1">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-lable">云主机启动源
                                         <span class="span-stand"> *</span>
                                     </label>
-                                    <select class="form-control">
-                                        <option>远程1</option>
-                                        <option>远程2</option>
-                                        <option>远程3</option>
+                                    <select class="form-control instance_startOriginSelect">
+                                        <option value="test">选择源</option>
+                                        <option value="image">从镜像启动</option>
+                                        <option value="snap">从快照启动</option>
+                                    </select>
+                                </div>
+                                <div class="form-group imageDiv" hidden>
+                                    <label class="control-lable">镜像名称
+                                        <span class="span-stand"> *</span>
+                                    </label>
+                                    <select class="form-control instance_imageSelect">
+                                        <option>选择镜像</option>
+                                    </select>
+                                </div>
+                                <div class="form-group snapDiv" hidden>
+                                    <label class="control-lable">云主机快照
+                                        <span class="span-stand"> *</span>
+                                    </label>
+                                    <select class="form-control instance_snapSelect">
+                                        <option>选择云主机快照</option>
                                     </select>
                                 </div>
                             </form>
