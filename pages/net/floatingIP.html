@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="checkbox" ng-click="chooseAll()" ng-model="all">
+                    <input type="checkbox" ng-show="item_count" ng-click="chooseAll()" ng-model="all">
                 </th>
                 <th>IP地址</th>
                 <th>已映射固定IP地址</th>
@@ -146,7 +146,7 @@
                     <div class="col-md-6">
                         <p>
                             <h5><lable>IP 地址:<span class="span-stand"> *</span></lable></h5>
-                            <input class="form-control" ng-value="curFloatingIp" disabled>
+                            <div class="well well-sm" ng-bind="curFloatingIp"></div>
                         </p>
                         <p>
                             <h5><lable　for="key-value">待连接的端口:<span class="span-stand"> *</span></lable></h5>
