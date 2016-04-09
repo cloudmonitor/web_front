@@ -107,6 +107,7 @@ $(".start_cloudmonitor").click(function() {
         }
     });
     //---------主机的限制
+
     $.ajax({
         type: "GET",
         url: config["host"] + "/tenant_limits?token=" + window.localStorage.token,
@@ -117,14 +118,25 @@ $(".start_cloudmonitor").click(function() {
             var temp_info = JSON.parse(data)['limits']['absolute'];
             setphoto(temp_info, 1);
             //--------启动云主机--操作准备阶段
+            var num = 0;
+            var free_num = 0;
+            num = new Number($(".instance_num").val());
+            free_num = new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed);
             $(".instance_num").on("input", function() {
-                var num = new Number($(".instance_num").val());
-                var free_num = new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed);
                 if (num > free_num)
                     $(".instance_num").val(free_num);
                 else if (num <= 0)
                     $(".instance_num").val(1);
                 setphoto(temp_info, num);
+            });
+            $(".up_num").click(function() {
+                if (num < free_num)
+                    $(".instance_num").val(num++);
+
+            });
+            $(".desc_num").click(function() {
+                if (num > 1)
+                    $(".instance_num").val(num--);
             });
         }
     });
