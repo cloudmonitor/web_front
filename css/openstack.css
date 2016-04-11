@@ -220,14 +220,15 @@ i {
 #create-net .modal-dialog {
     width: 500px
 }
-#create-subnet .modal-dialog
-{
+
+#create-subnet .modal-dialog {
     width: 600px
 }
-#add-subnet .modal-dialog
-{
+
+#add-subnet .modal-dialog {
     width: 600px
 }
+
 #start-host table {
     border: 1px dashed #eee
 }
@@ -424,6 +425,17 @@ i {
 
 .text-red {
     color: red !important;
+}
+
+#alert-container {
+    position: fixed;
+    top: 70px;
+    right: 40px;
+    float: right;
+    width: 300px;
+    /*让alert框离用户最近*/
+    z-index: 999;
+    /*background-color: blue;*/
 }
 
 
