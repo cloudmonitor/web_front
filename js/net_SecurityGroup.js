@@ -4,8 +4,8 @@ $(function() {
         type: "GET",
         url: config["host"] + "/security_groups?token=" + window.localStorage.token,
         success: function(data) {
-            console.log("---------------");
-            console.log(data);
+/*            console.log("---------------");
+            console.log(data);*/
             window.localStorage.securitys_temp = data;
             var securitys = JSON.parse(data)['security_groups'];
             for (var i = 0; i < securitys.length; i++) {

@@ -119,7 +119,7 @@
                                 <label class="control-lable">云主机数量<span class="span-stand"> *</span></label>
                                 <div class="form-group form-inline">
                                     <input class="form-control instance_num" value="1" style="width:98%">
-                                    <label for="search-input" class="control-label input-addon"><i class="fa fa-sort-asc up_num" style="height:10px;display:block;margin:0px" ></i><i class="fa fa-sort-desc desc_num" style="height:10px;margin:0px"></i></label>
+                                    <label for="search-input" class="control-label input-addon"><i class="fa fa-sort-asc up_num" style="height:10px;display:block;margin:0px"></i><i class="fa fa-sort-desc desc_num" style="height:10px;margin:0px"></i></label>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-lable">云主机启动源
@@ -225,19 +225,7 @@
                                 </p>
                                 <p>
                                     <h5>安全组</h5>
-                                    <ul>
-                                        <li>
-                                            <label class="control-lable">
-                                                <input type="checkbox">test</label>
-                                        </li>
-                                        <li>
-                                            <label class="control-lable">
-                                                <input type="checkbox">test</label>
-                                        </li>
-                                        <li>
-                                            <label class="control-lable">
-                                                <input type="checkbox">test</label>
-                                        </li>
+                                    <ul class="security_ul">
                                     </ul>
                                 </p>
                             </div>
@@ -252,46 +240,23 @@
                             <div class="col-md-6">
                                 <p>
                                     <h5>已选择的网络</h5>
-                                    <div class="alert alert-info"></div>
+                                    <div class="alert alert-info selected_subnet" id="selected_subnet"></div>
                                 </p>
-                                <p>
-                                    <h5>可用网络</h5>
-                                    <div class="alert alert-success">
-                                        <div class="net-item">
-                                            <span>
-                                                    project01-net01
-                                                </span>
-                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
-                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
-                                        </div>
-                                        <div class="net-item">
-                                            <span>
-                                                    project01-net01
-                                                </span>
-                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
-                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
-                                        </div>
-                                        <div class="net-item">
-                                            <span>
-                                                    project01-net01
-                                                </span>
-                                            <span class="shadow-span">(jlajfjl;kalfjasdfasdfk)</span>
-                                            <button class="btn btn-primary btn-xs"><span class="fa fa-plus"></span></button>
-                                        </div>
-                                    </div>
+                                <h5>可用网络</h5>
+                                <p class="free_netsInfo">
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p></p>
-                                <p>请选择要添加的网络，可以通过按钮添加也可以拖动添加，你还可以拖动已经添加的网络来改变NIC的顺序。</p>
+                                <p>请选择要添加的网络，可以通过按钮添加.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">运行</button>
+                <button type="button" class="btn btn-default instance_cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary instance_run">运行</button>
             </div>
         </div>
         <!-- /.modal-content -->
