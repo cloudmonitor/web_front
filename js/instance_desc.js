@@ -1,5 +1,5 @@
 $(function() {
-    if (window.location.href.split('&')[1] != "undefined") {
+    if (window.location.href.split('&')[1] != undefined) {
         var serverInfo = JSON.parse(localStorage.server_tempInfo);
 
         var id_num = window.location.href.split('?')[1];
@@ -20,6 +20,7 @@ $(function() {
         setInfo(serverInfo, id, curr_flavor);
     } else {
         var id_num = window.location.href.split('?')[1];
+        console.info("id_num: ", id_num);
         $.ajax({
             type: "GET",
             url: config["host"] + "/flavors?token=" + window.localStorage.token,
@@ -62,7 +63,7 @@ $(function() {
                                 $("#server_AvailabilityZone").html(servers['servers'][curr_number]["OS-EXT-AZ:availability_zone"]); //
                                
                                 $("#server_IPAddresses").html(addrs);
-                                setInfo(servers['servers'], curr_number, curr_flavor);
+                                setInfo(servers, curr_number, curr_flavor);
                                 break;
                             }
                         };
