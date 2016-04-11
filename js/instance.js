@@ -194,13 +194,16 @@ $(".start_cloudmonitor").click(function() {
                         for (var i = 0; i < subnet_infos.length; i++) {
                             var subnet_info = subnet_infos[i];
                             if (subnet_info.network_id == server.id) {
-                                subnet_str += '<div class="net-item draggable ui-widget-content" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
+                                subnet_str += '<div class="net-item" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
                                     '<span class="shadow-span subnet_id">(' + subnet_info.cidr + ')</span><button class = "btn btn-primary btn-xs net_add" name="' + j + '"> <span class = "fa fa-plus"></span></button></div>';
                             }
                         }
                         $(".free_subnet" + j).html(subnet_str);
                     }
                     //  $(".free_subnet0").show();
+                    //-----------------------拖拽start
+
+                    //-----------------------拖拽end
                 }
             });
         }
@@ -209,7 +212,6 @@ $(".start_cloudmonitor").click(function() {
 /*$(document).on("click", ".tabel", function() {
     $(this).next().next().slideToggle();
 });*/
-
 $(document).on("click", ".net_add", function() {
     var node = document.getElementById("selected_subnet");
     $(this).removeClass("net_add");
@@ -370,13 +372,53 @@ function instance_info(json_array) {
         contentType: "application/json",
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
+            //console.error(data);
             window.location.reload();
         }
     });
 }
 
+//-----------------删除云主机
+$(document).on("change", ".instance_checks", function() {
+    if ($(".instance_checks:checked").length > 0) {
+        $(".stop_instance").attr("disabled", false);
+    } else {
+        $(".stop_instance").attr("disabled", true);
+    }
+});
+//------多删
+$(".stop_instance").click(function() {
+    var servers = { "servers_ids": [] };
+    var server_ids = servers['servers_ids'];
+    var i = 0;
+    $(".instance_checks:checked").each(function() {
+        server_ids[i++] = $(this).attr("id");
+    });
+    deleteInstance_AJAX(servers);
+});
+//------单删
+$(document).on("click", ".delete_instanceSimple", function() {
+    var servers = { "servers_ids": [] };
+    var server_ids = servers['servers_ids'];
+    server_ids[0] = this.id;
+    deleteInstance_AJAX(servers);
+});
+
+function deleteInstance_AJAX(servers) {
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(servers),
+        contentType: "application/json",
+        url: config['host'] + "/servers/delete?token=" + window.localStorage.token,
+        success: function(data) {
+            window.location.reload();
+        }
+    });
+
+}
+
 function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
-    var str = "<tbody><tr><td><input type='checkbox'></td>" +
+    var str = "<tbody><tr><td><input type='checkbox' class='instance_checks' id='" + data.id + "'></td>" +
         "<td><a href='#/compute/instance_desc?" + i + "&" + num + "&" + data["OS-EXT-AZ:availability_zone"] + "'>" + data.name + "</a></td><td>" + addrs + "</td>" +
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
@@ -391,9 +433,7 @@ function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
         "<span class='caret'></span>" +
         "<span class='sr-only'>" + "切换下拉菜单" + "</span>" +
         "</button><ul class='dropdown-menu' role='menu'>" +
-        "<li><a href='#'>" + "功能" + "</a></li>" +
-        "<li><a href='#'>" + "另一个功能" + "</a></li>" +
-        "<li><a href='#'>" + "其他" + "</a></li>" +
+        "<li id='" + data.id + "' class='delete_instanceSimple'><a href='javascript:void(0)'>" + "终止实例" + "</a></li>" +
         "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
 }
