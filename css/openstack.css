@@ -66,7 +66,7 @@ body {
         top: 51px;
         bottom: 0;
         left: 0;
-        z-index: 1000;
+        z-index: 50;
         display: block;
         padding: 20px;
         overflow-x: hidden;
@@ -278,6 +278,16 @@ i {
 .net-item button {
     float: right;
     margin-right: 3px;
+}
+
+
+/* 密钥对 */
+
+#li-center {
+    height: 3em;
+    line-height: 3em;
+    overflow: hidden;
+    margin-right: 10px
 }
 
 
