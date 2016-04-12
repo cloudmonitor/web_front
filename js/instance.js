@@ -231,7 +231,7 @@ function drop(ev) {
         $("#" + data).find("button").find("span").removeClass("fa-plus");
         $("#" + data).find("button").parent().addClass("selected_netTag");
         $("#" + data).find("button").find("span").addClass("fa-minus");
-        console.error(document.getElementById(data));
+        //console.error(document.getElementById(data));
         ev.target.appendChild(document.getElementById(data));
     } else if (move_tag == parent_tag) {
         $("#" + data).find("button").removeClass("net_detract");
@@ -397,7 +397,7 @@ $(".instance_run").click(function() {
 });
 
 function instance_info(json_array) {
-    console.error(JSON.stringify(json_array));
+    //  console.error(JSON.stringify(json_array));
     $.ajax({
         type: "POST",
         data: JSON.stringify(json_array),
@@ -446,7 +446,148 @@ function deleteInstance_AJAX(servers) {
             window.location.reload();
         }
     });
+}
+//----------浮动IP的处理
+var servers_id;
+var flag_type;
+$(document).on("click", ".bind_floatIp", function() {
+    flag_type = "floatIP";
+    $(".IP_select").empty();
+    $(".show_info0").text("管理浮动IP的关联");
+    $(".show_info1").html("IP地址");
+    $(".show_info2").html("请为选中的云主机或端口选择要绑定的IP地址。");
+    $(".IP_select").append('<option value="test">请选择一个IP地址</option>');
+    servers_id = this.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/dis_floatingips?token=" + window.localStorage.token,
+        success: function(data) {
+            // console.error(data);
+            var IPs = JSON.parse(data)['floatingips'];
+            var ip_str = "";
+            for (var i = 0; i < IPs.length; i++) {
+                ip_str += '<option value="' + IPs[i].floating_ip_address + '">' + IPs[i].floating_ip_address + '</option>';
+            }
+            $(".IP_select").append(ip_str);
+        }
+    });
+});
+$(document).on("click", ".unbind_floatIp", function() {
+    var ip = $(this).attr("IP_id").replace("<br></li>", "").replace("<br/>", "");
+    servers_id = this.id;
+    var IP_selected = {
+        "removeFloatingIp": {
+            "address": ''
+        }
+    };
+    IP_selected['removeFloatingIp'].address = ip;
+    setInstanceAjax(IP_selected, "/servers_action/");
+});
 
+
+//-------接口的处理
+$(document).on("click", ".bind_Inteface", function() {
+    flag_type = "inteface";
+    $(".IP_select").empty();
+    $(".show_info0").text("绑定接口");
+    $(".show_info1").html("网络");
+    $(".show_info2").html("选择附属接口的网络");
+    $(".IP_select").append('<option value="test">选择网络</option>');
+    servers_id = this.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/new_subnets?token=" + window.localStorage.token,
+        success: function(data) {
+            // console.error(data);
+            var subnets = JSON.parse(data)['subnets'];
+            var net_str = "";
+            for (var i = 0; i < subnets.length; i++) {
+                net_str += '<option id="' + subnets[i].id + '" value="' + subnets[i].network_id + '">' + subnets[i].name + '</option>';
+            }
+            $(".IP_select").append(net_str);
+        }
+    });
+});
+$(document).on("click", ".unbind_Inteface", function() {
+    flag_type = "un_inteface";
+    $(".IP_select").empty();
+    $(".show_info0").text("解绑接口");
+    $(".show_info1").html("端口");
+    $(".show_info2").html("选择分离的端口");
+    $(".IP_select").append('<option value="test">选择端口</option>');
+    servers_id = this.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/instance/interfaces/" + servers_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            // console.error(data);
+            var net_str = "";
+            var servers = JSON.parse(data)['interfaceAttachments'];
+            for (var i = 0; i < servers.length; i++) {
+                var fixedIPs = servers[i].fixed_ips;
+                for (var j = 0; j < fixedIPs.length; j++) {
+                    net_str += '<option value="' + fixedIPs[j].ip_address + '">' + fixedIPs[j].ip_address + '</option>';
+                }
+            }
+            $(".IP_select").append(net_str);
+        }
+    });
+});
+//----------编辑云主机
+$(document).on("click", ".edit_instance", function() {
+    flag_type = "edit_instance";
+    $(".IP_select").empty();
+    $(".edit_instance_name").val($(this).attr("name"));
+    servers_id = this.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/instance/interfaces/" + servers_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            // console.error(data);
+            var subnet_str = "";
+/*            for (var i = 0; i < subnet_infos.length; i++) {
+                var subnet_info = subnet_infos[i];
+                if (subnet_info.network_id == server.id) {
+                    subnet_str += '<div class="net-item" draggable="true" ondragstart="drag(event)" tag="' + j + '" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
+                        '<span class="shadow-span subnet_id">(' + subnet_info.cidr + ')</span><button class = "btn btn-primary btn-xs net_add" name="' + j + '"> <span class = "fa fa-plus"></span></button></div>';
+                }
+            }
+            $(".free_subnet" + j).html(subnet_str);*/
+        }
+    });
+});
+//------提交数据
+$(".add_IP").click(function() {
+    if (flag_type == "floatIP") {
+        var IP_selected = {
+            "addFloatingIp": {
+                "address": "172.24.4.4"
+            }
+        };
+        IP_selected['addFloatingIp'].address = $(".IP_select").val();
+        setInstanceAjax(IP_selected, "/servers_action/");
+    } else if (flag_type == "inteface") {
+        var inteface = { "interface": { "network_id": "", "subnet_id": "" } };
+        inteface['interface'].network_id = $(".IP_select").val();
+        inteface['interface'].subnet_id = $(".IP_select option:selected").attr("id");
+        setInstanceAjax(inteface, "/interfaces/bind/");
+    } else if (flag_type == "un_inteface") {
+        var ip_addr = { "ip_address": "" };
+        ip_addr['ip_address'] = $(".IP_select").val();;
+        setInstanceAjax(ip_addr, "/interfaces/delete/");
+    }
+});
+
+function setInstanceAjax(data, url) {
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        url: config['host'] + url + servers_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            window.location.reload();
+        }
+    });
 }
 
 function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
@@ -465,7 +606,14 @@ function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
         "<span class='caret'></span>" +
         "<span class='sr-only'>" + "切换下拉菜单" + "</span>" +
         "</button><ul class='dropdown-menu' role='menu'>" +
-        "<li id='" + data.id + "' class='delete_instanceSimple'><a href='javascript:void(0)'>" + "终止实例" + "</a></li>" +
-        "</ul></div></td></tr></tbody>";
+        "<li id='" + data.id + "' class='delete_instanceSimple'><a href='javascript:void(0)'>" + "终止实例" + "</a></li>";
+    if (addrs.indexOf("浮动IP") == -1)
+        str += "<li id='" + data.id + "' class='bind_floatIp' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定浮动IP" + "</a></li>";
+    else
+        str += "<li id='" + data.id + "' IP_id='" + addrs.slice(addrs.indexOf("浮动IP") + 4) + "' class='unbind_floatIp'><a href='javascript:void(0)'><font color='red'>" + "解除浮动IP的绑定" + "</font></a></li>";
+    str += "<li id='" + data.id + "' class='bind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定接口" + "</a></li>";
+    str += "<li id='" + data.id + "' class='unbind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "解绑接口" + "</a></li>";
+    str += "<li name='"+data.name+"' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
+    str += "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
 }

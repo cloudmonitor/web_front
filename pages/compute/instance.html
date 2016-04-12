@@ -75,6 +75,105 @@
         </thead>
     </table>
 </div>
+<!-- 模态框 绑定浮动IP -->
+<div id="bind_floatingIP" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-size">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title modal-center" id="myModalLabel"><span class="show_info0">管理浮动IP的关联</span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row tab-pane in active" id="add_strategy">
+                    <!-- 增加策略 -->
+                    <form role="form">
+                        <div class="col-md-6 form-group">
+                            <label class="control-lable show_info1">IP地址<span class="span-stand"> *</span></label>
+                            <select class="form-control IP_select">
+                            </select>
+                        </div>
+                    </form>
+                    <div class="col-md-6">
+                        <p class="show_info2">请为选中的云主机或端口选择要绑定的IP地址。</p>
+                    </div>
+                </div>
+                <div class="modal-footer modal-center">
+                    <button type="button" class="btn btn-default cancel_IP" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary add_IP" data-dismiss="modal">
+                        添加
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+</div>
+<!-- 模态框 ：　编辑云主机-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="instance_security" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">编辑云主机</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-target="#detailInfo" data-toggle="tab">基本信息<span class="span-stand"> *</span> </a>
+                    </li>
+                    <li><a data-target="#securitys" data-toggle="tab">安全组</a></li>
+                </ul>
+                <div class="tab-content">
+                    <!-- 详情 -->
+                    <div class="tab-pane fade in active" id="detailInfo">
+                        <div class="row">
+                            <form role="form" class="col-md-6">
+                                <p></p>
+                                <div class="form-group">
+                                    <label class="control-lable">云主机名称<span class="span-stand"> *</span></label>
+                                    <input class="form-control edit_instance_name">
+                                </div>
+                            </form>
+                            <div class="col-md-6">
+                                <p>编辑实例详细信息</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 安全组 -->
+                    <div class="tab-pane fade" id="securitys">
+                        <div class="row">
+                            <h5>&nbsp;&nbsp;&nbsp;<span style="background:#F8F8FF">通过密钥对、防火墙、和其它机制控制你的云主机权限</span></h5></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>全部安全组</h5>
+                                <p class="all_securities">
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>云主机安全组</h5>
+                                <p class="instance_security">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default instance_cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary instance_run">运行</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
 <!-- 模态框 ：　启动云主机-->
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="start-host" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

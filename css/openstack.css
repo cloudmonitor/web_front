@@ -219,17 +219,27 @@ i {
 #start-host .modal-dialog {
     width: 650px
 }
+
 #create-net .modal-dialog {
     width: 500px
 }
-#create-subnet .modal-dialog
-{
+
+#create-subnet .modal-dialog {
     width: 600px
 }
-#add-subnet .modal-dialog
-{
+
+#add-subnet .modal-dialog {
     width: 600px
 }
+
+#bind_floatingIP .modal-dialog {
+    width: 600px
+}
+
+#instance_security .modal-dialog {
+    width: 600px
+}
+
 #start-host table {
     border: 1px dashed #eee
 }
