@@ -533,8 +533,20 @@ $(document).on("click", ".unbind_Inteface", function() {
         }
     });
 });
-//----------编辑云主机
+//----------编辑云主机---安全组
 $(document).on("click", ".edit_instance", function() {
+    var tagtemp = $(this).attr("tag");
+    if (tagtemp == "0") {
+        $(".dealInfo_li").addClass("active");
+        $(".security_li").removeClass("active");
+        $("#securitys").removeClass("in active");
+        $("#detailInfo").addClass("in active");
+    } else {
+        $(".security_li").addClass("active");
+        $(".dealInfo_li").removeClass("active");
+        $("#securitys").addClass("in active");
+        $("#detailInfo").removeClass("in active");
+    }
     flag_type = "edit_instance";
     $(".IP_select").empty();
     $(".edit_instance_name").val($(this).attr("name"));
@@ -552,7 +564,7 @@ $(document).on("click", ".edit_instance", function() {
                     '<button class = "btn btn-primary btn-xs sg_detract"> <span class = "fa fa-minus"></span></button></div>';
             }
             if (subnet_str == "")
-                $(".usedinstance_security").html('<span class="used" style="background:#E0EEEE">无授权的安全组</span>');
+                $(".usedinstance_security").html('<span class="used" style="background:#E0EEEE"><font color="red">无授权的安全组</font></span>');
             else
                 $(".usedinstance_security").html(subnet_str);
         }
@@ -570,7 +582,7 @@ $(document).on("click", ".edit_instance", function() {
                     '<button class = "btn btn-primary btn-xs sg_add"> <span class = "fa fa-plus"></span></button></div>';
             }
             if (subnet_str == "")
-                $(".all_securities").html('<span class="all" style="background:#E0EEEE">无法找到安全组</span>');
+                $(".all_securities").html('<span class="all" style="background:#E0EEEE"><font color="red">无法找到安全组</font></span>');
             else
                 $(".all_securities").html(subnet_str);
         }
@@ -587,7 +599,7 @@ $(document).on("click", ".sg_add", function() {
     if ($(".usedinstance_security").children("div").length == 0)
         $(".usedinstance_security").empty();
     if ($(".all_securities").children("div").length == 1)
-        $(".all_securities").append('<span class="all" style="background:#E0EEEE">无法找到安全组</span>');
+        $(".all_securities").append('<span class="all" style="background:#E0EEEE"><font color="red">无法找到安全组</font></span>');
     node.appendChild($(this).parent().get(0));
 });
 $(document).on("click", ".sg_detract", function() {
@@ -598,18 +610,21 @@ $(document).on("click", ".sg_detract", function() {
     $(this).parent().removeClass("selected_sg");
     $(this).find("span").addClass("fa-plus");
     if ($(".usedinstance_security").children("div").length == 1)
-        $(".usedinstance_security").append('<span class="used" style="background:#E0EEEE">无授权的安全组</span>');
+        $(".usedinstance_security").append('<span class="used" style="background:#E0EEEE"><font color="red">无授权的安全组</font></span>');
     if ($(".all_securities").children("div").length == 0)
         $(".all_securities").empty();
     node.appendChild($(this).parent().get(0));
 });
 $(".sg_keep").click(function() {
+    //-------------
     var name = $(".edit_instance_name").val();
+    var sg_info = { "security_groups": [] };
+    var i = 0;
     $(".selected_sg").each(function() {
-
+        sg_info['security_groups'][i++] = $(this).attr("name");
     });
-
-
+    console.error(JSON.stringify(name));
+    setInstanceAjax(sg_info, "/sever_sg/update/");
 
 });
 //-----------------------------------------------------------提交数据
@@ -669,7 +684,8 @@ function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
         str += "<li id='" + data.id + "' IP_id='" + addrs.slice(addrs.indexOf("浮动IP") + 4) + "' class='unbind_floatIp'><a href='javascript:void(0)'><font color='red'>" + "解除浮动IP的绑定" + "</font></a></li>";
     str += "<li id='" + data.id + "' class='bind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定接口" + "</a></li>";
     str += "<li id='" + data.id + "' class='unbind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "解绑接口" + "</a></li>";
-    str += "<li name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
+    str += "<li tag='0' name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
+    str += "<li tag='1' name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑安全组" + "</a></li>";
     str += "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
 }
