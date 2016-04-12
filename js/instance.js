@@ -188,27 +188,58 @@ $(".start_cloudmonitor").click(function() {
                     var servers = JSON.parse(data)['networks'];
                     for (var j = 0; j < servers.length; j++) {
                         var server = servers[j];
-                        var net_infoDiv = "<B class='tabel'>" + server.name + "</B><br/>" + '<div class="alert alert-success  all_subnet free_subnet' + j + '" id="free_subnet' + j + '" ></div>';
+                        var net_infoDiv = "<B class='tabel'>" + server.name + "</B><br/>" + '<div ondrop="drop(event)" ondragover="allowDrop(event)" parent_tag="' + j + '" class="alert alert-success  all_subnet free_subnet' + j + '" id="free_subnet' + j + '" name="' + j + '"></div>';
                         $(".free_netsInfo").append(net_infoDiv);
                         var subnet_str = "";
                         for (var i = 0; i < subnet_infos.length; i++) {
                             var subnet_info = subnet_infos[i];
                             if (subnet_info.network_id == server.id) {
-                                subnet_str += '<div class="net-item" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
+                                subnet_str += '<div class="net-item" draggable="true" ondragstart="drag(event)" tag="' + j + '" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
                                     '<span class="shadow-span subnet_id">(' + subnet_info.cidr + ')</span><button class = "btn btn-primary btn-xs net_add" name="' + j + '"> <span class = "fa fa-plus"></span></button></div>';
                             }
                         }
                         $(".free_subnet" + j).html(subnet_str);
                     }
                     //  $(".free_subnet0").show();
-                    //-----------------------拖拽start
-
-                    //-----------------------拖拽end
                 }
             });
         }
     });
 });
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var id = $(ev.target).attr("id");
+    var parent_tag = $(ev.target).attr("parent_tag");
+    var data = ev.dataTransfer.getData("Text");
+    // alert(new String(id));
+    var move_tag = $("#" + data).attr("tag");
+    if (id == "selected_subnet") {
+        $("#" + data).find("button").removeClass("net_add");
+        $("#" + data).find("button").addClass("net_detract");
+        $("#" + data).find("button").find("span").removeClass("fa-plus");
+        $("#" + data).find("button").parent().addClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-minus");
+        console.error(document.getElementById(data));
+        ev.target.appendChild(document.getElementById(data));
+    } else if (move_tag == parent_tag) {
+        $("#" + data).find("button").removeClass("net_detract");
+        $("#" + data).find("button").addClass("net_add");
+        $("#" + data).find("button").find("span").removeClass("fa-minus");
+        $("#" + data).find("button").parent().removeClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-plus");
+        ev.target.appendChild(document.getElementById(data));
+    }
+
+}
 /*$(document).on("click", ".tabel", function() {
     $(this).next().next().slideToggle();
 });*/
