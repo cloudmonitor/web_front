@@ -558,10 +558,14 @@ $(document).on("click", ".edit_instance", function() {
             // console.error("现存的：", data);
             var security_groups = JSON.parse(data)['security_groups'];
             var subnet_str = "";
+            var temp = "";
             for (var i = 0; i < security_groups.length; i++) {
                 var security_group = security_groups[i];
-                subnet_str += '<div class="net-item selected_sg" id="' + security_group.id + '" name="' + security_group.name + '"><span class="sg_name">' + security_group.name + '</span>' +
-                    '<button class = "btn btn-primary btn-xs sg_detract"> <span class = "fa fa-minus"></span></button></div>';
+                if (temp != security_group.name) {
+                    temp = security_group.name;
+                    subnet_str += '<div class="net-item selected_sg" id="' + security_group.id + '" name="' + security_group.name + '"><span class="sg_name">' + security_group.name + '</span>' +
+                        '<button class = "btn btn-primary btn-xs sg_detract"> <span class = "fa fa-minus"></span></button></div>';
+                }
             }
             if (subnet_str == "")
                 $(".usedinstance_security").html('<span class="used" style="background:#E0EEEE"><font color="red">无授权的安全组</font></span>');
@@ -598,9 +602,10 @@ $(document).on("click", ".sg_add", function() {
     $(this).find("span").addClass("fa-minus");
     if ($(".usedinstance_security").children("div").length == 0)
         $(".usedinstance_security").empty();
-    if ($(".all_securities").children("div").length == 1)
-        $(".all_securities").append('<span class="all" style="background:#E0EEEE"><font color="red">无法找到安全组</font></span>');
     node.appendChild($(this).parent().get(0));
+    if ($(".all_securities").children("div").length == 0)
+        $(".all_securities").append('<span class="all" style="background:#E0EEEE"><font color="red">无法找到安全组</font></span>');
+
 });
 $(document).on("click", ".sg_detract", function() {
     var node = document.getElementById("all_securities");
@@ -623,7 +628,7 @@ $(".sg_keep").click(function() {
     $(".selected_sg").each(function() {
         sg_info['security_groups'][i++] = $(this).attr("name");
     });
-    console.error(JSON.stringify(name));
+    console.error(JSON.stringify(sg_info));
     setInstanceAjax(sg_info, "/sever_sg/update/");
 
 });
