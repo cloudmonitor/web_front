@@ -1,0 +1,129 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- alert-container div用来显示警告框alert -->
+    <div id="alert-container">
+        <!-- <div class="alert alert-warning">
+            <a href="" class="close" data-dismiss="alert">&times;</a>
+            <strong>警告！</strong>您的网络连接有问题。
+        </div> -->
+    </div>
+    <div class="desc">密钥对</div>
+    <p></p>
+    <div class="row" style="margin-left: 3px;">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createKey-modal" ng-click="createKeyModal()"><i class="fa fa-plus-square"></i>创建密钥</button>
+        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteKey-modal" ng-disabled="delBtnDis" ng-click="delKeyBtn()">删除</button>
+    </div>
+    <p></p>
+    <!-- 用来展示密钥对 -->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" ng-model="all" ng-click="chooseAllBtn()">
+                </th>
+                <th>名称</th>
+                <th>指纹</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in keyItems">
+                <td>
+                    <input type="checkbox" ng-checked="one" ng-click="itemChecked($event)" index="{{ $index }}">
+                </td>
+                <td ng-bind="x.keypair.name"></td>
+                <td ng-bind="x.keypair.fingerprint"></td>
+            </tr>
+            <tr>
+                <td ng-if="!itemCount" colspan="3">
+                    <center>没有可显示的密钥对</center>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="active">
+                <td colspan="3">
+                    {{ itemCount }} 条数据
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- ===========================================分割线=================================================== -->
+<!-- 创建密钥模态框 -->
+<div class="modal fade" id="createKey-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">创建密钥</h4>
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills" role="tablist">
+                        <li id="li-center"><strong>创建方式:</strong></li>
+                        <li role="presentation" class="active">
+                            <a data-target="#createKey-tab" aria-controls="home" role="tab" data-toggle="tab">创建密钥</a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#importKey-tab" aria-controls="tab" role="tab" data-toggle="tab">导入密钥</a>
+                        </li>
+                    </ul>
+                    <p></p>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- 创建密钥 -->
+                        <div role="tabpanel" class="tab-pane active" id="createKey-tab">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label for="key-name">密钥名称<span class="span-stand"> *</span></label>
+                                    <input type="text" class="form-control" id="key-name" ng-model="keyName" placeholder="仅限字母和下划线" required>
+                                </div>
+                                <hr>
+                                <button class="btn btn-primary" ng-click="createKey()">创建</button>
+                            </form>
+                        </div>
+                        <!-- 导入密钥 -->
+                        <div role="tabpanel" class="tab-pane" id="importKey-tab">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label for="key-desc">密钥名称<span class="span-stand"> *</span></label>
+                                    <input type="text" class="form-control" id="key-desc" ng-model="keyName" placeholder="仅限字母和下划线" required>
+                                </div>
+                                <div class="form-group">
+                                    <lable class="control-label" for="pub-key">公钥<span class="span-stand"> *</span></lable>
+                                    <textarea class="form-control" id="pub-key" ng-model="pulic_key" required></textarea>
+                                </div>
+                                <hr>
+                                <button class="btn btn-primary" ng-click="createByImportKey()">创建</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除模态框 -->
+<div class="modal fade" id="deleteKey-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">删除密钥</h4>
+            </div>
+            <div class="modal-body">
+                <p>该操作无法撤销，将被删除的密钥:</p>
+                <div class="well well-sm">
+                    <ul>
+                        <li ng-repeat="x in deleteItems">name: <strong>{{ x }}</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" ng-click="confirmeDel()">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
