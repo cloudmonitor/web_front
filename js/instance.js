@@ -541,22 +541,78 @@ $(document).on("click", ".edit_instance", function() {
     servers_id = this.id;
     $.ajax({
         type: "GET",
-        url: config["host"] + "/instance/interfaces/" + servers_id + "?token=" + window.localStorage.token,
+        url: config["host"] + "/sever_sg/" + servers_id + "?token=" + window.localStorage.token,
         success: function(data) {
-            // console.error(data);
+            // console.error("现存的：", data);
+            var security_groups = JSON.parse(data)['security_groups'];
             var subnet_str = "";
-/*            for (var i = 0; i < subnet_infos.length; i++) {
-                var subnet_info = subnet_infos[i];
-                if (subnet_info.network_id == server.id) {
-                    subnet_str += '<div class="net-item" draggable="true" ondragstart="drag(event)" tag="' + j + '" id="' + server.id + '" name="' + subnet_info.id + '"><span class="net_name">' + subnet_info.name + '</span>' +
-                        '<span class="shadow-span subnet_id">(' + subnet_info.cidr + ')</span><button class = "btn btn-primary btn-xs net_add" name="' + j + '"> <span class = "fa fa-plus"></span></button></div>';
-                }
+            for (var i = 0; i < security_groups.length; i++) {
+                var security_group = security_groups[i];
+                subnet_str += '<div class="net-item selected_sg" id="' + security_group.id + '" name="' + security_group.name + '"><span class="sg_name">' + security_group.name + '</span>' +
+                    '<button class = "btn btn-primary btn-xs sg_detract"> <span class = "fa fa-minus"></span></button></div>';
             }
-            $(".free_subnet" + j).html(subnet_str);*/
+            if (subnet_str == "")
+                $(".usedinstance_security").html('<span class="used" style="background:#E0EEEE">无授权的安全组</span>');
+            else
+                $(".usedinstance_security").html(subnet_str);
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/disserver_sg/" + servers_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            // console.error("全部的：", data);
+            var security_groups = JSON.parse(data)['security_groups'];
+            var subnet_str = "";
+            for (var i = 0; i < security_groups.length; i++) {
+                var security_group = security_groups[i];
+                subnet_str += '<div class="net-item" id="' + security_group.id + '" name="' + security_group.name + '"><span class="sg_name">' + security_group.name + '</span>' +
+                    '<button class = "btn btn-primary btn-xs sg_add"> <span class = "fa fa-plus"></span></button></div>';
+            }
+            if (subnet_str == "")
+                $(".all_securities").html('<span class="all" style="background:#E0EEEE">无法找到安全组</span>');
+            else
+                $(".all_securities").html(subnet_str);
         }
     });
 });
-//------提交数据
+//-----------云主机增加移除处理
+$(document).on("click", ".sg_add", function() {
+    var node = document.getElementById("usedinstance_security");
+    $(this).removeClass("sg_add");
+    $(this).addClass("sg_detract");
+    $(this).find("span").removeClass("fa-plus");
+    $(this).parent().addClass("selected_sg");
+    $(this).find("span").addClass("fa-minus");
+    if ($(".usedinstance_security").children("div").length == 0)
+        $(".usedinstance_security").empty();
+    if ($(".all_securities").children("div").length == 1)
+        $(".all_securities").append('<span class="all" style="background:#E0EEEE">无法找到安全组</span>');
+    node.appendChild($(this).parent().get(0));
+});
+$(document).on("click", ".sg_detract", function() {
+    var node = document.getElementById("all_securities");
+    $(this).removeClass("sg_detract");
+    $(this).addClass("sg_add");
+    $(this).find("span").removeClass("fa-minus");
+    $(this).parent().removeClass("selected_sg");
+    $(this).find("span").addClass("fa-plus");
+    if ($(".usedinstance_security").children("div").length == 1)
+        $(".usedinstance_security").append('<span class="used" style="background:#E0EEEE">无授权的安全组</span>');
+    if ($(".all_securities").children("div").length == 0)
+        $(".all_securities").empty();
+    node.appendChild($(this).parent().get(0));
+});
+$(".sg_keep").click(function() {
+    var name = $(".edit_instance_name").val();
+    $(".selected_sg").each(function() {
+
+    });
+
+
+
+});
+//-----------------------------------------------------------提交数据
 $(".add_IP").click(function() {
     if (flag_type == "floatIP") {
         var IP_selected = {
@@ -613,7 +669,7 @@ function setList(i, num, data, addrs, status, UTC8_time, peizhi) {
         str += "<li id='" + data.id + "' IP_id='" + addrs.slice(addrs.indexOf("浮动IP") + 4) + "' class='unbind_floatIp'><a href='javascript:void(0)'><font color='red'>" + "解除浮动IP的绑定" + "</font></a></li>";
     str += "<li id='" + data.id + "' class='bind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定接口" + "</a></li>";
     str += "<li id='" + data.id + "' class='unbind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "解绑接口" + "</a></li>";
-    str += "<li name='"+data.name+"' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
+    str += "<li name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
     str += "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
 }
