@@ -129,9 +129,10 @@ myApp.controller('instanceCtrl', function($scope) {
     $("head title").text("实例");
 });
 
-myApp.controller('instanceDesc', function($scope) {
+myApp.controller('instance-descCtrl', function($scope) {
+    $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/instance_desc.js', 'text/javascript', 'utf-8');
-    $("head title").text("实例");
+    $("head title").text("实例详情");
 });
 
 // 网络与安全 -- 拓扑

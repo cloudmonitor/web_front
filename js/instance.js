@@ -188,7 +188,7 @@ $(".start_cloudmonitor").click(function() {
                     var servers = JSON.parse(data)['networks'];
                     for (var j = 0; j < servers.length; j++) {
                         var server = servers[j];
-                        var net_infoDiv = "<B class='tabel'>" + server.name + "</B><br/>" + '<div ondrop="drop(event)" ondragover="allowDrop(event)" parent_tag="' + j + '" class="alert alert-success  all_subnet free_subnet' + j + '" id="free_subnet' + j + '" name="' + j + '"></div>';
+                        var net_infoDiv = "<B class='tabel'>" + server.name + "</B><br/>" + '<div ondrop="drop(event)" ondragover="allowDrop(event)" parent_tag="' + j + '" class="alert alert-success  all_subnet free_subnet' + j + '" id="free_subnet' + j + '" name="' + j + '" hidden></div>';
                         $(".free_netsInfo").append(net_infoDiv);
                         var subnet_str = "";
                         for (var i = 0; i < subnet_infos.length; i++) {
@@ -200,13 +200,16 @@ $(".start_cloudmonitor").click(function() {
                         }
                         $(".free_subnet" + j).html(subnet_str);
                     }
-                    //  $(".free_subnet0").show();
+                    $(".free_subnet0").show();
                 }
             });
         }
     });
 });
-
+$(document).on("click", ".tabel", function() {
+    $(this).next().next().slideToggle();
+});
+//------------拖拽处理
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -240,9 +243,7 @@ function drop(ev) {
     }
 
 }
-/*$(document).on("click", ".tabel", function() {
-    $(this).next().next().slideToggle();
-});*/
+//-----------增加移除处理
 $(document).on("click", ".net_add", function() {
     var node = document.getElementById("selected_subnet");
     $(this).removeClass("net_add");
@@ -261,7 +262,7 @@ $(document).on("click", ".net_detract", function() {
     $(this).find("span").addClass("fa-plus");
     node.appendChild($(this).parent().get(0));
 });
-
+//------------设置进度条
 function setphoto(temp_info, num) {
     if (num / (new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed)) > 0.8) {
         $(".flavor_free").addClass("progress-bar-danger");
