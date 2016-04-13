@@ -52,6 +52,9 @@ $(function() {
                         setList(i, num, server, addrs, isntance_status, status, time_str, peizhi);
 
                     };
+                    instance_len = servers['servers'].length;
+                    var footer_str = "<tr class='active tfoot-dsp fireWall_tr'><td colspan='11'>Displaying <span id='item_count'>" + instance_len + "</span> items</td></tr>";
+                    $(".instance_footer").append(footer_str);
                 },
                 error: function(data) {
                     alert("信息获取失败！");
@@ -661,6 +664,8 @@ $(document).on("click", ".pause_instance", function() {
     var pause = {
         "pause": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'>&nbsp;<B>正在暂停...</B></font>");
     setInstanceAjax(pause, "/servers_action/");
 });
 //------------------恢复实例
@@ -669,6 +674,8 @@ $(document).on("click", ".unpause_instance", function() {
     var unpause = {
         "unpause": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'>&nbsp;<B>正在进行恢复...</B></font>");
     setInstanceAjax(unpause, "/servers_action/");
 });
 //------------------挂起实例
@@ -677,6 +684,8 @@ $(document).on("click", ".suspend_instance", function() {
     var suspend = {
         "suspend": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在挂起...</B></font>");
     setInstanceAjax(suspend, "/servers_action/");
 });
 //------------------恢复挂起
@@ -685,6 +694,8 @@ $(document).on("click", ".unpause_instance1", function() {
     var resume = {
         "resume": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在进行恢复...</B></font>");
     setInstanceAjax(resume, "/servers_action/");
 });
 //------------------锁定实例
@@ -711,6 +722,8 @@ $(document).on("click", ".softreboot", function() {
             "type": "SOFT"
         }
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在重启...</B></font>");
     setInstanceAjax(reboot, "/servers_action/");
 });
 //------------------硬重启
@@ -721,6 +734,8 @@ $(document).on("click", ".hardreboot", function() {
             "type": "HARD"
         }
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在硬重启...</B></font>");
     setInstanceAjax(reboot, "/servers_action/");
 });
 //------------------关闭实例
@@ -729,6 +744,8 @@ $(document).on("click", ".stop_instance", function() {
     var stop = {
         "os-stop": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在关闭电源...</B></font>");
     setInstanceAjax(stop, "/servers_action/");
     $(".create_start").html("启动实例");
 });
@@ -738,6 +755,8 @@ $(document).on("click", ".create_start", function() {
     var stop = {
         "os-start": null
     };
+    $("." + this.id).parent().css("background", "#FFEC8B");
+    $("." + this.id).html("<img src='./icon/preloader.gif' alt='loading..' style='height:13px;width:18px'/><font color='red'><B>正在启动电源...</B></font>");
     setInstanceAjax(stop, "/servers_action/");
     $(".create_start").removeClass("create_start");
     $(".create_start").html("创建快照");
@@ -771,7 +790,9 @@ function setInstanceAjax(data, url) {
         contentType: "application/json",
         url: config['host'] + url + servers_id + "?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
         }
     });
 }
@@ -784,38 +805,42 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         "<td>" + status1 + "</td>" +
         "<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
         "<td>" + "无" + "</td>" +
-        "<td>" + status + "</td>" +
+        "<td class='" + data.id + "'>" + status + "</td>" +
         "<td>" + UTC8_time + "</td>" +
         "<td><div class='btn-group'>";
     if (status1 != "关机")
-        str += "<button type='button' class='btn btn-default btn-sm' >" + "创建快照" + "</button>";
+        str += "<button type='button' class='btn btn-default btn-sm' disabled>" + "主机操作" + "</button>";
     else
         str += "<button type='button' id='" + data.id + "' class='btn btn-default btn-sm create_start' >" + "启动实例" + "</button>";
     str += "<button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>" +
         "<span class='caret'></span>" +
         "<span class='sr-only'>" + "切换下拉菜单" + "</span>" +
-        "</button><ul class='dropdown-menu' role='menu'>";
+        "</button><ul class='dropdown-menu' role='menu' style='z-index:1000'>";
 
     if (addrs.indexOf("浮动IP") == -1)
         str += "<li id='" + data.id + "' class='bind_floatIp' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定浮动IP" + "</a></li>";
     else
         str += "<li id='" + data.id + "' IP_id='" + addrs.slice(addrs.indexOf("浮动IP") + 4) + "' class='unbind_floatIp'><a href='javascript:void(0)'><font color='red'>" + "解除浮动IP的绑定" + "</font></a></li>";
-    str += "<li id='" + data.id + "' class='bind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定接口" + "</a></li>";
-    str += "<li id='" + data.id + "' class='unbind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "解绑接口" + "</a></li>";
     str += "<li tag='0' name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑云主机" + "</a></li>";
-    str += "<li tag='1' name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑安全组" + "</a></li>";
-    if (status1 == "运行中")
+    if (status1 == "运行中") {
+        str += "<li tag='1' name='" + data.name + "' id='" + data.id + "' class='edit_instance' data-toggle='modal' data-target='#instance_security'><a href='javascript:void(0)' >" + "编辑安全组" + "</a></li>";
+        str += "<li id='" + data.id + "' class='bind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "绑定接口" + "</a></li>";
+        str += "<li id='" + data.id + "' class='unbind_Inteface' data-toggle='modal' data-target='#bind_floatingIP'><a href='javascript:void(0)' >" + "解绑接口" + "</a></li>";
         str += "<li  name='" + data.name + "' id='" + data.id + "' class='pause_instance'><a href='javascript:void(0)' >" + "中止实例" + "</a></li>";
-    if (status1 == "已暂停")
+        str += "<li  name='" + data.name + "' id='" + data.id + "' class='softreboot'><a href='javascript:void(0)' ><font color='red'>" + "软重启实例" + "</font></a></li>";
+        str += "<li  name='" + data.name + "' id='" + data.id + "' class='hardreboot'><a href='javascript:void(0)' ><font color='red'>" + "硬重启实例" + "</font></a></li>";
+        str += "<li  name='" + data.name + "' id='" + data.id + "' class='stop_instance'><a href='javascript:void(0)' ><font color='red'>" + "关闭实例" + "</font></a></li>";
+        str += "<li  name='" + data.name + "' id='" + data.id + "' class='suspend_instance'><a href='javascript:void(0)' >" + "挂起实例" + "</a></li>";
+    }
+    if (status1 == "已暂停") {
         str += "<li  name='" + data.name + "' id='" + data.id + "' class='unpause_instance'><a href='javascript:void(0)' >" + "恢复实例" + "</a></li>";
-    else if (status1 == "关闭")
+    } else if (status1 == "已挂起") {
         str += "<li  name='" + data.name + "' id='" + data.id + "' class='unpause_instance1'><a href='javascript:void(0)' >" + "恢复实例" + "</a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='suspend_instance'><a href='javascript:void(0)' >" + "挂起实例" + "</a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='lock_instance'><a href='javascript:void(0)' >" + "锁定实例" + "</a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='unlock_instance'><a href='javascript:void(0)' >" + "解锁实例" + "</a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='softreboot'><a href='javascript:void(0)' ><font color='red'>" + "软重启实例" + "</font></a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='hardreboot'><a href='javascript:void(0)' ><font color='red'>" + "硬重启实例" + "</font></a></li>";
-    str += "<li  name='" + data.name + "' id='" + data.id + "' class='stop_instance'><a href='javascript:void(0)' ><font color='red'>" + "关闭实例" + "</font></a></li>";
+
+    }
+    /*    str += "<li  name='" + data.name + "' id='" + data.id + "' class='lock_instance'><a href='javascript:void(0)' >" + "锁定实例" + "</a></li>";
+        str += "<li  name='" + data.name + "' id='" + data.id + "' class='unlock_instance'><a href='javascript:void(0)' >" + "解锁实例" + "</a></li>";*/
+
     str += "<li id='" + data.id + "' class='delete_instanceSimple'><a href='javascript:void(0)'><font color='red'>" + "终止实例" + "</font></a></li>";
     str += "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);

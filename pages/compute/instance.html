@@ -1,5 +1,5 @@
 <!-- 内容显示界面 -->
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main setHeight">
     <!-- 实例 -->
     <div class="desc">实例</div>
     <form class="form-inline form-btn" role="form">
@@ -55,7 +55,7 @@
     </form>
     <br>
     <br>
-    <table class="table table-striped instance_info">
+    <table class="table table-striped instance_info ">
         <thead>
             <tr>
                 <th>
@@ -73,6 +73,8 @@
                 <th>Actions</th>
             </tr>
         </thead>
+        <tfoot class="instance_footer">
+        </tfoot>
     </table>
 </div>
 <!-- 模态框 绑定浮动IP -->
@@ -141,9 +143,8 @@
                                     <input class="form-control edit_instance_name">
                                 </div>
                             </form>
-                            <div class="col-md-6" >
-                             <h4>说明</h4>
-                                编辑实例详细信息
+                            <div class="col-md-6">
+                                <h4>说明</h4> 编辑实例详细信息
                             </div>
                         </div>
                     </div>

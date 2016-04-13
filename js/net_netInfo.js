@@ -50,6 +50,10 @@ $(function() {
                     var footer_str = "<tfoot><tr class='active tfoot-dsp'><td colspan='7'>Displaying <span id='item_count'>" + net_len + "</span> items</td></tr></tfoot>";
                     //var footer_str='<div style="background:#E5E5E5" style="height:5rem;width:50rem">'+'Displaying  '+count_num+'  items'+'</div>';
                     $(".instance_info").append(footer_str);
+                    if (net_len == 10) {
+                        $(".add_netbutton").text("创建网络(配额用尽)");
+                        $(".add_netbutton").parent().attr("disabled",true);
+                    }
                 },
                 error: function(data) {
                     alert("信息获取失败！");
@@ -396,7 +400,7 @@ function createSubnetAJAX(subnet) {
 }
 
 function setList(data, i, status) {
-    var str = "<tbody><tr><td><input type='checkbox' class='net_check' id='" + data.id + "'></td><td><a href='#/net/net-desc?" + i + "&" + status +"id_start"+data.id+"'>" + data.name + "</a></td><td>" + data.subnets + "</td><td>" + data.shared + "</td>" +
+    var str = "<tbody><tr><td><input type='checkbox' class='net_check' id='" + data.id + "'></td><td><a href='#/net/net-desc?" + i + "&" + status + "id_start" + data.id + "'>" + data.name + "</a></td><td>" + data.subnets + "</td><td>" + data.shared + "</td>" +
         "<td>" + data.status + "</td><td>" + data.admin_state_up +
         "</td><td><div class='btn-group'>" +
         "<button type='button'id='" + data.id + "' name='" + data.name + "' status='" + data.admin_state_up + "' class='btn btn-default btn-sm edite_net_class' data-toggle='modal' data-target='#edite-net'>" + "编辑网络" + "</button>" +
