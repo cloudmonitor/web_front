@@ -4,6 +4,7 @@ $(function() {
         type: "GET",
         url: config["host"] + "/subnets?token=" + window.localStorage.token,
         success: function(data) {
+            $("#loading_monitor1,#background_monitor1").hide();
             var subnet_infos = JSON.parse(data)['subnets'];
             localStorage.subnets_tempInfo = data;
             /*            localStorage.subnetInfo=data;*/
@@ -193,6 +194,7 @@ $(".delete_nets").click(function() {
     $(".net_check:checked").each(function() {
         net_ids[i++] = this.id;
     });
+   $("#loading_monitor1,#background_monitor1").show();
     deleteNetAjax(nets);
 });
 //----单删
