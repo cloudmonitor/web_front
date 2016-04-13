@@ -13,7 +13,7 @@ $(function() {
         policy_Info = JSON.parse(localStorage.policyInfo)[num];
     }
     console.log("==========================>");
-     console.log(policy_Info);
+    console.log(policy_Info);
     $("#policy_name").html(policy_Info.name);
     if (policy_Info.description == "")
         policy_Info.description = "无";
@@ -39,7 +39,10 @@ $(function() {
                     }
                 }
             }
-            $("#policy_rules").append(str);
+            if (str != "")
+                $("#policy_rules").append(str);
+            else
+                $("#policy_rules").append("-");
         },
         error: function(data) {
             alert("信息获取失败");

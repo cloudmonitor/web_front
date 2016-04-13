@@ -1,12 +1,12 @@
 $(function() {
-    if (localStorage.net_tempInfo != null && localStorage.net_tempInfo != "undefined") {
+/*    if (localStorage.net_tempInfo != null && localStorage.net_tempInfo != "undefined") {
         var networks = JSON.parse(localStorage.net_tempInfo)['networks'];
         localStorage.net = JSON.stringify(networks);
         rount_netInfo(networks);
-    } else {
+    } else {*/
         $.ajax({
             type: "GET",
-            url: config["host"] + "/networks?token=" + window.localStorage.token,
+            url: config["host"] + "/all_networks?token=" + window.localStorage.token,
             success: function(data) {
                 var networks = JSON.parse(data)['networks'];
                 localStorage.net = JSON.stringify(networks);
@@ -16,7 +16,7 @@ $(function() {
                 alert("获取网络失败！");
             }
         });
-    }
+    /*}*/
 });
 var router_len = 0;
 
@@ -301,10 +301,15 @@ function dealRouterInfo(rounter, networks) {
     else
         rounter.admin_state_up = "下";
     //---外部网络
+    console.error("rounter:",rounter);
     if (rounter.external_gateway_info != null && rounter.external_gateway_info != "") {
+        console.error(JSON.stringify(networks));
         for (var j = 0; j < networks.length; j++) {
+            console.error(networks[j].id);
+            console.error(rounter.external_gateway_info.network_id);
             if (networks[j].id == rounter.external_gateway_info.network_id) {
                 setList(rounter, networks[j].name);
+               // break;
             }
         }
     } else {

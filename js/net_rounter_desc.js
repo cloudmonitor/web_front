@@ -50,6 +50,7 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
                 success: function(data) {
+                    localStorage.portInfos=data;
                     var ports = JSON.parse(data)['ports'];
                     for (var i = 0; i < ports.length; i++) {
                         var port = ports[i];
@@ -268,7 +269,7 @@ function deleteAjax(data) {
 function sertPortList(data) {
     var str = '<tr>' +
         '<td><input type="checkbox" class="port_check" id="' + data['fixed_ips'][0]['subnet_id'] + '"></td>' +
-        '<td><a href="network_firewall_strategy_desc.html">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
+        '<td><a href="#/net/port-desc?'+data.id+'">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
         '<td>' + data.fixed_ips[0].ip_address + '</td>' +
         '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
         '<td>' + (data['binding:vnic_type'] == 'normal' ? "内部接口" : "外部接口") + '</td>' +

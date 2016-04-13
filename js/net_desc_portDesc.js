@@ -1,11 +1,12 @@
 $(function() {
     var id = window.location.href.split("?")[1];
-    var temp=id.substr(0,4);
-    if (temp!="gate") {
+    var temp = id.substr(0, 4);
+    if (temp != "gate") {
         var port_Info;
         var port_Infos = JSON.parse(localStorage.portInfos)["ports"];
         for (var i = 0; i < port_Infos.length; i++) {
             if (port_Infos[i].id == id) {
+                alert(id);
                 port_Info = port_Infos[i];
                 break;
             }
@@ -34,10 +35,8 @@ $(function() {
         $("#port_deviceId").html(port_Info.device_id);
         $("#port_VNCType").html(port_Info["binding:vnic_type"]);
 
-    }
-    else
-    {
-        window.location="#/net/topology";
+    } else {
+        window.location = "#/net/topology";
     }
 
 

@@ -82,10 +82,10 @@ Kinetic.Topology = Kinetic.Class.extend({
                 $(".button_modelShow").click();
                 $(".create_router_name").val("");
                 $(".outNet_selected").empty();
-                $(".outNet_selected").append(' <option value="test" selected>选择网络</option>');
+                $(".outNet_selected").append('<option value="test" selected>选择网络</option>');
                 $.ajax({
                     type: "GET",
-                    url: "http://192.168.0.109:8888/extnet?token=" + window.localStorage.token,
+                    url: "http://192.168.0.149:8888/extnet?token=" + window.localStorage.token,
                     success: function(data) {
                         var ext_nets = JSON.parse(data)['ext_net'];
                         var str = "";
@@ -130,11 +130,12 @@ Kinetic.Topology = Kinetic.Class.extend({
                         router['external_gateway_info'] = null;
                     }
                     //--------------数据的提交
+                    console.error(JSON.stringify(router_create));
                     $.ajax({
                         type: "POST",
                         data: JSON.stringify(router_create),
                         contentType: "application/json",
-                        url: "http://192.168.0.109:8888/router/create" + "?token=" + window.localStorage.token,
+                        url: "http://192.168.0.149:8888/router/create" + "?token=" + window.localStorage.token,
                         success: function(data) {
                             that.topology.addDevice(device);
                             window.location.reload();
@@ -566,6 +567,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 $(".deviceTitle_Info").html(title_Info);
                 var body_str = "";
                 // alert(instance.config.data.device_name);
+                /*网络的信息提示*/
                 if (instance.config.data.device_name == "network") {
                     footer_showInfo = "» View Details ";
                     body_str = '<B>Subnets</B><br/>';
@@ -582,20 +584,24 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     }
 
                     footer_str = '<a href="#/net/net-desc?' + instance.deviceImage.attrs.id + '" class="ttttt"  >' + footer_showInfo + '</a>';
-                } else if (instance.config.data.device_name == "ext_net") {
+                } 
+                /*外网的信息提示*/
+                else if (instance.config.data.device_name == "ext_net") {
                     body_str = '<B>Subnets</B><br/>';
                     var id_temp = instance.id;
                     var subnets = instance.config.data.subnets;
                     if (subnets != null && subnets != "undefined" && subnets.length != 0) {
                         for (var i = 0; i < subnets.length; i++) {
                             if (body_str != '<B>Subnets</B><br/>') {
-                                body_str += '<br/><a href="#?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
+                                body_str += '<br/><a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
                             } else {
-                                body_str += '<a href="#?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
+                                body_str += '<a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
                             }
                         }
                     }
-                } else if (instance.config.data.device_name == "router") {
+                }
+                /*路由的信息提示*/
+                 else if (instance.config.data.device_name == "router") {
                     footer_showInfo = "» View Router Details";
                     body_str = '<B>Interfaces</B><br/>';
                     var id_temp = instance.id;
@@ -617,8 +623,10 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                         }
                     }
 
-                    footer_str = '<a href="#?"' + instance.deviceImage.attrs.id + ' >' + footer_showInfo + '</a>';
-                } else {
+                    footer_str = '<a href="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                }
+                /*实例的信息提示*/
+                 else {
                     footer_showInfo = "» View Instance Details ";
                     body_str = '<B>IP Addresses</B><br/>';
                     var id_temp = instance.id;
@@ -631,8 +639,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                             }
                         }
                     }
-
-                    footer_str = '<a href="#?"' + instance.deviceImage.attrs.id + ' >' + footer_showInfo + '</a>';
+                    footer_str = '<a href="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
                 };
 
                 $(".devicebodyInfo").html(body_str);

@@ -22,7 +22,7 @@ $(function() {
     $(".rule_footer").append(str_footer);
 
     //------------单个删除操作·！！！！！！
-    $(".delete_rule").click(function() {
+    $(document).on("click", ".delete_rule", function() {
         var id = $(this).parent().siblings().first().children(".rule_id").attr("id");
 
         var json_array = '{"sg_rules_ids":["' + id + '"]}';
@@ -127,7 +127,7 @@ $(function() {
         ruleVlue.protocol = $(".select_rule").val();
         ruleVlue.direction = $(".director").val();
         var port_temp = $(".port_selected").val();
-       // alert($(".port_text").val());
+        // alert($(".port_text").val());
         if (($(".port_text").val() != null && $(".port_text").val() != "") || ($(".portmin_text").val() != null && $(".portmin_text").val() != "")) {
             if (port_temp == "port") {
                 ruleVlue.port_range_min = $(".port_text").val();
@@ -182,7 +182,6 @@ function setSecurityRulesList(data) {
 }
 
 function setRule(rule) {
-
     if (rule.direction == "egress")
         rule.direction = "出口";
     else

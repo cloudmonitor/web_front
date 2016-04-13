@@ -1,5 +1,5 @@
 $(function() {
-    if (window.location.href.split('&')[1] != "undefined") {
+    if (window.location.href.split('&')[1] != undefined && window.location.href.split('&')[1] != "undefined") {
 
         var serverInfo = JSON.parse(localStorage.server_tempInfo);
 
@@ -63,7 +63,7 @@ $(function() {
                                 $("#server_AvailabilityZone").html(servers['servers'][curr_number]["OS-EXT-AZ:availability_zone"]); //
                                
                                 $("#server_IPAddresses").html(addrs);
-                                setInfo(servers['servers'], curr_number, curr_flavor);
+                                setInfo(servers, curr_number, curr_flavor);
                                 break;
                             }
                         };
