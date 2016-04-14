@@ -164,7 +164,6 @@ Kinetic.Topology = Kinetic.Class.extend({
                     create_networkFun();
                     $(".create_net").click();
                 }
-
             }
         });
         this.connector = new Kinetic.Topology.Device.Connector({
@@ -190,11 +189,10 @@ Kinetic.Topology = Kinetic.Class.extend({
         return false;
     },
     deleteCurrentObject: function() {
-        console.log(">>>>>>>>>>>>>>>");
-        console.log(this.currentObject);
         var id = this.currentObject.id;
         var type = this.currentObject['config']['data'].device_name;
-        var flag = false;
+        var that=this;
+        //---------------删除设备
         if (type == "router") {
             var json_array = '{"router_ids":["' + id + '"]}';
             $.ajax({
@@ -207,7 +205,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
-                            flag = true;
+                            that.currentObject.remove();
                             alert(x + "删除成功！");
                         } else
                             alert(x + "删除失败");
@@ -230,7 +228,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
-                            flag = true;
+                            that.currentObject.remove();
                             alert(x + "删除成功！");
                         } else
                             alert(x + "删除失败");
@@ -250,7 +248,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
-                            flag = true;
+                            that.currentObject.remove();
                             alert(x + "删除成功！");
                         } else
                             alert(x + "删除失败");
@@ -258,9 +256,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 }
             });
         }
-        if (flag) {
-            this.currentObject.remove();
-        }
+
     },
     /////////////////////////////////////ctt-codeStart///////////////////////////////////////////////////////////////
     //点击设备全屏访问后新开远程tab
@@ -345,7 +341,11 @@ Kinetic.Topology = Kinetic.Class.extend({
                 width: this.devices[i].deviceImage.getWidth(),
                 height: this.devices[i].deviceImage.getHeight(),
             };
-            if ((x >= fireRange.x && x <= fireRange.x + fireRange.width) && (y >= fireRange.y && y <= fireRange.y + fireRange.height)) {
+            var r_w = Number(fireRange.x) + Number(fireRange.width);
+            var t_h = Number(fireRange.y) + Number(fireRange.height);
+            /*            console.error("x-->  ",x+" : "+fireRange.x+"--"+r_w);
+                        console.error("y-->  ",y+" : "+fireRange.y+"--"+t_h);*/
+            if ((x >= fireRange.x && x <= r_w) && (y >= fireRange.y && y <= t_h)) {
                 return this.devices[i];
             }
         }
@@ -498,6 +498,7 @@ Kinetic.Topology.Background = Kinetic.Class.extend({
         return this.config;
     },
     draw: function() {
+        // alert("498")
         var imageObj = new Image();
         var instance = this;
         imageObj.onload = function() {
@@ -559,6 +560,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         return this.id;
     },
     remove: function() {
+       // alert(560);
         if (this.deviceImage != null) {
             if (this.lines != null && this.lines.length > 0) {
                 for (var i = 0; i < this.lines.length; i++) {
@@ -606,6 +608,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         this.config.data.height = this.deviceImage.getHeight();
     },
     draw: function() {
+        //alert(608);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -907,6 +910,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         return this.connectorImage;
     },
     move: function(device) {
+        //alert(910);
         if (!this.onDrag) {
             this.device = device;
             var shape = device.getDeviceImage();
@@ -942,6 +946,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         this.draw();
     },
     draw: function() {
+        // alert(946);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -980,6 +985,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             instance.hide();
         });
         this.connectorImage.on("dragstart", function(evt) {
+            //alert(985);
             instance.onDrag = true;
             var device = instance.getDevice();
             var shape = device.getDeviceImage();
@@ -998,6 +1004,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             connector.getLayer().draw();
         });
         this.connectorImage.on("dragend", function(evt) {
+            //alert(1004);
             var shape = evt.shape;
             var dstDevice = instance.config.topology.getFitDevice(shape.getX(), shape.getY());
             //如果连接器的终点是空白区域，就在终点位置建立一个与源设备一样的结点，并把它设置为终结点
@@ -1009,36 +1016,39 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             shape.getLayer().remove(instance.joinLine);
             shape.getLayer().draw();
             instance.joinLine = null;
+
             if (dstDevice == null) {
-                var originalDevice = instance.getDevice(); //源结点
-                var config = originalDevice.getConfig().data;
-                var dstDeviceId = config.id.substring(0, config.id.lastIndexOf("_")) + "_" + sequence.nextVal();
-                dstDevice = new Kinetic.Topology.Device({
-                    topology: instance.config.topology,
-                    data: {
-                        id: dstDeviceId,
-                        name: config.name,
-                        src: config.src,
-                        x: connector_x,
-                        y: connector_y,
-                        width: 'auto',
-                        height: 'auto'
-                    },
-                    callbackObj: {
-                        instance: instance,
-                        callback: function(dstDevice) {
-                            new Kinetic.Topology.Line({
-                                topology: this.instance.config.topology,
-                                srcDevice: this.instance.getDevice(),
-                                dstDevice: dstDevice,
-                                stroke: 'black',
-                                strokeWidth: 1
-                            });
-                        }
-                    }
-                });
-                instance.config.topology.addDevice(dstDevice);
+                /*
+                                var originalDevice = instance.getDevice(); //源结点
+                                var config = originalDevice.getConfig().data;
+                                var dstDeviceId = config.id.substring(0, config.id.lastIndexOf("_")) + "_" + sequence.nextVal();
+                                dstDevice = new Kinetic.Topology.Device({
+                                    topology: instance.config.topology,
+                                    data: {
+                                        id: dstDeviceId,
+                                        name: config.name,
+                                        src: config.src,
+                                        x: connector_x,
+                                        y: connector_y,
+                                        width: 'auto',
+                                        height: 'auto'
+                                    },
+                                    callbackObj: {
+                                        instance: instance,
+                                        callback: function(dstDevice) {
+                                            new Kinetic.Topology.Line({
+                                                topology: this.instance.config.topology,
+                                                srcDevice: this.instance.getDevice(),
+                                                dstDevice: dstDevice,
+                                                stroke: 'black',
+                                                strokeWidth: 1
+                                            });
+                                        }
+                                    }
+                                });
+                                instance.config.topology.addDevice(dstDevice);*/
             } else {
+                alert(1046);
                 if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
                     if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
                         var line = new Kinetic.Topology.Line({
@@ -1054,6 +1064,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
 
         });
         this.connectorImage.on("dragmove", function(evt) {
+            //alert(1062);
             var connector = evt.shape;
             var device = instance.getDevice();
             var shape = device.getDeviceImage();
@@ -1105,6 +1116,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         this.config.topology.getLayer().draw();
     },
     redraw: function() {
+        //alert(1114);
         var srcElement = this.config.srcDevice.getDeviceImage();
         var x1 = srcElement.getX() + srcElement.getWidth() / 2;
         var y1 = srcElement.getY() + srcElement.getHeight() / 2;
@@ -1116,6 +1128,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         this.lineObject.saveImageData();
     },
     remove: function() {
+        alert(1126);
         if (this.lineObject != null) {
             var lines = this.config.topology.getLines();
             if (lines != null && lines.length > 0) { //删除拓扑图中注册的线信息
@@ -1133,6 +1146,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         }
     },
     draw: function() {
+        // alert(1144);
         /*        console.log("Line_draw________________________");
                 console.log(this);*/
         var srcElement = this.config.srcDevice.getDeviceImage();
@@ -1174,6 +1188,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         //    });
         /////////////////////////////////////ctt-codeStart///////////////////////////////////////////////////////////////
         this.lineObject.on("click", function(evt) {
+            alert(1186);
             document.body.style.cursor = "pointer";
             $("#infoDialog").show();
             if (evt.button == 0) {

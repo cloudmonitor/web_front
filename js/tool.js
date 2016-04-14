@@ -395,6 +395,7 @@ function createInstanceFun() {
             obj.network_id = $(this).attr("id");
             obj.subnet_id = $(this).attr("name");
             obj1.uuid = $(this).attr("id");
+            alert(typeof($(this).attr("id")));
             if ($(this).attr("id") != "" && $(this).attr("id") != 'undefined') {
                 server.network_info[temp0++] = obj;
                 if (temp1 == 0)
@@ -409,6 +410,7 @@ function createInstanceFun() {
                 }
             }
         });
+        console.error(JSON.stringify(instance));
         $("#loading_monitor1,#background_monitor1").show();
         //-------------------提交数据
         instance_info(instance);
