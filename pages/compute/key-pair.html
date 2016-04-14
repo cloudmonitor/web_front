@@ -9,7 +9,7 @@
     </div>
     <div class="desc">密钥对</div>
     <p></p>
-    <div class="row" style="margin-left: 3px;">
+    <div class="row" id="btn-group-right">
         <button class="btn btn-primary" data-toggle="modal" data-target="#createKey-modal" ng-click="createKeyModal()"><i class="fa fa-plus-square"></i>创建密钥</button>
         <button class="btn btn-danger" data-toggle="modal" data-target="#deleteKey-modal" ng-disabled="delBtnDis" ng-click="delKeyBtn()">删除</button>
     </div>
@@ -77,7 +77,8 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label for="key-name">密钥名称<span class="span-stand"> *</span></label>
-                                    <input type="text" class="form-control" id="key-name" ng-model="keyName" placeholder="仅限字母和下划线" required>
+                                    <input type="text" class="form-control" id="key-name" ng-model="keyName" placeholder="仅限字母数字和下划线" required>
+                                    <span id="novalid" ng-show="novalid">非法密钥名称</span>
                                 </div>
                                 <hr>
                                 <button class="btn btn-primary" ng-click="createKey()">创建</button>
@@ -88,11 +89,13 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label for="key-desc">密钥名称<span class="span-stand"> *</span></label>
-                                    <input type="text" class="form-control" id="key-desc" ng-model="keyName" placeholder="仅限字母和下划线" required>
+                                    <input type="text" class="form-control" id="key-desc" ng-model="keyName" placeholder="仅限字母数字和下划线" required>
+                                    <span id="novalid" ng-show="novalid">非法密钥名称</span>
                                 </div>
                                 <div class="form-group">
                                     <lable class="control-label" for="pub-key">公钥<span class="span-stand"> *</span></lable>
                                     <textarea class="form-control" id="pub-key" ng-model="pulic_key" required></textarea>
+                                    <span id="area-novalid" ng-show="area_novalid">公钥输入非法</span>
                                 </div>
                                 <hr>
                                 <button class="btn btn-primary" ng-click="createByImportKey()">创建</button>
@@ -127,3 +130,4 @@
         </div>
     </div>
 </div>
+
