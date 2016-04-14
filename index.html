@@ -1,4 +1,4 @@
-    <!-- 首页 -->
+<!-- 首页 -->
 <!DOCTYPE html>
 <html ng-app="myApp" ng-controller="myCtrl">
 
@@ -20,51 +20,27 @@
     <link rel="stylesheet" href="css/icon.css" type="text/css"></link>
     <link rel="stylesheet" href="css/topology.css" type="text/css"></link>
     <script src="js/config.js"></script>
+    <!-- 引入显示警告框的自定义js库 -->
+    <script src="js/show-alert.js"></script>
     <!-- 引入angular js库 -->
     <script src="js/lib/angular.min.js"></script>
     <!-- 引入angular 路由库 -->
     <script src="js/lib/angular-route.js"></script>
     <!-- 引入 angular js 自定义库 -->
-    <script src="js/angular-ref.js"></script>
-    <!-- 引入显示警告框的自定义js库 -->
-    <script src="js/show-alert.js" type="text/javascript"></script>
+    <script src="js/angularApp.js"></script>
+    <script src="js/floatingIPCtrl.js"></script>
+    <script src="js/keyPairCtrl.js"></script>
 </head>
 
 <body>
     <header>
         <!-- 顶部导航栏 -->
-        <nav ng-include="'nav/nav-header.html'"></nav>
+        <ng-include src="'nav/nav-header.html'"></ng-include>
     </header>
     <div class="container-fluid">
         <div class="row">
             <!-- 左侧导航栏 -->
-            <!-- <div ng-include="'nav/nav-sidebar.html'"></div> -->
-            <div class="col-sm-3 col-md-2 sidebar">
-                <li>计算</li>
-                <ul class="nav nav-sidebar">
-                    <li class="active"><a href="#/compute/abstract" id="first_page"><i class="fa fa-certificate"></i>概括</a></li>
-                    <li><a href="#/compute/instance"><i class="fa fa-desktop"></i>实例</a></li>
-                    <li><a href="#/compute/key-pair"><i class="fa fa-venus-mars"></i>密钥对</a></li>
-                </ul>
-                <li>网络与安全</li>
-                <ul class="nav nav-sidebar">
-                    <li id="showPics"><a href="#/net/topology"><i class="fa fa-connectdevelop"></i>拓扑</a></li>
-                    <li><a href="#/net/net"><i class="fa fa-wifi"></i>网络</a></li>
-                    <li><a href="#/net/secGroup"><i class="fa fa-users"></i>安全组</a></li>
-                    <li><a href="#/net/firewall"><i class="fa fa-fire-extinguisher"></i>防火墙</a></li>
-                    <li><a href="#/net/router"><i class="fa fa-paper-plane"></i>路由器</a></li>
-                    <li><a href="#/net/floatingIP"><i class="fa fa-spinner"></i>浮动IP</a></li>
-                </ul>
-                <li>主机</li>
-                <ul class="nav nav-sidebar">
-                    <li><a href="#/monitor"><i class="fa fa-line-chart"></i>主机监控</a></li>
-                </ul>
-                <li>信息</li>
-                <ul class="nav nav-sidebar">
-                    <li><a href="#/info/base-info"><i class="fa fa-user"></i>基本信息</a></li>
-                    <li><a href="#/info/account-info"><i class="fa fa-jpy"></i>账户信息</a></li>
-                </ul>
-            </div>
+            <ng-include src="'nav/nav-sidebar.html'"></ng-include>
             <!-- 内容显示界面 -->
             <div ng-view></div>
         </div>
@@ -81,18 +57,5 @@
     <script type="text/javascript" src="./js/topology/kinetic-v3.10.4.js"></script>
     <script type="text/javascript" src="./js/topology/kinetic_topology.js"></script>
     <script type="text/javascript" src="./js/topology/common.js"></script>
-    <script type="text/javascript">
-    $(".nav-sidebar > li > a").click(function() {
-        $(".nav-sidebar > li > a").css({
-            "color": "#337ab7",
-            "background-color": "transparent"
-        })
-        $(this).css({
-            "color": "#fff",
-            "background-color": "#428bca"
-        });
-    });
-    </script>
 </body>
-
 </html>
