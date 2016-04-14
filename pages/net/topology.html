@@ -285,4 +285,112 @@
     </div>
     <!-- /.modal -->
 </div>
-<!-- ==================================主机start========================================== -->
+<!-- ==================================主机end========================================== -->
+<!-- ==================================网络start========================================== -->
+<button class="create_net" data-toggle="modal" data-target="#create-net" hidden></button>
+<!-- 模态框：创建网络 -->
+<div class="modal fade" id="create-net">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#E0EEE0">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><B>创建网络</B></h4>
+            </div>
+            <div class="modal-body">
+                <div class="well well-lg">创建新网络。另外，关联到网络的子网在下一面板中被创建。</div>
+                <div class="row">
+                    <div class="col-sm-2" style="margin:0;padding:1px;text-align:right">
+                        <label>
+                            <font color="red">*</font>网络名称</label>
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <input type="text" class="form-control createnetwork_name">
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-2" style="margin:0;padding:1px;text-align:right">
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <input type="checkbox" class="subnet_check" checked>&nbsp;&nbsp;创建子网
+                    </div>
+                    <div class="col-sm-2" style="margin:0;padding:1px;text-align:right">
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <input type="checkbox" class="subnet_mangerStatuscheck" checked>&nbsp;&nbsp;管理员状态
+                    </div>
+                </div>
+                <br/>
+                <div class="subNet_infos">
+                    <div class="row">
+                        <div class="col-sm-2" style="margin:0;padding:1px;text-align:right">
+                            <label>
+                                <font color="red">*</font>子网名称</label>
+                        </div>
+                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <input type="text" class="form-control subnet_name">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin:0;padding:1px;text-align:right">
+                            <label>网络地址</label>
+                        </div>
+                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    <input type="radio" name="radio_subnetaddr" class="radio_subnetaddr" checked>
+                                </div>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="192" disabled>
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="168" disabled>
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0" disabled>
+                                <span style="float:left">&nbsp;/&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="24" disabled>
+                                <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4 choose_subnet" style="text-align:right"><font color="#5CACEE"><B>精简选项<i class="fa fa-angle-double-down info_pic"></i></B></font></span>
+                            </div>
+                            <br/>
+                            <div class="row subnet_multi" hidden>
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    <input type="radio" name="radio_subnetaddr" class="radio_subnetaddr">
+                                </div>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="10" disabled>
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;/&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="24">
+                            </div>
+                            <br/>
+                            <div class="row subnet_multi" hidden>
+                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    <input type="radio" name="radio_subnetaddr" class="radio_subnetaddr">
+                                </div>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="172" disabled>
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="16">
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;.&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="0">
+                                <span style="float:left">&nbsp;/&nbsp;</span>
+                                <input type="text" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px" value="24">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default create_networkCancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary create_networkOk">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ==================================网络end========================================== -->

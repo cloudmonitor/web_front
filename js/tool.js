@@ -430,3 +430,104 @@ function createInstanceFun() {
     }
     //--------------------------------------------------创建虚拟机end
 }
+
+function create_networkFun() {
+    //------------创建网络面板的控制--start
+    $(".create_networkCancel").click(function() {
+        if (!flag) {
+            $(".info_pic").removeClass("fa fa-angle-double-up");
+            $(".info_pic").addClass("fa fa-angle-double-down");
+            $(".subnet_multi").slideToggle();
+            flag = true;
+        }
+        $("createnetwork_name").val("");
+        $("subnet_name").val("");
+        $(".subnet_check").prop("checked", true);
+        $(".subnet_mangerStatuscheck").prop("checked", true);
+    });
+    //--------是否显示子网详细
+    var flag = true;
+    $(".choose_subnet").click(function() {
+        $(".subnet_multi").slideToggle();
+        if (flag) {
+            $(".info_pic").removeClass("fa fa-angle-double-down");
+            $(".info_pic").addClass("fa fa-angle-double-up");
+            flag = false;
+        } else {
+            $(".info_pic").removeClass("fa fa-angle-double-up");
+            $(".info_pic").addClass("fa fa-angle-double-down");
+            flag = true;
+        }
+    });
+    //-------是否显示子网
+    $(".subnet_check").change(function() {
+        if ($(".subnet_check").is(":checked")) {
+            $(".subNet_infos").fadeToggle();
+        } else {
+            $(".subNet_infos").fadeToggle();
+        }
+    });
+
+    //------------创建网络面板的控制--end
+    //-------------创建网络
+    $(".create_networkOk").click(function() {
+        var network_json;
+        var net_managerStatus;
+        var net_name = $(".createnetwork_name").val();
+        if ($(".subnet_mangerStatuscheck").prop("checked"))
+            net_managerStatus = true;
+        else
+            net_managerStatus = false;
+        if (!$(".subnet_check").prop("checked")) {
+            var network = [{
+                "network": {
+                    "name": "",
+                    "admin_state_up": true
+                }
+            }];
+            if (net_name != "")
+                network[0]['network'].name = net_name;
+            network[0]['network'].admin_state_up = net_managerStatus;
+            createNetAjax(network);
+        } else {
+            var netWork_info = [{
+                "network": {
+                    "name": "",
+                    "admin_state_up": true
+                }
+            }, {
+                "subnet": {
+                    "name": "",
+                    "ip_version": 4,
+                    "cidr": ""
+                }
+            }];
+            var network = netWork_info[0]['network'];
+            var subnet = netWork_info[1]['subnet'];
+            if (net_name != "")
+                network.name = net_name;
+            else
+                network.name = "";
+            network.admin_state_up = net_managerStatus;
+            //--------校验子网信息
+            var subnet_name = $(".subnet_name").val();
+            //---获取子网的地址
+            var object = $(".radio_subnetaddr:checked");
+            console.log($(".radio_subnetaddr:checked"));
+            var num_1 = object.parent().siblings().eq(0).val();
+            var num_2 = object.parent().siblings().eq(2).val();
+            var num_3 = object.parent().siblings().eq(4).val();
+            var num_4 = object.parent().siblings().eq(6).val();
+            var num_5 = object.parent().siblings().eq(8).val();
+            var str_ip = num_1 + "." + num_2 + "." + num_3 + "." + num_4 + "/" + num_5;
+            subnet.name = subnet_name;
+            subnet.cidr = str_ip;
+            if (subnet_name == "") {
+                alert("请填写子网名称和地址！");
+            } else {
+                createNetAjax(netWork_info);
+            }
+        }
+    });
+
+}

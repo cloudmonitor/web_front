@@ -158,11 +158,11 @@ Kinetic.Topology = Kinetic.Class.extend({
                             $(".snapDiv").show();
                         }
                     });
-                    //-------------创建云主机
                     createInstanceFun();
                     $(".start_cloudmonitor").click();
                 } else {
-
+                    create_networkFun();
+                    $(".create_net").click();
                 }
 
             }
@@ -1434,4 +1434,17 @@ function drop(ev) {
         $("#" + data).find("button").find("span").addClass("fa-plus");
         ev.target.appendChild(document.getElementById(data));
     }
+}
+
+function createNetAjax(network_json) {
+    console.log(JSON.stringify(network_json));
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(network_json),
+        contentType: "application/json",
+        url: config['host'] + "/network/create?token=" + window.localStorage.token,
+        success: function(data) {
+            window.location.reload();
+        }
+    });
 }
