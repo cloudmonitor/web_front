@@ -4,6 +4,7 @@ $(function() {
         type: "GET",
         url: config["host"] + "/flavors?token=" + window.localStorage.token,
         success: function(data) {
+            $("#loading_monitor1,#background_monitor1").hide();
             var flavor = JSON.parse(data).flavors;
             localStorage.flavor = data;
             $.ajax({
@@ -78,9 +79,44 @@ $(".instance_startOriginSelect").change(function() {
         $(".imageDiv").hide();
         $(".snapDiv").show();
     }
-
 });
+//-------------创建云主机
+createInstanceFun();
+//------------拖拽处理
+function allowDrop(ev) {
+    ev.preventDefault();
+}
 
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var id = $(ev.target).attr("id");
+    var parent_tag = $(ev.target).attr("parent_tag");
+    var data = ev.dataTransfer.getData("Text");
+    // alert(new String(id));
+    var move_tag = $("#" + data).attr("tag");
+    if (id == "selected_subnet") {
+        $("#" + data).find("button").removeClass("net_add");
+        $("#" + data).find("button").addClass("net_detract");
+        $("#" + data).find("button").find("span").removeClass("fa-plus");
+        $("#" + data).find("button").parent().addClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-minus");
+        //console.error(document.getElementById(data));
+        ev.target.appendChild(document.getElementById(data));
+    } else if (move_tag == parent_tag) {
+        $("#" + data).find("button").removeClass("net_detract");
+        $("#" + data).find("button").addClass("net_add");
+        $("#" + data).find("button").find("span").removeClass("fa-minus");
+        $("#" + data).find("button").parent().removeClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-plus");
+        ev.target.appendChild(document.getElementById(data));
+    }
+}
+
+/*//--------------------------------------------------创建虚拟机start
 //--------启动云主机--信息准备阶段
 $(".start_cloudmonitor").click(function() {
     $(".free_netsInfo").empty();
@@ -229,11 +265,9 @@ $(document).on("click", ".tabel", function() {
 function allowDrop(ev) {
     ev.preventDefault();
 }
-
 function drag(ev) {
     ev.dataTransfer.setData("Text", ev.target.id);
 }
-
 function drop(ev) {
     ev.preventDefault();
     var id = $(ev.target).attr("id");
@@ -257,7 +291,6 @@ function drop(ev) {
         $("#" + data).find("button").find("span").addClass("fa-plus");
         ev.target.appendChild(document.getElementById(data));
     }
-
 }
 //-----------增加移除处理
 $(document).on("click", ".net_add", function() {
@@ -411,7 +444,6 @@ $(".instance_run").click(function() {
     //-------------------提交数据
     instance_info(instance);
 });
-
 function instance_info(json_array) {
     //  console.error(JSON.stringify(json_array));
     $.ajax({
@@ -425,6 +457,7 @@ function instance_info(json_array) {
         }
     });
 }
+//--------------------------------------------------创建虚拟机end*/
 
 //-----------------删除云主机
 $(document).on("change", ".instance_checks", function() {

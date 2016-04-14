@@ -73,76 +73,98 @@ Kinetic.Topology = Kinetic.Class.extend({
                         height: '70px'
                     }
                 });
-                $(".createRouter_cancel").click(function() {
-                  //  topology.deleteCurrentObject();
-
-                });
-                //-----------------------------------------------------创建路由start
-                //-----------------模态start
-                $(".button_modelShow").click();
-                $(".create_router_name").val("");
-                $(".outNet_selected").empty();
-                $(".outNet_selected").append('<option value="test" selected>选择网络</option>');
-                $.ajax({
-                    type: "GET",
-                    url: "http://192.168.0.149:8888/extnet?token=" + window.localStorage.token,
-                    success: function(data) {
-                        var ext_nets = JSON.parse(data)['ext_net'];
-                        var str = "";
-                        for (var i = 0; i < ext_nets.length; i++) {
-                            str += "<option value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
-                        }
-                        $(".outNet_selected").append(str);
-                    }
-                });
-                //-------------模态end
-                //-------------提交数据start
-                $(".createRouter_OK").click(function() {
-                    //--------------提交前对数据的处理
-                    var name = $(".create_router_name").val();
-                    var status = $(".create_router_status").val();
-                    var outNet = $(".outNet_selected").val();
-                    if (name == "" || name == "undefined" || name == null) {
-                        alert("名称为必填项！");
-                        return;
-                    }
-                    if (status == "true")
-                        status = true;
-                    else
-                        status = false;
-                    if (outNet == "test")
-                        outNet = null;
-                    var router_create = {
-                        "router": {
-                            "name": "another_router",
-                            "external_gateway_info": {
-                                "network_id": "8ca37218-28ff-41cb-9b10-039601ea7e6b"
-                            },
-                            "admin_state_up": true
-                        }
-                    };
-                    var router = router_create['router'];
-                    router.name = name;
-                    router.admin_state_up = status;
-                    if (outNet != null) {
-                        router['external_gateway_info']['network_id'] = outNet
-                    } else {
-                        router['external_gateway_info'] = null;
-                    }
-                    //--------------数据的提交
-                    console.error(JSON.stringify(router_create));
+                var drawType = img.attr("title");
+                if (drawType == "ROUTER") {
+                    $(".createRouter_cancel").click(function() {
+                        //  topology.deleteCurrentObject();
+                    });
+                    //-----------------------------------------------------创建路由start
+                    //-----------------模态start
+                    $(".button_modelShow").click();
+                    $(".create_router_name").val("");
+                    $(".outNet_selected").empty();
+                    $(".outNet_selected").append('<option value="test" selected>选择网络</option>');
                     $.ajax({
-                        type: "POST",
-                        data: JSON.stringify(router_create),
-                        contentType: "application/json",
-                        url: "http://192.168.0.149:8888/router/create" + "?token=" + window.localStorage.token,
+                        type: "GET",
+                        url: "http://192.168.0.149:8888/extnet?token=" + window.localStorage.token,
                         success: function(data) {
-                            that.topology.addDevice(device);
-                            window.location.reload();
+                            var ext_nets = JSON.parse(data)['ext_net'];
+                            var str = "";
+                            for (var i = 0; i < ext_nets.length; i++) {
+                                str += "<option value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
+                            }
+                            $(".outNet_selected").append(str);
                         }
                     });
-                });
-                //-------------提交数据end
+                    //-------------模态end
+                    //-------------提交数据start
+                    $(".createRouter_OK").click(function() {
+                        //--------------提交前对数据的处理
+                        var name = $(".create_router_name").val();
+                        var status = $(".create_router_status").val();
+                        var outNet = $(".outNet_selected").val();
+                        if (name == "" || name == "undefined" || name == null) {
+                            alert("名称为必填项！");
+                            return;
+                        }
+                        if (status == "true")
+                            status = true;
+                        else
+                            status = false;
+                        if (outNet == "test")
+                            outNet = null;
+                        var router_create = {
+                            "router": {
+                                "name": "another_router",
+                                "external_gateway_info": {
+                                    "network_id": "8ca37218-28ff-41cb-9b10-039601ea7e6b"
+                                },
+                                "admin_state_up": true
+                            }
+                        };
+                        var router = router_create['router'];
+                        router.name = name;
+                        router.admin_state_up = status;
+                        if (outNet != null) {
+                            router['external_gateway_info']['network_id'] = outNet
+                        } else {
+                            router['external_gateway_info'] = null;
+                        }
+                        //--------------数据的提交
+                        console.error(JSON.stringify(router_create));
+                        $.ajax({
+                            type: "POST",
+                            data: JSON.stringify(router_create),
+                            contentType: "application/json",
+                            url: "http://192.168.0.149:8888/router/create" + "?token=" + window.localStorage.token,
+                            success: function(data) {
+                                that.topology.addDevice(device);
+                                window.location.reload();
+                            }
+                        });
+                    });
+                    //-------------提交数据end               
+                } else if (drawType == "server") {
+                    //--------启动云主机预备工作
+                    $(".instance_startOriginSelect").change(function() {
+                        if ($(".instance_startOriginSelect").val() == "test") {
+                            $(".imageDiv").hide();
+                            $(".snapDiv").hide();
+                        } else if ($(".instance_startOriginSelect").val() == "image") {
+                            $(".imageDiv").show();
+                            $(".snapDiv").hide();
+                        } else {
+                            $(".imageDiv").hide();
+                            $(".snapDiv").show();
+                        }
+                    });
+                    //-------------创建云主机
+                    createInstanceFun();
+                    $(".start_cloudmonitor").click();
+                } else {
+
+                }
+
             }
         });
         this.connector = new Kinetic.Topology.Device.Connector({
@@ -584,7 +606,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     }
 
                     footer_str = '<a href="#/net/net-desc?' + instance.deviceImage.attrs.id + '" class="ttttt"  >' + footer_showInfo + '</a>';
-                } 
+                }
                 /*外网的信息提示*/
                 else if (instance.config.data.device_name == "ext_net") {
                     body_str = '<B>Subnets</B><br/>';
@@ -601,7 +623,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     }
                 }
                 /*路由的信息提示*/
-                 else if (instance.config.data.device_name == "router") {
+                else if (instance.config.data.device_name == "router") {
                     footer_showInfo = "» View Router Details";
                     body_str = '<B>Interfaces</B><br/>';
                     var id_temp = instance.id;
@@ -626,7 +648,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     footer_str = '<a href="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
                 }
                 /*实例的信息提示*/
-                 else {
+                else {
                     footer_showInfo = "» View Instance Details ";
                     body_str = '<B>IP Addresses</B><br/>';
                     var id_temp = instance.id;
@@ -1378,5 +1400,38 @@ var sequence = new Kinetic.Topology.Sequence({});
 function test() {
     $('#frame11').onkeydown = function() {
         $('#frame11').focus();
+    }
+}
+//------------拖拽处理
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var id = $(ev.target).attr("id");
+    var parent_tag = $(ev.target).attr("parent_tag");
+    var data = ev.dataTransfer.getData("Text");
+    // alert(new String(id));
+    var move_tag = $("#" + data).attr("tag");
+    if (id == "selected_subnet") {
+        $("#" + data).find("button").removeClass("net_add");
+        $("#" + data).find("button").addClass("net_detract");
+        $("#" + data).find("button").find("span").removeClass("fa-plus");
+        $("#" + data).find("button").parent().addClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-minus");
+        //console.error(document.getElementById(data));
+        ev.target.appendChild(document.getElementById(data));
+    } else if (move_tag == parent_tag) {
+        $("#" + data).find("button").removeClass("net_detract");
+        $("#" + data).find("button").addClass("net_add");
+        $("#" + data).find("button").find("span").removeClass("fa-minus");
+        $("#" + data).find("button").parent().removeClass("selected_netTag");
+        $("#" + data).find("button").find("span").addClass("fa-plus");
+        ev.target.appendChild(document.getElementById(data));
     }
 }

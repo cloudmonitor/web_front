@@ -140,6 +140,7 @@ myApp.controller('instance-descCtrl', function($scope) {
 myApp.controller('topologyCtrl', function($scope) {
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/topology.js', 'text/javascript', 'utf-8');
     $("head title").text("拓扑");
 });

@@ -6,7 +6,6 @@ $(function() {
         var port_Infos = JSON.parse(localStorage.portInfos)["ports"];
         for (var i = 0; i < port_Infos.length; i++) {
             if (port_Infos[i].id == id) {
-                alert(id);
                 port_Info = port_Infos[i];
                 break;
             }
