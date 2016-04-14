@@ -121,9 +121,9 @@ myApp.controller('abstractCtrl', function($scope) {
 
 // 计算 -- 实例页面js
 myApp.controller('instanceCtrl', function($scope) {
+    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/lib/moment.min.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
-    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/instance.js', 'text/javascript', 'utf-8');
     $("head title").text("实例");
 });

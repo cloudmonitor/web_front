@@ -315,7 +315,6 @@ function createInstanceFun() {
     }
     //----------启动云主机----提交信息
     $(".instance_run").click(function() {
-        $("#loading_monitor1,#background_monitor1").show();
         var instance = {
             "server": {
                 "security_groups": [],
@@ -410,6 +409,7 @@ function createInstanceFun() {
                 }
             }
         });
+        $("#loading_monitor1,#background_monitor1").show();
         //-------------------提交数据
         instance_info(instance);
     });
