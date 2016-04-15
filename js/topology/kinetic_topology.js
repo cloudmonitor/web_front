@@ -160,9 +160,53 @@ Kinetic.Topology = Kinetic.Class.extend({
                     });
                     createInstanceFun();
                     $(".start_cloudmonitor").click();
-                } else {
+                } else if (drawType == "network") {
                     create_networkFun();
                     $(".create_net").click();
+                } else {
+                    create_subnetFun();
+                    //-------创建子网
+                    function setNetselect() {
+                        $(".private_selected").empty();
+                        $(".private_selected").append('<option value="test">选择私有网络</option>');
+                        var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
+                        var server;
+                        var str = "";
+                        for (var i = 0; i < servers.length; i++) {
+                            server = servers[i];
+                            str += '<option value="' + server.id + '">' + server.name + '</option>';
+                        }
+                        $(".private_selected").append(str);
+                    }
+                    function createSubnetAJAX(subnet) {
+                        console.log(JSON.stringify(subnet));
+                        var url_info;
+                        if (update_flag)
+                            url_info = "/subnet/create";
+                        else {
+                            delete subnet['subnet'].cidr;
+                            delete subnet['subnet'].ip_version;
+                            delete subnet['subnet'].network_id;
+                            url_info = "/subnet/update/" + subnet_tempid;
+                        }
+                        update_flag = false;
+                        $.ajax({
+                            type: "POST",
+                            data: JSON.stringify(subnet),
+                            contentType: "application/json",
+                            url: config['host'] + url_info + "?token=" + window.localStorage.token,
+                            success: function(data) {
+                                if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
+                                    console.log(data);
+                                    alert("请检查子网配置格式！");
+                                } else {
+                                    window.location.reload();
+                                    window.location.href = "#/net/net";
+                                }
+                            }
+                        });
+                    }
+                    $(".add-subnet").click();
                 }
             }
         });
@@ -191,7 +235,7 @@ Kinetic.Topology = Kinetic.Class.extend({
     deleteCurrentObject: function() {
         var id = this.currentObject.id;
         var type = this.currentObject['config']['data'].device_name;
-        var that=this;
+        var that = this;
         //---------------删除设备
         if (type == "router") {
             var json_array = '{"router_ids":["' + id + '"]}';
@@ -343,6 +387,7 @@ Kinetic.Topology = Kinetic.Class.extend({
             };
             var r_w = Number(fireRange.x) + Number(fireRange.width);
             var t_h = Number(fireRange.y) + Number(fireRange.height);
+            //console.error(">>>>",this.devices[i]);
             /*            console.error("x-->  ",x+" : "+fireRange.x+"--"+r_w);
                         console.error("y-->  ",y+" : "+fireRange.y+"--"+t_h);*/
             if ((x >= fireRange.x && x <= r_w) && (y >= fireRange.y && y <= t_h)) {
@@ -560,7 +605,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         return this.id;
     },
     remove: function() {
-       // alert(560);
+        // alert(560);
         if (this.deviceImage != null) {
             if (this.lines != null && this.lines.length > 0) {
                 for (var i = 0; i < this.lines.length; i++) {
@@ -1016,7 +1061,6 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             shape.getLayer().remove(instance.joinLine);
             shape.getLayer().draw();
             instance.joinLine = null;
-
             if (dstDevice == null) {
                 /*
                                 var originalDevice = instance.getDevice(); //源结点
@@ -1048,17 +1092,35 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                                 });
                                 instance.config.topology.addDevice(dstDevice);*/
             } else {
-                alert(1046);
-                if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
-                    if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
-                        var line = new Kinetic.Topology.Line({
-                            topology: instance.config.topology,
-                            srcDevice: instance.getDevice(),
-                            dstDevice: dstDevice,
-                            stroke: 'black',
-                            strokeWidth: 1
-                        });
+                var origin_dev = instance.getDevice();
+                var ori_dev = origin_dev['config']['data'].device_name;
+                var des_dev = dstDevice['config']['data'].device_name;
+                console.error(ori_dev + " : " + des_dev);
+                var flag = false;
+                if (ori_dev == 'ext_net' && des_dev == "router")
+                    flag = true;
+                if (ori_dev == 'router' && (des_dev == "ext_net" || des_dev == "network"))
+                    flag = true;
+                if (ori_dev == 'network' && (des_dev == "router" || des_dev == "server"))
+                    flag = true;
+                if (ori_dev == "server" && des_dev == "network")
+                    flag = true;
+                if (flag) {
+                    if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
+                        if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
+                            var line = new Kinetic.Topology.Line({
+                                topology: instance.config.topology,
+                                srcDevice: instance.getDevice(),
+                                dstDevice: dstDevice,
+                                stroke: 'black',
+                                strokeWidth: 1
+                            });
+                        }
                     }
+                } else {
+                    // console.error("该设备间不可连接！");
+                    if (ori_dev == des_dev)
+                        alert("该设备间不可连接！");
                 }
             }
 

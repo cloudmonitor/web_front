@@ -26,7 +26,7 @@ function pretty_adrr(addrs_temp) {
     }
     return str;
 }
-
+//--------格式化地址
 function pretty_adrr1(addrs_temp) {
     var str = "";
     var num = 0;
@@ -65,7 +65,7 @@ function pretty_adrr1(addrs_temp) {
     }
     return str;
 }
-
+//----时间的长度计算
 function getTimeLen(date_temp) {
     var UTC8_time = moment(date_temp).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
     var now = moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
@@ -87,12 +87,12 @@ function getTimeLen(date_temp) {
     }
     return time_str;
 }
-
+//-------格式化时间
 function getTimeStr(date_temp) {
     var UTC8_time = moment.utc(date_temp).zone(-8).format('YYYY-MM-DD HH:mm:ss');
     return UTC8_time;
 }
-
+//-----云主机类型
 function flvors_info() {
     $.ajax({
         type: "GET",
@@ -110,9 +110,8 @@ function flvors_info() {
             alert("配置获取失败！");
         }
     });
-
 }
-
+//------创建实例
 function createInstanceFun() {
     //--------------------------------------------------创建虚拟机start
     //--------启动云主机--信息准备阶段
@@ -126,6 +125,8 @@ function createInstanceFun() {
         $(".instance_name").val("");
         $(".imageDiv").hide();
         $(".snapDiv").hide();
+        $(".key_select").empty();
+        $(".key_select").append('<option value="test">请选择一个密钥对</option>');
         $(".instance_startOriginSelect option[value='test']").attr("selected", true);
         $(".instance_num").val(1);
         //--------可用域获取
@@ -209,6 +210,21 @@ function createInstanceFun() {
                     imag_str += '<option value="' + imag.id + '">' + imag.name + '</option>';
                 }
                 $(".instance_imageSelect").append(imag_str);
+            }
+        });
+        //---------键值对
+        $.ajax({
+            type: "GET",
+            url: config["host"] + "/keypairs?token=" + window.localStorage.token,
+            success: function(data) {
+                console.error(">>>>>>>", data);
+                var keypairs = JSON.parse(data)['keypairs'];
+                var keypair_str = "";
+                for (var i = 0; i < keypairs.length; i++) {
+                    var keypair = keypairs[i]['keypair'];
+                    keypair_str += '<option  name="' + keypair.name + '"> ' + keypair.name + ' </option>';
+                }
+                $(".key_select").append(keypair_str);
             }
         });
         //----------访问安全
@@ -324,7 +340,8 @@ function createInstanceFun() {
                 "flavorRef": "",
                 "max_count": 1,
                 "network_info": [],
-                "networks": []
+                "networks": [],
+                "key_name": ""
             }
         };
         var server = instance['server'];
@@ -364,6 +381,10 @@ function createInstanceFun() {
             alert("请选择启动源！");
             return;
         }
+        //----------键值对
+        var keyValue = $(".key_select").val();
+        if (keyValue != "test")
+            server.key_name = keyValue;
         //----------安全组
         var security_i = 0;
         $(".securities_li").each(function() {
@@ -395,7 +416,7 @@ function createInstanceFun() {
             obj.network_id = $(this).attr("id");
             obj.subnet_id = $(this).attr("name");
             obj1.uuid = $(this).attr("id");
-            alert(typeof($(this).attr("id")));
+            //alert(typeof($(this).attr("id")));
             if ($(this).attr("id") != "" && $(this).attr("id") != 'undefined') {
                 server.network_info[temp0++] = obj;
                 if (temp1 == 0)
@@ -410,8 +431,9 @@ function createInstanceFun() {
                 }
             }
         });
-        console.error(JSON.stringify(instance));
-        $("#loading_monitor1,#background_monitor1").show();
+        //console.error(JSON.stringify(instance));
+        $("#loading_monitor").prepend("<span>正在创建,请稍后...</span>");
+        $("#loading_monitor,#background_monitor").show();
         //-------------------提交数据
         instance_info(instance);
     });
@@ -424,15 +446,16 @@ function createInstanceFun() {
             contentType: "application/json",
             url: config["host"] + "/servers/create?token=" + window.localStorage.token,
             success: function(data) {
+                $("#loading_monitor").empty("span");
                 setTimeout(function() {
                     window.location.reload();
-                }, 3000);
+                }, 4000);
             }
         });
     }
     //--------------------------------------------------创建虚拟机end
 }
-
+//------创建网络
 function create_networkFun() {
     //------------创建网络面板的控制--start
     $(".create_networkCancel").click(function() {
@@ -531,5 +554,129 @@ function create_networkFun() {
             }
         }
     });
+}
+//-----创建子网
+function create_subnetFun() {
+    //---------------创建子网面板配置
+    var sub1_flag = true;
+    $(".createchoose_subnet").click(function() {
+        $(".createsubnet_multi").slideToggle();
+        if (sub1_flag) {
+            $(".info_pic2").removeClass("fa fa-angle-double-down");
+            $(".info_pic2").addClass("fa fa-angle-double-up");
+            sub1_flag = false;
+        } else {
+            $(".info_pic2").removeClass("fa fa-angle-double-up");
+            $(".info_pic2").addClass("fa fa-angle-double-down");
+            sub1_flag = true;
+        }
+    });
+    var sub2_flag = true;
+    $(".showmoresubnetInfo").click(function() {
+        $(".showMoreInfo").slideToggle();
+        if (sub2_flag) {
+            $(".info_pic3").removeClass("fa fa-angle-double-down");
+            $(".info_pic3").addClass("fa fa-angle-double-up");
+            sub2_flag = false;
+        } else {
+            $(".info_pic3").removeClass("fa fa-angle-double-up");
+            $(".info_pic3").addClass("fa fa-angle-double-down");
+            sub2_flag = true;
+        }
+    });
+    $(".subnet_opengateway").change(function() {
+        if (!$(".subnet_opengateway").is(":checked"))
+            $(".creategateway_adrr").attr("disabled", true);
+        else
+            $(".creategateway_adrr").attr("disabled", false);
+    });
+    $(document).on("click", ".add_subnetInfo", function() {
+        setNetselect();
+    });
+    //---------创建子网
+    $(".create_subnetworkOk").click(function() {
+        update_flag = false;
+        //------子网名称
+        var sub_name = $(".createsubnet_name").val();
+        //------私有网络ID
+        var private_net = $(".private_selected").val();
+        //---获取子网的地址
+        var object = $(".createradio_subnetaddr:checked");
+        var num_1 = object.parent().siblings().eq(0).val();
+        var num_2 = object.parent().siblings().eq(2).val();
+        var num_3 = object.parent().siblings().eq(4).val();
+        var num_4 = object.parent().siblings().eq(6).val();
+        var num_5 = object.parent().siblings().eq(8).val();
+        var str_ip = num_1 + "." + num_2 + "." + num_3 + "." + num_4 + "/" + num_5;
+        //------------开启网关判断
+        var gateWay;
+        if ($(".subnet_opengateway").prop("checked")) {
+            gateWay = $(".creategateway_adrr").val();
+        }
+        //--------DHCP
+        var dhcp;
+        if ($(".subnet_openDHCP").prop("checked")) {
+            dhcp = true;
+        } else {
+            dhcp = false;
+        }
 
+        //--------数据提交
+        var subnet = {
+            "subnet": {
+                "name": "",
+                "network_id": "",
+                "ip_version": 4,
+                "cidr": "10.0.0.1",
+                "gateway_ip": "",
+                "enable_dhcp": false,
+                "allocation_pools": [],
+                "dns_nameservers": []
+            }
+        }
+        var subnetInfo = subnet['subnet'];
+        if (sub_name == "") {
+            alert("子网名称必填！");
+            return;
+        }
+        subnetInfo.name = sub_name;
+        if (private_net == "test") {
+            alert("请选择私有网络！");
+            return;
+        }
+        subnetInfo.network_id = private_net;
+        subnetInfo.cidr = str_ip;
+        if (gateWay == "")
+            delete subnetInfo.gateway_ip;
+        else
+            subnetInfo.gateway_ip = gateWay;
+        subnetInfo.enable_dhcp = dhcp;
+        //--------地址池
+        if ($(".Addrpool").val() != "") {
+            var arr = $(".Addrpool").val().split("\n");
+
+            var temp_arr = [];
+            var temp;
+            var object = { "start": "", "end": "" };
+            for (var i = 0; i < arr.length; i++) {
+                temp = arr[i].split(",");
+                if (temp.length % 2 != 0) {
+                    alert("地址池起始地址有误！");
+                    return;
+                }
+                object.start = temp[0];
+                object.end = temp[1];
+                temp_arr[i] = object;
+            }
+            subnetInfo.allocation_pools = temp_arr;
+        }
+        //--------DNS服务
+        if ($(".DNSserver").val() != "") {
+            var arr = $(".DNSserver").val().split("\n");
+            for (var i = 0; i < arr.length; i++) {
+                subnetInfo.dns_nameservers[i] = arr[i];
+            }
+        }
+        createSubnetAJAX(subnet);
+    });
 }

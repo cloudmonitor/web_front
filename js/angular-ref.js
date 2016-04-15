@@ -156,6 +156,8 @@ myApp.controller('netCtrl', function($scope) {
 
 // 计算 -- 网络详情
 myApp.controller('netDesc', function($scope) {
+    $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/net_desc.js', 'text/javascript', 'utf-8');
     $("head title").text("网络详情");
 });

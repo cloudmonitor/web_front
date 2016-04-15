@@ -1,6 +1,6 @@
 <!-- 内容显示界面 -->
-<div id="loading_monitor1" style="display: none;">创建中，请稍等...<img src="./icon/preloader.gif" alt="loading.." /></div>
-<div id="background_monitor1" class="background" style="display: none;"></div>
+<div id="loading_monitor"><img src="./icon/preloader.gif" alt="loading.." /></div>
+<div id="background_monitor" class="background" style="display: none;"></div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main setHeight">
     <!-- 实例 -->
     <div class="desc">实例</div>
@@ -31,7 +31,7 @@
         </div>
         &nbsp;
         <div class="form-group">
-            <button class="btn btn-primary start_cloudmonitor" data-toggle="modal" data-target="#start-host" type="button"><span class="fa fa-cloud-upload"></span> 启动云主机</button>
+            <button class="btn btn-primary start_cloudmonitor" data-toggle="modal" data-target="#start-host" type="button"><span class="fa fa-cloud-upload"></span><span class="instance_numlimit">启动云主机</span></button>
             <button type="button" class="btn btn-primary stop_instance btn-danger" disabled>终止实例</button>
         </div>
         &nbsp;
@@ -321,11 +321,8 @@
                             <div class="col-md-6">
                                 <p>
                                     <h5><lable　for="key-value">值对</lable></h5>
-                                    <select class="form-control">
-                                        <option>key-value1</option>
-                                        <option>key-value2</option>
+                                    <select class="form-control key_select">
                                     </select>
-                                    <button class="btn btn-default"><span class="fa fa-plus"></span></button>
                                 </p>
                                 <p>
                                     <h5>安全组</h5>

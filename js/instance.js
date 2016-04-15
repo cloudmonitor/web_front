@@ -1,10 +1,14 @@
 var flavors_local;
 $(function() {
+    $("#loading_monitor,#background_monitor").show();
+    setTimeout(function() {
+        $("#loading_monitor,#background_monitor").hide();
+    }, 6000);
     $.ajax({
         type: "GET",
         url: config["host"] + "/flavors?token=" + window.localStorage.token,
         success: function(data) {
-            $("#loading_monitor1,#background_monitor1").hide();
+            $("#loading_monitor,#background_monitor").hide();
             var flavor = JSON.parse(data).flavors;
             localStorage.flavor = data;
             $.ajax({
@@ -56,6 +60,10 @@ $(function() {
                     instance_len = servers['servers'].length;
                     var footer_str = "<tr class='active tfoot-dsp fireWall_tr'><td colspan='11'>Displaying <span id='item_count'>" + instance_len + "</span> items</td></tr>";
                     $(".instance_footer").append(footer_str);
+                    if (instance_len == 10) {
+                        $(".start_cloudmonitor").attr("disabled", true);
+                        $(".instance_numlimit").text("启动云主机(配额用尽)");
+                    }
                 },
                 error: function(data) {
                     alert("信息获取失败！");
