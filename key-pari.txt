@@ -1,0 +1,56 @@
+<!-- 请求密钥列表 -->
+var url = config.host + "/keypairs?token=" + window.localStorage.token;
+返回数据格式：(已完成)
+{  
+   "keypairs":[  
+      {  
+         "keypair":{  
+            "public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRX8PAZ9zOaPwBFmD1UX3SRJul5XCaC1O+yapcXX2c1haNv5kVnnBxdAPnk9s33cW+fjg2HYhGJ730LNtqn3av1jNZDOglmrhicGKr7YjrYfjGDJl/eK7lNcWI5RLFU26aWbTxZ4LIQA/VItwJH43oogXGMe1lGFif2qYPFf5Qe8FSb7dP6z+7AXHFuIw5WKaR/GwYuhjEvt2WRh5FM1jiKMRidon0YORi1k0FNhAqCJ7DzSQqsLu+rDY/MwURGdAkKF29LnbdNrEOA6/3z+jIBVF6H46iFHc6S5OE8mMLTIrD7E7gLNpFVbYLpVXk+YP9PwC+KHbXqKVo6BlftX Generated-by-Nova",
+            "name":"testkey",
+            "fingerprint":"1f:3c:b2:f7:61:94:46:84:a8:c1:8d:29:23:be:0e:6e"
+         }
+      },
+      {  
+         "keypair":{  
+            "public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRX8PAZ9zOaPwBFmD1UX3SRJul5XCaC1O+yapcXX2c1haNv5kVnnBxdAPnk9s33cW+fjg2HYhGJ730LNtqn3av1jNZDOglmrhicGKr7YjrYfjGDJl/eK7lNcWI5RLFU26aWbTxZ4LIQA/VItwJH43oogXGMe1lGFif2qYPFf5Qe8FSb7dP6z+7AXHFuIw5WKaR/GwYuhjEvt2WRh5FM1jiKMRidon0YORi1k0FNhAqCJ7DzSQqsLu+rDY/MwURGdAkKF29LnbdNrEOA6/3z+jIBVF6H46iFHc6S5OE8mMLTIrD7E7gLNpFVbYLpVXk+YP9PwC+KHbXqKVo6BlftX Generated-by-Nova",
+            "name":"testkey",
+            "fingerprint":"1f:3c:b2:f7:61:94:46:84:a8:c1:8d:29:23:be:0e:6e"
+         }
+      }
+   ]
+} 
+
+
+<!-- 创建密钥 -->
+var url = config.host + "/keypairs/create?token=" + window.localStorage.token;
+POST 请求数据格式：
+{  
+   "keypair":{  
+      "name":"testkey"
+   }
+}
+
+创建成功后下载到本地：
+<a href="data:application/octet-stream;charset=utf-8;base64,Zm9vIGJhcg==">text file</a><br/>
+
+
+<!-- 导入创建： -->
+POST 请求数据格式
+var url = config.host + "/keypairs/create?token=" + window.localStorage.token;
+{  
+   "keypair":{  
+      "name":"keypair-d20a3d59-9433-4b79-8726-20b431d89c78",
+      "public_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDx8nkQv/zgGgB4rMYmIf+6A4l6Rr+o/6lHBQdW5aYd44bd8JttDCE/F/pNRr0lRE+PiqSPO8nDPHw0010JeMH9gYgnnFlyY3/OcJ02RhIPyyxYpv9FhY+2YiUkpwFOcLImyrxEsYXpD/0d3ac30bNH6Sw9JD9UZHYcpSxsIbECHw== Generated-by-Nova"
+   }
+}
+
+public_key格式：
+'ssh-ed25519', 'ssh-rsa', 'ssh-dss', 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384', or 'ecdsa-sha2-nistp521'.
+
+<!-- 删除密钥对 --> (已完成)
+var url = config.host + "/keypairs/delete?token=" + window.localStorage.token;
+POST数据格式：
+{"keypair_names":[ "keypairname"]}
+
+删除后返回的数据格式:
+{"name1": 202, "name2": 202}

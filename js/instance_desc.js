@@ -1,6 +1,5 @@
 $(function() {
     if (window.location.href.split('&')[1] != undefined && window.location.href.split('&')[1] != "undefined") {
-
         var serverInfo = JSON.parse(localStorage.server_tempInfo);
 
         var id_num = window.location.href.split('?')[1];
@@ -21,6 +20,7 @@ $(function() {
         setInfo(serverInfo, id, curr_flavor);
     } else {
         var id_num = window.location.href.split('?')[1];
+        console.info("id_num: ", id_num);
         $.ajax({
             type: "GET",
             url: config["host"] + "/flavors?token=" + window.localStorage.token,

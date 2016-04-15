@@ -66,7 +66,7 @@ body {
         top: 51px;
         bottom: 0;
         left: 0;
-        z-index: 1000;
+        z-index: 50;
         display: block;
         padding: 20px;
         overflow-x: hidden;
@@ -110,10 +110,10 @@ body {
     color: rgba(0, 0, 0, 0.3);
 }
 
-.nav-sidebar > li > a:hover {
+/*.nav-sidebar > li > a:hover {
     color: #fff;
     background-color: #428bca;
-}
+}*/
 
 
 /* 以下部分用来定义导航栏左侧滚动条样式 */
@@ -294,6 +294,28 @@ i {
 }
 
 
+/* 密钥对 */
+
+#btn-group-right {
+    float: right;
+    margin-right: 10px;
+}
+
+#li-center {
+    height: 3em;
+    line-height: 3em;
+    overflow: hidden;
+    margin-right: 10px
+}
+
+#novalid,
+#area-novalid {
+    color: rgb(160, 0, 0);
+    font-weight: lighter;
+    font-size: 12px;
+}
+
+
 /* 网络与安全 */
 
 
@@ -438,6 +460,17 @@ i {
 
 .text-red {
     color: red !important;
+}
+
+#alert-container {
+    position: fixed;
+    top: 70px;
+    right: 40px;
+    float: right;
+    width: 300px;
+    /*让alert框离用户最近, 并且大于modal框的z-index*/
+    z-index: 1100;
+    /*background-color: blue;*/
 }
 
 

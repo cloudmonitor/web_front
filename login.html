@@ -1,51 +1,40 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Login Form</title>
-    <link href="css/lib/style.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="icon/openstack.jpg">
+    <title>后台-登陆</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
 </head>
 
-<body class="login-body">
-    <div id="wrapper">
-        <div class="user-icon"></div>
-        <div class="pass-icon"></div>
-        <div name="login-form" class="login-form">
-            <div class="header">
-                <h1>Login Form</h1>
-                <span>Fill out the form below to login to my super awesome imaginary control panel.</span>
+<body>
+    <div class="container">
+        <form class="form-signin" novalidate onsubmit="return false;">
+            <h2 class="form-signin-heading">登录</h2>
+            <input type="text" id="userName" class="form-control" placeholder="用户名" required autofocus value="user01">
+            <p></p>
+            <input type="password" id="userId" class="form-control" placeholder="密码" required value="user01">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> 自动登录
+                </label>
             </div>
-            <div class="content">
-                <input name="username" id="userName" type="text" class="input username" value="user01" onfocus="this.value=''" />
-                <input name="password" id="userId" type="password" class="input password " value="user01" onfocus="this.value=''" />
-            </div>
-            <div class="footer">
-                <input type="button" name="submit" value="Login" class="button login" />
-            </div>
-        </div>
+            <button id="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
+        </form>
     </div>
-    <div class="gradient"></div>
+    <script src="js/config.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
+    <!-- 登陆验证js -->
+    <script src="js/login.js"></script>
 </body>
-<script src="js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="js/config.js"></script>
-<script type="text/javascript" src="js/login.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    $(".username").focus(function() {
-        $(".user-icon").css("left", "-48px");
-    });
-    $(".username").blur(function() {
-        $(".user-icon").css("left", "0px");
-    });
-
-    $(".password").focus(function() {
-        $(".pass-icon").css("left", "-48px");
-    });
-    $(".password").blur(function() {
-        $(".pass-icon").css("left", "0px");
-    });
-});
-</script>
-<!--Google Analytics-->
 
 </html>
