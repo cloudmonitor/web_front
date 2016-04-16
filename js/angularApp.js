@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'floatingIPApp', 'keyPairApp']);
+var myApp = angular.module('myApp', ['ngRoute', 'floatingIPApp', 'keyPairApp', 'programApp', 'modifyPasswdApp']);
 
 // 路由跳转
 myApp.config(function($routeProvider) {
@@ -66,6 +66,16 @@ myApp.config(function($routeProvider) {
         .when('/monitor', {
             templateUrl: 'pages/host/monitor.html',
             controller: 'monitorCtrl'
+        })
+        // 信息 -- 项目信息
+        .when('/info/program', {
+            templateUrl: 'pages/info/programList.html',
+            controller: 'programCtrl'
+        })
+        // 信息 -- 修改密码
+        .when('/info/modify-passwd', {
+            templateUrl: 'pages/info/modify-passwd.html',
+            controller: 'modifyPasswdCtrl'
         })
         // 信息 -- 基本信息
         .when('/info/base-info', {
@@ -435,6 +445,9 @@ myApp.controller('account-infoCtrl', function($scope) {
         });
     });
 });
+
+
+
 
 // -----------------------------控制器函数实现-----------------------------------------//
 function myCtrl($scope) {
