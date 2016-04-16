@@ -110,6 +110,7 @@ body {
     color: rgba(0, 0, 0, 0.3);
 }
 
+
 /*.nav-sidebar > li > a:hover {
     color: #fff;
     background-color: #428bca;
@@ -433,7 +434,7 @@ i {
 
 /* 网络与安全　-- 浮动IP页面 -- 模态框 -- "*" 颜色 */
 
-.modal-body .span-stand {
+.span-stand {
     color: orange;
 }
 
@@ -637,4 +638,24 @@ tfoot .tfoot-dsp {
 
 .modal-body .form-select {
     margin-left: 15px;
+}
+
+
+/* 信息 -- 修改密码 */
+
+#curPasswd,
+#newPasswd,
+#confirmPasswd {
+    display: inline-block;
+    width: 95%;
+}
+
+.icon-btn {
+    display: inline;
+
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+
+    margin-left: -25px;
 }
