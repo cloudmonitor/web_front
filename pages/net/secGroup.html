@@ -43,13 +43,13 @@
                     <div class="form-group">
                         <label for="firewall_name" class="col-sm-3 control-label">安全组名称</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="firewall_name" placeholder='汉字、字母、数字及"_"，"-"，"@"，"." 组成'>
+                            <input type="text" class="form-control sg_name" id="sg_name" placeholder='汉字、字母、数字及"_"，"-"，"@"，"." 组成'>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="firewall_desc" class="col-sm-3 control-label">安全组描述</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="firewall_desc" placeholder="建议描述使用场景或简略协议端口信息">
+                            <input type="text" class="form-control sg_desc" id="sg_desc" placeholder="建议描述使用场景或简略协议端口信息">
                         </div>
                     </div>
                     <div class="form-group form-left btn-group">
@@ -101,8 +101,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default close_temp" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary createSgInfo">Save changes</button>
             </div>
         </div>
     </div>

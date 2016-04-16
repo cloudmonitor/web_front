@@ -1,4 +1,6 @@
 <!-- 内容显示界面 -->
+<div id="loading_monitor1" style="display: none;">删除中，请稍等...<img src="./icon/preloader.gif" alt="loading.."/></div>
+<div id="background_monitor1" class="background" style="display: none;"></div>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <!-- 实例 -->
     <div class="desc">网络</div>
@@ -9,7 +11,7 @@
         </div>
         &nbsp;
         <div class="form-group">
-            <button type="button" class="btn btn-primary" tabindex="1" data-toggle="modal" data-target="#create-net"><span class="fa fa-plus-square"></span> 创建网络</button>
+            <button type="button" class="btn btn-primary" tabindex="1" data-toggle="modal" data-target="#create-net"><span class="fa fa-plus-square"></span><span class="add_netbutton">创建网络</span></button>
             <button type="button" class="btn btn-danger delete_nets" disabled tabindex="1"><span class="fa fa-times"></span> 删除网络</button>
         </div>
     </form>

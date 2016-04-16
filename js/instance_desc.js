@@ -1,5 +1,5 @@
 $(function() {
-    if (window.location.href.split('&')[1] != undefined) {
+    if (window.location.href.split('&')[1] != undefined && window.location.href.split('&')[1] != "undefined") {
         var serverInfo = JSON.parse(localStorage.server_tempInfo);
 
         var id_num = window.location.href.split('?')[1];

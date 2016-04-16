@@ -4,8 +4,8 @@ $(function() {
         type: "GET",
         url: config["host"] + "/security_groups?token=" + window.localStorage.token,
         success: function(data) {
-            console.log("---------------");
-            console.log(data);
+/*            console.log("---------------");
+            console.log(data);*/
             window.localStorage.securitys_temp = data;
             var securitys = JSON.parse(data)['security_groups'];
             for (var i = 0; i < securitys.length; i++) {
@@ -26,34 +26,27 @@ $(function() {
     $(".createSgInfo").click(function() {
         $("#update_info").attr("data-toggle", "");
         $("#update_info").attr("data-target", "");
-        var name = $(".sg_name").val();
+        var name = "";
+        name = $(".sg_name").val();
         var desc = $(".sg_desc").val();
         var sec_group;
-/*        if (createOrupdate == 0) {*/
             sec_group = {
                 "security_group": {
                     "name": null,
                     "description": null
                 }
             }
-/*        } else {
-            sec_group = {
-                "security_group": {
-                    "name": null,
-                    "description": null,
-                    "id": null
-                }
-            }
-        }*/
 
         var sec_gourp_temp = sec_group['security_group'];
         if (name.trim().length != 0 && name != "default")
             sec_gourp_temp.name = name;
         else {
             $(".sg_name").attr("placeholder", "该项必填并且不能命名为default！")
+            return;
         }
         sec_gourp_temp.description = desc;
-
+        console.error(JSON.stringify(sec_group));
+        console.error(createOrupdate);
         if (createOrupdate == 0) {
             $.ajax({
                 type: "POST",
@@ -61,6 +54,7 @@ $(function() {
                 contentType: "application/json",
                 url: config["host"] + "/security_groups/create?token=" + window.localStorage.token,
                 success: function(data) {
+                    $(".close_temp").click();
                     setSecurityGroupList(JSON.parse(data)['security_group'], JSON.parse(data)['security_group'].id);
                     $(".footerID").remove();
                     var footer_info = '<tr class="active tfoot-dsp footerID"><td colspan="6">Displaying <span id="item_count">' + (++sec_group_count) + '</span> items</td></tr>';
@@ -80,10 +74,12 @@ $(function() {
                 contentType: "application/json",
                 url: config["host"] + "/security_groups/update/"+sg_id+"?token=" + window.localStorage.token,
                 success: function(data) {
+                    $(".close_temp").click();
                     $("#" + JSON.parse(data)['security_group'].id + "").parent().parent().remove();
                     setSecurityGroupList(JSON.parse(data)['security_group'], JSON.parse(data)['security_group'].id);
                     $(".sg_name").val("");
                     $(".sg_desc").val("");
+
                 },
                 error: function(data) {
                     alert("更新失败！");
@@ -147,9 +143,10 @@ $(function() {
         createOrupdate = 0;
         if ($(".secGoup_id:checked").length != 1) {
             alert("请选择一条信息进行修改 ^.^");
+            return;
         } else {
             $("#update_info").attr("data-toggle", "modal");
-            $("#update_info").attr("data-target", "#myModal");
+            $("#update_info").attr("data-target", "#create-sec-group");
             //data-toggle="modal" data-target="#myModal"
             $(".secGoup_id:checked").each(function() {
                 createOrupdate = $(this).attr("id");
