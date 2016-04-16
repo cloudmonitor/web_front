@@ -1,0 +1,50 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">
+        项目
+    </div>
+    <form class="form-inline form-btn" role="form">
+        <div class="form-group">
+            <input id="search-input" type="text" class="form-control" placeholder="Filter" tabindex="1">
+            <label for="search-input" class="control-label input-addon"><i class="fa fa-search"></i></label>
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type='checkbox' ng-model="all" ng-click="chooseAllBtn()">
+                </th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>项目ID</th>
+                <th>激活</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in programList">
+                <th>
+                    <input type='checkbox' index="{{ $index }}" ng-checked="one" ng-click="chooseOne()">
+                </th>
+                <td ng-bind="x.name"></td>
+                <td ng-bind="x.description"></td>
+                <td ng-bind="x.id"></td>
+                <td ng-bind="x.enabled"></td>
+                <td>
+                    <button class="btn btn-default">设置为当前项目</button>
+                </td>
+            </tr>
+            <tr>
+                <td ng-if="!itemCount" colspan="6">
+                    <h5 class="text-center">没有可显示的项目</h5>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">{{ itemCount }} 条数据</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
