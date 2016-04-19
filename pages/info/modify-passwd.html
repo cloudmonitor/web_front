@@ -1,30 +1,46 @@
 <!-- 修改密码 -->
 <!-- 内容显示界面 -->
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- alert-container div用来显示警告框alert -->
+    <div id="alert-container">
+        <!-- <div class="alert alert-warning">
+            <a href="" class="close" data-dismiss="alert">&times;</a>
+            <strong>警告！</strong>您的网络连接有问题。
+        </div> -->
+    </div>
     <div class="desc">
         修改密码
     </div>
     <!-- <hr> -->
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <form role="form">
+            <form name="form" role="form" ng-submit="submitForm()" novalidate>
                 <legend>密码</legend>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': submitted && (form.curPasswd.$error.curPasswd || (form.curPasswd.$modelValue != corPasswd))}">
                     <label for="curPasswd">当前密码<span class="span-stand"> *</span></label>
-                    <input type="password" class="form-control" id="curPasswd">
-                    <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    <input type="password" class="form-control" name="curPasswd" ng-model="curPasswd" ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }" required>
+                    <!-- <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button> -->
+                    <span class="help-block" ng-show="submitted && form.curPasswd.$error.curPasswd">密码格式有误</span>
+                    <span class="help-block" ng-show="submitted && form.curPasswd.$pristine">密码不能为空</span>
+                    <span class="help-block" ng-show="submitted && form.curPasswd.$dirty && (curPasswd != corPasswd)">密码不正确</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': submitted && (form.newPasswd.$error.newPasswd || (newPasswd === curPasswd))}">
                     <label for="newPasswd">新密码<span class="span-stand"> *</span></label>
-                    <input type="password" class="form-control" id="newPasswd">
-                    <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    <input type="password" class="form-control" name="newPasswd" ng-model="newPasswd" required>
+                    <!-- <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button> -->
+                    <span class="help-block" ng-show="submitted && form.newPasswd.$error.newPasswd">密码格式有误</span>
+                    <span class="help-block" ng-show="submitted && form.newPasswd.$pristine">密码不能为空</span>
+                    <span class="help-block" ng-show="submitted && form.curPasswd.$dirty && (newPasswd === curPasswd)">与当前密码相同</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': submitted && (form.confirmPasswd.$error.confirmPasswd || form.confirmPasswd.$pristine || (confirmPasswd != newPasswd))}">
                     <label for="confirmPasswd">确认密码<span class="span-stand"> *</span></label>
-                    <input type="password" class="form-control" id="confirmPasswd">
-                    <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    <input type="password" class="form-control" name="confirmPasswd" ng-model="confirmPasswd" ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }" required>
+                    <!-- <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button> -->
+                    <span class="help-block" ng-show="submitted && form.confirmPasswd.$error.confirmPasswd">密码格式有误</span>
+                    <span class="help-block" ng-show="submitted && form.confirmPasswd.$pristine">密码不能为空</span>
+                    <span class="help-block" ng-show="submitted && form.confirmPasswd.$dirty && (confirmPasswd != newPasswd)">密码输入不一致</span>
                 </div>
-                <button type="button" class="btn btn-primary">修改</button>
+                <button type="submit" class="btn btn-primary">修改</button>
             </form>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
