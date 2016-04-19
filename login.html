@@ -14,27 +14,54 @@
     <link href="css/lib/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
+    <link href="css/openstack.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <form class="form-signin" novalidate onsubmit="return false;">
+    <div class="container" ng-app="formApp" ng-controller="formValidCtrl">
+        <!-- alert-container div用来显示警告框alert -->
+        <div id="alert-container">
+            <!-- <div class="alert alert-warning">
+            <a href="" class="close" data-dismiss="alert">&times;</a>
+            <strong>警告！</strong>您的网络连接有问题。
+        </div> -->
+        </div>
+        <form class="form-signin" name="form" ng-submit="submitForm()" novalidate>
             <h2 class="form-signin-heading">登录</h2>
-            <input type="text" id="userName" class="form-control" placeholder="用户名" required autofocus value="user01">
-            <p></p>
-            <input type="password" id="userId" class="form-control" placeholder="密码" required value="user01">
-            <div class="checkbox">
+            <!-- 用户名输入 -->
+            <div class="form-group" ng-class="{'has-error': submitted && form.userName.$invalid}">
+                <input type="text" class="form-control" name="userName" ng-model="userName" ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }" ng-pattern="/^[a-z][\w\-]{1,}$/i" ng-minlength="5" ng-maxlength="20" placeholder="用户名" required autofocus>
+                <div ng-if="submitted" ng-messages="form.userName.$error" class="help-block">
+                    <p ng-message="pattern">非法用户名名称</p>
+                    <p ng-message="minlength">用户名字符长度不能小于5</p>
+                    <p ng-message="maxlength">用户名字符长度不能大于20</p>
+                    <p ng-message="required">用户名不能为空</p>
+                </div>
+            </div>
+            <!-- 密码输入 -->
+            <div class="form-group" ng-class="{'has-error': submitted && form.password.$invalid}">
+                <input type="password" class="form-control" name="password" ng-model="passWord" placeholder="密码" required>
+                <div ng-if="submitted" ng-messages="form.password.$error" class="help-block">
+                    <p ng-message="pattern">非法的密钥</p>
+                    <p ng-message="required">密码不能为空</p>
+                </div>
+            </div>
+            <!-- <div class="checkbox">
                 <label>
                     <input type="checkbox" value="remember-me"> 自动登录
                 </label>
-            </div>
-            <button id="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
+            </div> -->
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
         </form>
     </div>
     <script src="js/config.js"></script>
     <script src="js/lib/jquery.min.js"></script>
-    <!-- 登陆验证js -->
-    <script src="js/login.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-messages.js"></script>
+    <!-- 登录验证js -->
+    <script src="js/loginApp.js"></script>
+    <script src="js/show-alert.js"></script>
 </body>
 
 </html>
