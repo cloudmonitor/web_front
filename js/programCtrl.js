@@ -17,27 +17,30 @@ function programCtrl($scope, $http) {
         });
     });
     // 初始化值
+    $scope.sortType = 'name'; // set the default sort type
+    $scope.sortReverse = false; // set the default sort order
+    $scope.searchFish = ''; // set the default search/filter term
     // 条目数为0
     $scope.itemCount = 0;
+
     // 获取项目列表
     var getProgramList = function() {
         var url = config.host + "/tenants?token=" + window.localStorage.token;
         $http.get(url).then(function(response) {
             // 请求成功
             var data = response.data.tenants;
-            var len = data.length;
             console.info("返回的数据:", data);
-            if (len) {
-                // 项目列表非空
-                $scope.programList = data;
-                $scope.itemCount = len;
-            } else {
+            if (data === undefined) {
                 // 项目列表为空
                 createAndHideAlert({
                     "message": "项目列表为空",
                     "className": "alert-warning"
                 });
+                return;
             }
+            // 项目列表非空
+            $scope.programList = data;
+            $scope.itemCount = data.length;
         }, function(response) {
             // 请求失败
             console.error("项目列表请求失败:", response.statusText);
@@ -47,6 +50,56 @@ function programCtrl($scope, $http) {
             });
         });
     }();
+
+
+    // 从localStorage中获取token值
+    var projectName = function() {
+        var token = JSON.parse(window.localStorage.token);
+        var projectName = token.tenant.name;
+        console.info("projectName = ", projectName);
+        return projectName;
+    };
+    $scope.projectName = projectName();
+
+    // 设置当前项目
+    $scope.setProject = function(event) {
+        var curProjectname = event.target.name;
+        console.info("当前对象", curProjectname);
+        var url = config.host + "/tenant/login?token=" + window.localStorage.token + "&tenantname=" + curProjectname;
+        $http.get(url).then(
+            function(response) {
+                // get请求成功
+                var data = response.data;
+                if (data.error) {
+                    // 设置当前失败
+                    createAndHideAlert({
+                        "message": "当前项目设置失败",
+                        "className": "alert-danger"
+                    });
+                    return;
+                }
+                var token = JSON.stringify(data.access.token);
+                console.info("旧的token:", window.localStorage.token);
+                window.localStorage.token = token;
+                console.info("新的token:", window.localStorage.token);
+                $scope.projectName = curProjectname;
+                createAndHideAlert({
+                    "message": "成功切换到项目 " + "<strong>" + curProjectname + "</strong>",
+                    "className": "alert-success"
+                });
+                // 设置顶部导航栏的项目名称
+                $(".curr_deviceName").text(curProjectname);
+            },
+            function(response) {
+                // get请求失败
+                console.error("修改项目请求失败");
+                createAndHideAlert({
+                    "message": "修改项目请求失败",
+                    "className": "alert-danger"
+                });
+            }
+        );
+    };
 
     // checkbox全选
     $scope.chooseAllBtn = function() {
@@ -59,7 +112,8 @@ function programCtrl($scope, $http) {
     $scope.chooseOne = function() {
         var checkedItems = $("tbody td input[type='checkbox']:checked");
         var len = checkedItems.length;
-        $scope.all = (len === $sope.itemCount);
+        console.info("已选项目长度:", len);
+        $scope.all = (len === $scope.itemCount);
     };
 
 
