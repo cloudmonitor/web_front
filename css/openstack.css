@@ -210,11 +210,23 @@ i {
 }
 
 
+#resSize tr td:first-child {
+    width: 30%;
+    padding-left: 20px;
+}
+
+#resSize tr td:last-child > div {
+    width: 80%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 /* 计算 -- 实例 */
 
 .form-btn {
     float: right;
 }
+
 
 
 /*　启动云主机：详情　*/
