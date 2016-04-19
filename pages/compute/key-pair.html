@@ -10,8 +10,8 @@
     <div class="desc">密钥对</div>
     <p></p>
     <div class="row" id="btn-group-right">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#createKey-modal" ng-click="createKeyModal()"><i class="fa fa-plus-square"></i>创建密钥</button>
-        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteKey-modal" ng-disabled="delBtnDis" ng-click="delKeyBtn()">删除</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createKey-modal" ng-click="initKeyModal()"><i class="fa fa-plus-square"></i>创建密钥</button>
+        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteKey-modal" ng-disabled="delBtnDis" ng-click="delKeyBtn()"><span class="fa fa-times"></span> 删除</button>
     </div>
     <p></p>
     <!-- 用来展示密钥对 -->
@@ -63,42 +63,40 @@
                     <ul class="nav nav-pills" role="tablist">
                         <li id="li-center"><strong>创建方式:</strong></li>
                         <li role="presentation" class="active">
-                            <a data-target="#createKey-tab" aria-controls="home" role="tab" data-toggle="tab">创建密钥</a>
+                            <a id="createKey-tab" aria-controls="home" role="tab" data-toggle="tab">创建密钥</a>
                         </li>
                         <li role="presentation">
-                            <a data-target="#importKey-tab" aria-controls="tab" role="tab" data-toggle="tab">导入密钥</a>
+                            <a id="importKey-tab" aria-controls="tab" role="tab" data-toggle="tab">导入密钥</a>
                         </li>
                     </ul>
                     <p></p>
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <!-- 创建密钥 -->
-                        <div role="tabpanel" class="tab-pane active" id="createKey-tab">
-                            <form role="form">
-                                <div class="form-group">
+                        <div role="tabpanel" class="tab-pane active">
+                            <form name="form" ng-submit="createKey()" role="form" novalidate>
+                                <div class="form-group" ng-class="{'has-error': submitted && form.keyName.$invalid}">
                                     <label for="key-name">密钥名称<span class="span-stand"> *</span></label>
-                                    <input type="text" class="form-control" id="key-name" ng-model="keyName" placeholder="仅限字母数字和下划线" required>
-                                    <span id="novalid" ng-show="novalid">非法密钥名称</span>
+                                    <input type="text" class="form-control" name="keyName" ng-model="keyName" ng-pattern="/^[a-z][\w\-]{1,}$/i" ng-minlength="5" ng-maxlength="20" placeholder="仅限字母数字和下划线" required>
+                                    <div ng-if="submitted" ng-messages="form.keyName.$error" class="help-block">
+                                        <p ng-message="pattern">非法密钥名称</p>
+                                        <p ng-message="minlength">密钥字符长度不能小于5</p>
+                                        <p ng-message="maxlength">密钥字符长度不能大于20</p>
+                                        <p ng-message="required">密钥不能为空</p>
+                                    </div>
                                 </div>
-                                <hr>
-                                <button class="btn btn-primary" ng-click="createKey()">创建</button>
-                            </form>
-                        </div>
-                        <!-- 导入密钥 -->
-                        <div role="tabpanel" class="tab-pane" id="importKey-tab">
-                            <form role="form">
-                                <div class="form-group">
-                                    <label for="key-desc">密钥名称<span class="span-stand"> *</span></label>
-                                    <input type="text" class="form-control" id="key-desc" ng-model="keyName" placeholder="仅限字母数字和下划线" required>
-                                    <span id="novalid" ng-show="novalid">非法密钥名称</span>
+                                <div ng-if="showPubKey" class="form-group" ng-class="{'has-error': submitted && form.public_key.$invalid}">
+                                    <!-- <label for="key-name">密钥名称<span class="span-stand"> *</span></label> -->
+                                    <lable>公钥<span class="span-stand"> *</span></lable>
+                                    <textarea class="form-control" name="public_key" ng-model="public_key" ng-trim="true" ng-pattern="/^(ssh-ed25519|ssh-rsa|ssh-rsa|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521)/i" ng-minLength="10" required>
+                                    </textarea>
+                                    <div ng-if="submitted" ng-messages="form.public_key.$error" class="help-block">
+                                        <p ng-message="pattern">非法公钥，请检查格式</p>
+                                        <p ng-message="minlength">密钥字符长度不能小于10</p>
+                                        <p ng-message="required">密钥不能为空</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <lable class="control-label" for="pub-key">公钥<span class="span-stand"> *</span></lable>
-                                    <textarea class="form-control" id="pub-key" ng-model="pulic_key" required></textarea>
-                                    <span id="area-novalid" ng-show="area_novalid">公钥输入非法</span>
-                                </div>
-                                <hr>
-                                <button class="btn btn-primary" ng-click="createByImportKey()">创建</button>
+                                <button class="btn btn-primary" type="submit">创建</button>
                             </form>
                         </div>
                     </div>
@@ -130,4 +128,3 @@
         </div>
     </div>
 </div>
-
