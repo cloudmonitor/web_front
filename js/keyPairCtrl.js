@@ -1,8 +1,10 @@
 // 计算 -- 密钥对
-var keyPairApp = angular.module('keyPairApp', []);
+var keyPairApp = angular.module('keyPairApp', ['ngMessages']);
 keyPairApp.controller('keyPairCtrl', keyPairCtrl);
 // 密钥对控制器
 function keyPairCtrl($scope, $http) {
+    console.info("localStorage.user:", window.localStorage.user);
+
     // 初始化值
     $("head title").text("密钥");
     $(".nav-sidebar a[href='#/compute/key-pair']").css({
@@ -53,13 +55,8 @@ function keyPairCtrl($scope, $http) {
     $scope.itemChecked = function(event) {
         var length = $("td input[type='checkbox']:checked").length;
         console.info("该项目的索引值: ", $(event.target));
-        if (length) {
-            // 勾选数目大于0
-            console.info("勾选数目 = ", length);
-            $scope.delBtnDis = false;
-            $scope.all = (length == $scope.itemCount) ? true : false;
-            console.info("$scope.all = ", $scope.all);
-        }
+        $scope.delBtnDis = !length;
+        $scope.all = (length === $scope.itemCount);
     };
 
     // 删除密钥对
@@ -132,13 +129,20 @@ function keyPairCtrl($scope, $http) {
         };
     };
 
+    // 创建密钥模态框
+    var createKeyModal = function() {
+        var activePill = null;
+        // 初始化，不显示公钥导入框
+        $scope.showPubKey = false;
 
-    // 创建密钥模态框按钮
-    $scope.createKeyModal = function() {
-        $scope.novalid = false;
-        $scope.area_novalid = false;
-        $scope.keyName = null;
-        $scope.public_key = null;
+        // 点击创建密钥按钮，初始化模态框
+        $scope.initKeyModal = function() {
+            $scope.submitted = false;
+
+            // 清空输入框内容
+            $scope.keyName = undefined;
+            $scope.public_key = undefined;
+        };
 
         // 自动下载本地文件
         function download(filename, text) {
@@ -154,53 +158,32 @@ function keyPairCtrl($scope, $http) {
             document.body.removeChild(element);
         }
 
-        // 密钥名称输入框
-        $("#key-name, #key-desc").blur(function() {
-            var name = $scope.keyName;
-            console.info("密钥名称 ", name);
 
-            if (name) {
-                // 输入字符串长度大于0
-                var len = name.length;
-                console.info("密钥长度 ", len);
-                // 如果非法字符串长度大于0，则非法
-                var res = name.match(/[^a-zA-Z0-9_]/g);
-                if (res != null) {
-                    $scope.novalid = true;
-                    console.info("检查的结果: ", res);
-                    return;
-                }
-            } else {
-                $scope.novalid = true;
-                return;
-            }
-            $scope.novalid = false;
+        $("a[data-toggle='tab']").on('show.bs.tab', function(e) {
+            activePill = e.target;
+            //  tell angular updated the var
+            $scope.$apply(function() {
+                $scope.showPubKey = !$scope.showPubKey;
+            });
+            console.info("显示导入密钥框:", $scope.showPubKey);
         });
 
-        // 公钥输入域
-        $("#pub-key").blur(function() {
-            var public_key = $scope.pulic_key;
-            console.info("公钥名称 ", public_key);
-            if (public_key) {
-                var patt = /^ssh-ed25519|ssh-rsa|ssh-rsa|ecdsa-sha2-nistp256|ecdsa-sha2-nistp384|ecdsa-sha2-nistp521/g;
-                var index = public_key.search(patt);
-                if (index != 0) {
-                    $scope.area_novalid = true;
-                    console.info("公钥开始字符串错误");
-                    return;
-                }
-            } else {
-                $scope.area_novalid = true;
-                return;
-            }
-            $scope.area_novalid = false;
-        });
-
-        // 创建密钥 -- 方式一
+        // 创建密钥 -- 提交请求
         $scope.createKey = function() {
-            if ($scope.novalid) {
-                return;
-            }
+            $scope.submitted = true;
+
+            console.info("密钥名称:", $scope.form.keyName);
+
+            // 显示公钥输入框
+            var showPubKey = $scope.showPubKey;
+
+            // 表单非法
+            if ($scope.form.$invalid) return;
+
+            public_key = (showPubKey) ? $scope.form.public_key.$modelValue : undefined;
+
+            // 构造请求数据
+            console.info("public_key = ", public_key);
             var url = config.host + "/keypairs/create?token=" + window.localStorage.token;
             var req = {
                 method: 'POST',
@@ -208,77 +191,51 @@ function keyPairCtrl($scope, $http) {
                 headers: {
                     'Content-Type': "application/json",
                 },
-                data: JSON.stringify({ "keypair": { "name": name } })
+                data: JSON.stringify({ "keypair": { "name": $scope.keyName, "public_key": public_key } })
             };
-            $http(req).then(function(response) {
-                // POST请求成功
-                var data = response.data;
-                console.info("请求成功返回的数据： ", data);
-                if (data.length === undefined) {
+            console.info("请求格式:", req.data);
+
+            // 请求服务器
+            $http(req).then(
+                function(response) {
+                    // POST请求成功
+                    var data = response.data;
+                    console.info("请求成功返回的数据： ", data);
+                    if (!data.keypair) {
+                        createAndHideAlert({
+                            "message": "密钥创建失败",
+                            "className": "alert-warning"
+                        });
+                        return;
+                    }
+
+                    $scope.keyItems.push(data);
                     createAndHideAlert({
-                        "message": "密钥创建失败",
-                        "className": "alert-warning"
+                        "message": "密钥创建成功:<br>" + data.keypair.name,
+                        "className": "alert-success"
                     });
-                    return;
-                }
-                // 删除Object中的private_key、user_id属性
-                $scope.keyItems.push(data);
-                createAndHideAlert({
-                    "message": "密钥创建成功:<br>" + data.keypair.name,
-                    "className": "alert-success"
+
+                    $scope.itemCount = $scope.keyItems.length;
+                    $("#createKey-modal").modal('hide');
+
+                    if (!showPubKey) {
+                        // 创建方式一、下载密钥描述文件
+                        // parameters1: 文件名   parameter2: 文件内容
+                        var filename = data.keypair.name + ".pem";
+                        var fileContent = data.keypair.private_key;
+                        download(filename, fileContent);
+                    }
+
+                },
+                function(response) {
+                    // POST请求失败
+                    createAndHideAlert({
+                        "message": "请求创建失败",
+                        "className": "alert-danger"
+                    });
                 });
-                $scope.itemCount = $scope.keyItems.length;
-                $("#createKey-modal").modal('hide');
-                // parameters1: 文件名   parameter2: 文件内容
-                var filename = data.keypair.name + ".pem";
-                var fileContent = data.keypair.private_key;
-                download(filename, fileContent);
-            }, function(response) {
-                // POST请求失败
-                createAndHideAlert({
-                    "message": "请求创建失败",
-                    "className": "alert-danger"
-                });
-            });
+
         };
 
-        // 创建密钥 -- 方式二
-        $scope.createByImportKey = function() {
-            if ($scope.novalid || $scope.area_novalid) {
-                return;
-            }
-            var name = $scope.keyName;
-            var public_key = $scope.public_key;
-            var url = config.host + "/keypairs/create?token=" + window.localStorage.token;
-            var req = {
-                method: 'POST',
-                url: url,
-                headers: {
-                    'Content-Type': "application/json",
-                },
-                data: JSON.stringify({ "keypair": { "name": name, "public_key": public_key } })
-            };
-            $http(req).then(function(response) {
-                var data = response.data;
-                console.info("请求成功返回的数据： ", data);
-                // 删除Object中的private_key、user_id属性
-                data.keypair.private_key = undefined;
-                data.keypair.user_id = undefined;
-                $scope.keyItems.push(data);
-                createAndHideAlert({
-                    "message": "密钥创建成功:<br>" + data.keypair.name,
-                    "className": "alert-success"
-                });
-                $scope.itemCount = $scope.keyItems.length;
-                $("#createKey-modal").modal('hide');
-
-            }, function(response) {
-                // POST请求失败
-                createAndHideAlert({
-                    "message": "请求创建失败",
-                    "className": "alert-danger"
-                });
-            });
-        }
-    };
+    }();
 }
