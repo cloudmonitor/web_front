@@ -54,6 +54,8 @@ $(function() {
                                 var flavor_id = server.flavor.id;
                                 var curr_flavor;
                                 var num;
+               /*                 console.error("当前实例",server);
+                                console.error("所有的云主机",flavor);*/
                                 for (var j = 0; j < flavor.length; j++) {
                                     if (flavor[j].id == flavor_id) {
                                         curr_flavor = flavor[j];

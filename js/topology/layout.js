@@ -10,7 +10,7 @@ $(function() {
         // 		// width: $("#centerTabs").width(),
         // height: $("#centerTabs").height(),
         width: $("#centerTabs").width() - 10,
-        height: 720,
+        height: 740,
         backgroundImage: "", //./icon/background.png",
         connectorImage: "./icon/connector.png",
         toolbar: {
@@ -18,7 +18,8 @@ $(function() {
             data: [
                 { id: 'router', name: 'ROUTER', image: './icon/device/router.png', width: 42, height: 42 },
                 { id: 'server', name: 'server', image: './icon/device/server.png', width: 42, height: 42 },
-                { id: 'network', name: 'network', image: './icon/device/network.png', width: 42, height: 42 }
+                { id: 'network', name: 'network', image: './icon/device/network.png', width: 42, height: 42 },
+                { id: 'subnet', name: 'subnet', image: './icon/device/subnet.png', width: 42, height: 42 }
             ]
         }
     });
@@ -44,23 +45,6 @@ $(function() {
 //拓扑示例，根据id变换拓扑图
 function expTopoListChange(data) {
     jsonStr = data;
-    //console.log(jsonStr);
-    /*	var expTopoListVal=$("#expTopoList").val();
-    	if(expTopoListVal=='defined'){
-    		jsonStr='{"devices":[],"lines":[]}';
-    	}else if(expTopoListVal=='firewall'){
-    		jsonStr='{"devices":[{"id":"firewall_13F492","name":"Firewall","src":"./icon/device/Firewall_Icon.png","x":284,"y":179,"width":62,"height":80},{"id":"pc_11E007","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":469,"y":79,"width":96,"height":73}],"lines":[{"srcDeviceId":"firewall_13F492","dstDeviceId":"pc_11E007","stroke":"black","strokeWidth":1}]}';
-    	}else if(expTopoListVal=='example'){
-    		jsonStr='{"devices":[{"id":"router_2C1DDE","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":411,"y":45,"width":78,"height":49},{"id":"router_8C4862","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":547,"y":121,"width":78,"height":49},{"id":"switch_C4B9FE","name":"Switch","src":"./icon/device/Switch_Icon.png","x":263,"y":114,"width":88,"height":47},{"id":"pc_AE9612","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":160,"y":236,"width":96,"height":73},{"id":"applicationServer_998BF1","name":"ApplicationServer","src":"./icon/device/Application_Icon.png","x":397,"y":227,"width":62,"height":73},{"id":"pc_0D766D","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":599,"y":238,"width":96,"height":73}],"lines":[{"srcDeviceId":"router_2C1DDE","dstDeviceId":"router_8C4862","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_2C1DDE","dstDeviceId":"switch_C4B9FE","stroke":"black","strokeWidth":1},{"srcDeviceId":"switch_C4B9FE","dstDeviceId":"pc_AE9612","stroke":"black","strokeWidth":1},{"srcDeviceId":"switch_C4B9FE","dstDeviceId":"applicationServer_998BF1","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_8C4862","dstDeviceId":"pc_0D766D","stroke":"black","strokeWidth":1}]}';
-    	}else if (expTopoListVal=='rip'||expTopoListVal=='ospf') {
-    		jsonStr='{"devices":[{"id":"router_88E8AA","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":200,"y":55,"width":78,"height":49},{"id":"router_EED3B2","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":361,"y":189,"width":78,"height":49},{"id":"router_D2F424","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":526,"y":49,"width":78,"height":49},{"id":"pc_08C80E","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":352,"y":341,"width":96,"height":73},{"id":"pc_077E39","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":118,"y":230,"width":96,"height":73},{"id":"pc_C98303","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":588,"y":237,"width":96,"height":73}],"lines":[{"srcDeviceId":"router_88E8AA","dstDeviceId":"router_EED3B2","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_88E8AA","dstDeviceId":"router_D2F424","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_EED3B2","dstDeviceId":"router_D2F424","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_EED3B2","dstDeviceId":"pc_08C80E","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_D2F424","dstDeviceId":"pc_C98303","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_88E8AA","dstDeviceId":"pc_077E39","stroke":"black","strokeWidth":1}]}';
-    	}else if (expTopoListVal=='ipicmp'||expTopoListVal=='arp'||expTopoListVal=='ftp'||expTopoListVal=='http'||expTopoListVal=='ophttp'||expTopoListVal=='ethernet'||expTopoListVal=='tcpUdp') {
-    		jsonStr='{"devices":[{"id":"pc_171E3F","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":314,"y":161,"width":96,"height":73},{"id":"applicationServer_21C49E","name":"ApplicationServer","src":"./icon/device/Application_Icon.png","x":537,"y":180,"width":62,"height":73}],"lines":[{"srcDeviceId":"pc_171E3F","dstDeviceId":"applicationServer_21C49E","stroke":"black","strokeWidth":1}]}';
-    	}else if (expTopoListVal=='oprouter'||expTopoListVal=='opwebroute'||expTopoListVal=='routeTable') {
-    		jsonStr='{"devices":[{"id":"pc_0E5DD1","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":314,"y":155,"width":96,"height":73},{"id":"router_8B6483","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":542,"y":213,"width":78,"height":49}],"lines":[{"srcDeviceId":"pc_0E5DD1","dstDeviceId":"router_8B6483","stroke":"black","strokeWidth":1}]}';
-    	}else if (expTopoListVal=='natservice'||expTopoListVal=='staticroute') {
-    		jsonStr='{"devices":[{"id":"pc_A7FDF0","name":"WinXP","src":"./icon/device/Pc_Icon.png","x":294,"y":240,"width":96,"height":73},{"id":"router_AC0689","name":"ROUTER","src":"./icon/device/Router_Icon.png","x":480,"y":125,"width":78,"height":49},{"id":"applicationServer_E7A4BA","name":"ApplicationServer","src":"./icon/device/Application_Icon.png","x":669,"y":236,"width":62,"height":73}],"lines":[{"srcDeviceId":"pc_A7FDF0","dstDeviceId":"router_AC0689","stroke":"black","strokeWidth":1},{"srcDeviceId":"router_AC0689","dstDeviceId":"applicationServer_E7A4BA","stroke":"black","strokeWidth":1}]}';
-    	}*/
     loadJson();
 }
 

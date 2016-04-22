@@ -135,6 +135,29 @@ body {
     background-color: rgb(188, 188, 188);
 }
 
+.img_bar::-webkit-scrollbar {
+    width: 8px;
+    background-color: white;
+    display: auto;
+}
+
+.img_bar::-webkit-scrollbar-thumb {
+    background-color: rgb(188, 188, 188);
+}
+
+
+/* .img_button {
+    background: #E0EEEE;
+}
+
+.img_button:focus {
+    background-color: #00B2EE;
+}
+
+.img_button:active {
+    background-color: #00B2EE;
+} */
+
 #alert-container {
     position: fixed;
     top: 70px;
@@ -226,7 +249,7 @@ i {
 }
 
 #resSize tr td:nth-child(2) {
-    width: 20%;    
+    width: 20%;
 }
 
 #resSize tr td:nth-child(2) > div {
@@ -270,6 +293,10 @@ i {
 
 #start-host table {
     border: 1px dashed #eee
+}
+
+#myModal_toupu .modal-dialog {
+    width: 600px
 }
 
 

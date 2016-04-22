@@ -99,7 +99,7 @@ $(function() {
                         break;
                     }
                 }
-                id_net=id;
+                id_net = id;
                 //---------显示子网
                 $.ajax({
                     type: "GET",
@@ -110,19 +110,18 @@ $(function() {
                         var subnets = servers['networks'][curr_net]['subnets'];
 
                         var subnet_Info = [];
-                        var temp_i=0;
+                        var temp_i = 0;
                         for (var j = 0; j < subnets.length; j++) {
                             // createAndHideAlert(subnets.length);
                             for (var k = 0; k < subnet_infos.length; k++) {
                                 //createAndHideAlert(subnets[i]+"=="+subnet_infos[j].id);
                                 if (subnets[j] == subnet_infos[k].id) {
                                     console.error(subnet_Info);
-                                    // createAndHideAlert(subnets[i]);
-                                    subnet_Info[temp_i++]=subnet_infos[k];
+                                    subnet_Info[temp_i++] = subnet_infos[k];
                                 }
                             }
                         }
-                      console.error(">>>>>>>>>>.",subnet_Info);
+                        console.error(">>>>>>>>>>.", subnet_Info);
                         var sunNetInfos = subnet_Info;
                         for (var i = 0; i < sunNetInfos.length; i++)
                             set_subNet(sunNetInfos[i], sunNetInfos[i].id);
@@ -189,14 +188,29 @@ $(function() {
     }
 
 });
-
-//----------------删除网络
-//---批量删
-$(".sub_checks").change(function() {
-    if ($(".sub_checks:checked").length != 0) {
+//----------------全选的控制
+$(document).on("change", ".all_check", function() {
+    var isChecked = $(this).prop("checked");
+    $(".sub_checks").prop("checked", isChecked);
+    if (isChecked) {
         $(".delete_subnetInfo").attr("disabled", false);
     } else {
         $(".delete_subnetInfo").attr("disabled", true);
+    }
+});
+
+//----------------删除网络delete_subnetInfo
+//---批量删
+$(".sub_checks").change(function() {
+    if ($(".sub_checks:checked").length == $(".sub_checks").length) {
+        $(".delete_subnetInfo").attr("disabled", false);
+        $(".all_check").prop("checked", true);
+    } else if ($(".sub_checks:checked").length > 0) {
+        $(".delete_subnetInfo").attr("disabled", false);
+        $(".all_check").prop("checked", false);
+    } else {
+        $(".delete_subnetInfo").attr("disabled", true);
+        $(".all_check").prop("checked", false);
     }
 });
 $(".delete_subnetInfo").click(function() {
@@ -246,23 +260,23 @@ function setNetInfo(netInfo, manager_status) {
 }
 //-------创建子网
 create_subnetFun();
-function setNetselect() {
-    $(".private_selected").empty();
-    $(".private_selected").append('<option value="test">选择私有网络</option>');
-    var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
-    var server;
-    var str = "";
-    for (var i = 0; i < servers.length; i++) {
-        server = servers[i];
-        str += '<option value="' + server.id + '">' + server.name + '</option>';
-    }
-    $(".private_selected").append(str);
-}
+//function setNetselect() {
+//    $(".private_selected").empty();
+//    $(".private_selected").append('<option value="test">选择私有网络</option>');
+//    var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
+//    var server;
+//    var str = "";
+//    for (var i = 0; i < servers.length; i++) {
+//        server = servers[i];
+//        str += '<option value="' + server.id + '">' + server.name + '</option>';
+//    }
+//    $(".private_selected").append(str);
+//}
 
 function createSubnetAJAX(subnet) {
     console.log(JSON.stringify(subnet));
     var url_info;
-    if (update_flag)
+    if (!update_flag)
         url_info = "/subnet/create";
     else {
         delete subnet['subnet'].cidr;
@@ -306,7 +320,7 @@ $(document).on("click", ".eidt_subnetInfo", function() {
     $(".createsubnet_name").val(subnet.name);
     setNetselect();
     $(".private_selected option[value='" + id_net + "']").attr("selected", true);
-    $(".private_selected").attr("disabled",true);
+    $(".private_selected").attr("disabled", true);
     var temp_cidr = subnet.cidr;
     if (temp_cidr != "") {
         var num = temp_cidr.split(".")[0];
@@ -388,14 +402,14 @@ function setPortInfo(data, fixed_ips_str, i) {
         '</a></td><td>' + fixed_ips_str + '</td>' +
         '<td>' + data.device_owner + '</td>' +
         '<td>' + data.status + '</td>' +
-        '<td>' + data.admin_state_up + '</td>'+
-/*        '<td>' +
-        '<div class="btn-group">' +
-        '<button type="button" class="btn btn-default btn-sm">编辑端口</button>' +
-        '<button type="button" class="btn btn-default btn-sm >' +
-        '</button>' +
-        '</div>' +
-        '</td>' +*/
+        '<td>' + data.admin_state_up + '</td>' +
+        /*        '<td>' +
+                '<div class="btn-group">' +
+                '<button type="button" class="btn btn-default btn-sm">编辑端口</button>' +
+                '<button type="button" class="btn btn-default btn-sm >' +
+                '</button>' +
+                '</div>' +
+                '</td>' +*/
         '</tr>' +
         '</tbody>';
     $(".port_infos").append(str);

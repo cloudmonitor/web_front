@@ -1,4 +1,4 @@
-﻿$('#frame11').onload = function() {
+$('#frame11').onload = function() {
     $('body').onkeydown = function() {
         $('#frame11').focus();
     };
@@ -84,18 +84,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     $(".create_router_name").val("");
                     $(".outNet_selected").empty();
                     $(".outNet_selected").append('<option value="test" selected>选择网络</option>');
-                    $.ajax({
-                        type: "GET",
-                        url: "http://192.168.0.149:8888/extnet?token=" + window.localStorage.token,
-                        success: function(data) {
-                            var ext_nets = JSON.parse(data)['ext_net'];
-                            var str = "";
-                            for (var i = 0; i < ext_nets.length; i++) {
-                                str += "<option value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
-                            }
-                            $(".outNet_selected").append(str);
-                        }
-                    });
+                    getExtNetInfo();
                     //-------------模态end
                     //-------------提交数据start
                     $(".createRouter_OK").click(function() {
@@ -136,7 +125,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                             type: "POST",
                             data: JSON.stringify(router_create),
                             contentType: "application/json",
-                            url: "http://192.168.0.149:8888/router/create" + "?token=" + window.localStorage.token,
+                            url: config["host"] + "/router/create" + "?token=" + window.localStorage.token,
                             success: function(data) {
                                 that.topology.addDevice(device);
                                 window.location.reload();
@@ -146,67 +135,14 @@ Kinetic.Topology = Kinetic.Class.extend({
                     //-------------提交数据end               
                 } else if (drawType == "server") {
                     //--------启动云主机预备工作
-                    $(".instance_startOriginSelect").change(function() {
-                        if ($(".instance_startOriginSelect").val() == "test") {
-                            $(".imageDiv").hide();
-                            $(".snapDiv").hide();
-                        } else if ($(".instance_startOriginSelect").val() == "image") {
-                            $(".imageDiv").show();
-                            $(".snapDiv").hide();
-                        } else {
-                            $(".imageDiv").hide();
-                            $(".snapDiv").show();
-                        }
-                    });
-                    createInstanceFun();
+                    setInstanceReadyInfo();
                     $(".start_cloudmonitor").click();
                 } else if (drawType == "network") {
                     create_networkFun();
                     $(".create_net").click();
                 } else {
                     create_subnetFun();
-                    //-------创建子网
-                    function setNetselect() {
-                        $(".private_selected").empty();
-                        $(".private_selected").append('<option value="test">选择私有网络</option>');
-                        var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
-                        var server;
-                        var str = "";
-                        for (var i = 0; i < servers.length; i++) {
-                            server = servers[i];
-                            str += '<option value="' + server.id + '">' + server.name + '</option>';
-                        }
-                        $(".private_selected").append(str);
-                    }
-                    function createSubnetAJAX(subnet) {
-                        console.log(JSON.stringify(subnet));
-                        var url_info;
-                        if (update_flag)
-                            url_info = "/subnet/create";
-                        else {
-                            delete subnet['subnet'].cidr;
-                            delete subnet['subnet'].ip_version;
-                            delete subnet['subnet'].network_id;
-                            url_info = "/subnet/update/" + subnet_tempid;
-                        }
-                        update_flag = false;
-                        $.ajax({
-                            type: "POST",
-                            data: JSON.stringify(subnet),
-                            contentType: "application/json",
-                            url: config['host'] + url_info + "?token=" + window.localStorage.token,
-                            success: function(data) {
-                                if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
-                                    console.log(data);
-                                    createAndHideAlert("请检查子网配置格式！");
-                                } else {
-                                    window.location.reload();
-                                    window.location.href = "#/net/net";
-                                }
-                            }
-                        });
-                    }
-                    $(".add-subnet").click();
+                    $(".add_subnetInfo").click();
                 }
             }
         });
@@ -442,8 +378,6 @@ Kinetic.Topology = Kinetic.Class.extend({
         this.lines = [];
     },
     load: function(jsonStr) {
-        /*        console.log("______________________load");
-                console.log(this);*/
         this.loading = true;
 
         if (jsonStr != null && jsonStr.length > 0) {
@@ -583,8 +517,6 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
     fireRange: null,
     id: null,
     init: function(config) {
-        /*        console.log("Topology.Device_init________________________");
-                console.log(this);*/
         this.config = config;
         this.draw();
         this.lines = new Array();
@@ -653,7 +585,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         this.config.data.height = this.deviceImage.getHeight();
     },
     draw: function() {
-        //alert(608);
+        // alert(608);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -691,6 +623,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         imageObj.src = config.data.src;
     },
     bindEvent: function() {
+        //------信息的展示
         var config = this.config;
         var instance = this;
         var footer_str = "";
@@ -698,13 +631,12 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         this.deviceImage.on("click", function(evt) {
             document.body.style.cursor = "pointer";
             /*            console.log(instance.deviceImage.attrs);*/
-            if (instance.config.data.device_name != "ext_net") {
-                $(".showInfoButton").click();
-            }
+            //if (instance.config.data.device_name != "ext_net") {
+            $(".showInfoButton").click();
+            // }
             if (evt.button == 0) {
                 var footer_showInfo = "";
-                var title_Info = '<B>' + instance.deviceImage.attrs.name + '</B><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">ID</font>   ' + instance.deviceImage.attrs.id + '<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">STATUS</font>   ' + instance.config.data.status;
-                $(".deviceTitle_Info").html(title_Info);
+                setShowHeader(instance);
                 var body_str = "";
                 // alert(instance.config.data.device_name);
                 /*网络的信息提示*/
@@ -716,58 +648,60 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     if (subnets != null && subnets != "undefined" && subnets.length != 0) {
                         for (var i = 0; i < subnets.length; i++) {
                             if (body_str != '<B>Subnets</B><br/>') {
-                                body_str += '<br/><a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
+                                body_str += '<br/><a class="close_model" href="javascript:void(0)" name="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
                             } else {
-                                body_str += '<a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
+                                body_str += '<a  class="close_model" href="javascript:void(0)" name="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
                             }
                         }
                     }
-                    footer_str = '<a href="#/net/net-desc?' + instance.deviceImage.attrs.id + '" class="ttttt"  >' + footer_showInfo + '</a>';
+                    footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/net-desc?' + instance.deviceImage.attrs.id + '" class="ttttt"  >' + footer_showInfo + '</a>';
                     $(".delete_device").attr("id", instance.id);
+                    $(".devicebodyInfo").html(body_str);
+                    $(".footer_str").html(footer_str);
                 }
                 /*外网的信息提示*/
                 else if (instance.config.data.device_name == "ext_net") {
-                    /*                    body_str = '<B>Subnets</B><br/>';
-                                        var id_temp = instance.id;
-                                        var subnets = instance.config.data.subnets;
-                                        if (subnets != null && subnets != "undefined" && subnets.length != 0) {
-                                            for (var i = 0; i < subnets.length; i++) {
-                                                if (body_str != '<B>Subnets</B><br/>') {
-                                                    body_str += '<br/><a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
-                                                } else {
-                                                    body_str += '<a href="#/net/subnet-desc?' + subnets[i].id + '">' + subnets[i].id.substr(0, 10) + '...</a>  ' + subnets[i].cidr;
-                                                }
-                                            }
-                                        }
-                                        $(".delete_device").attr("id", instance.id);*/
+                    body_str = '';
+                    var id_temp = instance.id;
+                    //--------
+                    $(".delete_device").attr("id", instance.id);
+                    $(".devicebodyInfo").html(body_str);
+                    $(".footer_str").html(footer_str);
                 }
                 /*路由的信息提示*/
                 else if (instance.config.data.device_name == "router") {
                     footer_showInfo = "» 查看路由详情";
                     body_str = '<B>Interfaces</B><br/>';
                     var id_temp = instance.id;
+                    //----------接口的信息处理
                     for (var i = 0; i < lines.length; i++) {
                         if (id_temp == lines[i].dstDeviceId) {
                             if (body_str != '<B>Interfaces</B><br/>') {
                                 if (lines[i].device_owner == null || lines[i].device_owner == "undefined") {
-                                    body_str += '<br/><a href="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;none';
+                                    body_str += '<br/><a class="close_model" href="javascript:void(0)" name="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;none';
                                 } else {
-                                    body_str += '<br/><a href="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;' + lines[i].fixed_ips[0].ip_address + " " + lines[i].device_owner + " " + lines[i].status;
+                                    body_str += '<br/><a class="close_model" href="javascript:void(0)" name="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;' + lines[i].fixed_ips[0].ip_address + " " + lines[i].device_owner + " " + lines[i].status;
                                 }
                             } else {
                                 if (lines[i].device_owner == null || lines[i].device_owner == "undefined") {
-                                    body_str += '<a href="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;none';
+                                    body_str += '<a class="close_model" href="javascript:void(0)" name="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;none';
                                 } else {
-                                    body_str += '<a href="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;' + lines[i].fixed_ips[0].ip_address + " " + lines[i].device_owner + " " + lines[i].status;
+                                    body_str += '<a class="close_model" href="javascript:void(0)" name="#/net/port-desc?' + lines[i].id + '">' + lines[i].id.substr(0, 10) + '...' + '</a>&nbsp;' + lines[i].fixed_ips[0].ip_address + " " + lines[i].device_owner + " " + lines[i].status;
                                 }
                             }
                         }
                     }
-                    footer_str = '<a href="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
-                    $(".delete_device").attr("id", instance.id);
+                    if (body_str == '<B>Interfaces</B><br/>') {
+                        body_str += '&nbsp;&nbsp;&nbsp;暂未分配接口<br/>';
+                        body_str += "<br/><B>防火墙</B><br/>";
+                    } else {
+                        body_str += "<br/><br/><B>防火墙</B><br/>";
+                    }
+                    //----防火墙的信息处理
+                    setFireWallInfo(id_temp, body_str, instance, footer_showInfo);
                 }
                 /*实例的信息提示*/
-                else {
+                else if (instance.config.data.device_name == "server") {
                     footer_showInfo = "» 查看实例详情 ";
                     body_str = '<B>IP Addresses</B><br/>';
                     var id_temp = instance.id;
@@ -780,19 +714,30 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                             }
                         }
                     }
-                    footer_str = '<a href="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
-                    $(".delete_device").attr("id", instance.id);
-                };
-                if (instance.config.data.device_name != "ext_net") {
-                    $(".devicebodyInfo").html(body_str);
-                    $(".footer_str").html(footer_str);
+                    if (body_str == '<B>IP Addresses</B><br/>') {
+                        body_str += '&nbsp;&nbsp;&nbsp;暂未分配IP<br/>';
+                    }
+                    //----防火墙的信息处理
+                    body_str += "<br/><B>安全组</B><br/>";
+                    setInstanceInfo(instance, body_str, footer_showInfo);
                 }
+                /*子网的信息提示*/
+                else {
+                    footer_showInfo = "» 查看子网详情 ";
+                    body_str = '';
+                    setSubnetInfo(instance, body_str, footer_showInfo);
+
+                }
+                // if (instance.config.data.device_name != "ext_net") {
+
+                //  }
                 $(".delete_device").click(function() {
                     deleteDevice();
                 });
-                $("a").click(function() {
-                    $(".close_model_toupu").click();
-                });
+                /*                $("a").click(function() {
+                                    $(".close_model_toupu").click();
+                                });*/
+
                 /* var infoContent = '<fieldset><legend>基本信息</legend><table class="basicInfoTable">'
                       +'<tr><th>设备名称:</th><td>'+instance.deviceImage.attrs.id;*/
                 /*              if(instance.deviceImage.attrs.name != 'Switch'){
@@ -991,7 +936,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         this.draw();
     },
     draw: function() {
-        // alert(946);
+        //alert(946);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -1049,7 +994,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             connector.getLayer().draw();
         });
         this.connectorImage.on("dragend", function(evt) {
-            //alert(1004);
+            //------连线的处理
             var shape = evt.shape;
             var dstDevice = instance.config.topology.getFitDevice(shape.getX(), shape.getY());
             //如果连接器的终点是空白区域，就在终点位置建立一个与源设备一样的结点，并把它设置为终结点
@@ -1101,9 +1046,11 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                     flag = true;
                 if (ori_dev == 'router' && (des_dev == "ext_net" || des_dev == "network"))
                     flag = true;
-                if (ori_dev == 'network' && (des_dev == "router" || des_dev == "server"))
+                if (ori_dev == 'network' && (des_dev == "router" || des_dev == "subnet"))
                     flag = true;
-                if (ori_dev == "server" && des_dev == "network")
+                if (ori_dev == 'subnet' && (des_dev == "network" || des_dev == "server"))
+                    flag = true;
+                if (ori_dev == "server" && des_dev == "subnet")
                     flag = true;
                 if (flag) {
                     if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
@@ -1180,10 +1127,18 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
     redraw: function() {
         //createAndHideAlert(1114);
         var srcElement = this.config.srcDevice.getDeviceImage();
-        var x1 = srcElement.getX() + srcElement.getWidth() / 2;
-        var y1 = srcElement.getY() + srcElement.getHeight() / 2;
         var dstElement = this.config.dstDevice.getDeviceImage();
-        var x2 = dstElement.getX() + dstElement.getWidth() / 2;
+        var x1 = srcElement.getX();
+        var x2 = dstElement.getX();
+        if (x1 > x2)
+            x1 = srcElement.getX() + srcElement.getWidth() / 15; // + srcElement.getWidth() / 1;
+        else
+            x1 = srcElement.getX() + srcElement.getWidth() / 1 - srcElement.getWidth() / 15;
+        var y1 = srcElement.getY() + srcElement.getHeight() / 2;
+        if (x1 < x2)
+            x2 = dstElement.getX() + srcElement.getWidth() / 15; //+ dstElement.getWidth() / 1;
+        else
+            x2 = dstElement.getX() + dstElement.getWidth() / 1 - srcElement.getWidth() / 15;
         var y2 = dstElement.getY() + dstElement.getHeight() / 2;
         this.lineObject.setPoints([x1, y1, x2, y2]);
         this.config.topology.getLayer().draw();
@@ -1208,14 +1163,22 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         }
     },
     draw: function() {
-        // createAndHideAlert(1144);
+        //  alert(1144);
         /*        console.log("Line_draw________________________");
                 console.log(this);*/
         var srcElement = this.config.srcDevice.getDeviceImage();
-        var x1 = srcElement.getX() + srcElement.getWidth() / 2;
-        var y1 = srcElement.getY() + srcElement.getHeight() / 2;
         var dstElement = this.config.dstDevice.getDeviceImage();
-        var x2 = dstElement.getX() + dstElement.getWidth() / 2;
+        var x1 = srcElement.getX();
+        var x2 = dstElement.getX();
+        if (x1 > x2)
+            x1 = srcElement.getX() + srcElement.getWidth() / 15; // + srcElement.getWidth() / 1;
+        else
+            x1 = srcElement.getX() + srcElement.getWidth() / 1 - srcElement.getWidth() / 15;
+        var y1 = srcElement.getY() + srcElement.getHeight() / 2;
+        if (x1 < x2)
+            x2 = dstElement.getX() + srcElement.getWidth() / 15; //+ dstElement.getWidth() / 1;
+        else
+            x2 = dstElement.getX() + dstElement.getWidth() / 1 - srcElement.getWidth() / 15;
         var y2 = dstElement.getY() + dstElement.getHeight() / 2;
         //console.log(this.config.stroke+": "+this.config.strokeWidth+": "+this.config.srcDevice.getId()+": "+this.config.dstDevice.getId());
         this.lineObject = new Kinetic.Line({
@@ -1354,7 +1317,8 @@ Kinetic.Topology.Toolbar = Kinetic.Class.extend({
     config: null,
     init: function(config) {
         this.config = config;
-        $("#" + this.config.toolbar.container).html(this.getHtml());
+        $("#" + this.config.toolbar.container).append("<span><font color='blue'><B>工具栏</B></font></span>");
+        $("#" + this.config.toolbar.container).append(this.getHtml());
         for (var i = 0, n = this.config.toolbar.data.length; i < n; i++) {
             var data = this.config.toolbar.data[i];
             var toolkit = new Kinetic.Topology.Toolbar.Toolkit({
@@ -1362,6 +1326,7 @@ Kinetic.Topology.Toolbar = Kinetic.Class.extend({
                 data: data
             });
         }
+
         //      $("#"+this.config.toolbar.container).accordion({  
         //      });  
     },
@@ -1395,7 +1360,15 @@ Kinetic.Topology.Toolbar.Toolkit = Kinetic.Class.extend({
         return this.config;
     },
     getHtml: function() {
-        var html = "<div id='" + this.config.data.id + "_div' style='float:left'><img id='" + this.config.data.id + "' src='" + this.config.data.image + "' width='" + this.config.data.width + "px' height='" + this.config.data.height + "px' style='padding:2px;position:relative;z-index:100;border:solid white 1px' title='" + this.config.data.name + "'/></div>";
+        var html = "<div id='" + this.config.data.id + "_div' style='float:left'><img id='" + this.config.data.id + "' src='" + this.config.data.image + "' width='" + this.config.data.width + "px' height='" + this.config.data.height + "px' style='padding:2px;position:relative;z-index:100;border:solid white 1px' title='" + this.config.data.name + "'/>";
+        if (this.config.data.name == "ROUTER")
+            html += '<span>路由器</span></div>';
+        else if (this.config.data.name == "server")
+            html += '<span>云主机</span></div>';
+        else if (this.config.data.name == "network")
+            html += '<span>网&nbsp;&nbsp;络</span></div>';
+        else
+            html += '<span>子&nbsp;&nbsp;网</span></div>';
         return html;
     },
     bindEvent: function() {
@@ -1595,6 +1568,696 @@ function createNetAjax(network_json) {
         url: config['host'] + "/network/create?token=" + window.localStorage.token,
         success: function(data) {
             window.location.reload();
+        }
+    });
+}
+//-------创建子网
+function createSubnetAJAX(subnet) {
+    console.log(JSON.stringify(subnet));
+    var url_info = "/subnet/create";
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(subnet),
+        contentType: "application/json",
+        url: config['host'] + url_info + "?token=" + window.localStorage.token,
+        success: function(data) {
+            if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
+                console.log(data);
+                alert("请检查子网配置格式！");
+            } else {
+                window.location.reload();
+                window.location.href = "#/net/net";
+            }
+        }
+    });
+}
+
+function setShowHeader(instance) {
+    var status_str = '<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">STATUS</font>   ' + instance.config.data.status;
+    var model_type;
+    if (instance.config.data.device_name == "ext_net")
+        model_type = "外网";
+    if (instance.config.data.device_name == "router")
+        model_type = "路由";
+    if (instance.config.data.device_name == "server")
+        model_type = "实例";
+    if (instance.config.data.device_name == "network")
+        model_type = "网络";
+    if (instance.config.data.device_name == "subnet") {
+        status_str = "";
+        model_type = "子网";
+    }
+    var title_Info = '<B><span style="text-align:center">' + model_type + '</span></B><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">名称</font>   <B>' + instance.deviceImage.attrs.name + '</B><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">ID</font>   ' + instance.deviceImage.attrs.id + status_str;
+    $(".deviceTitle_Info").html(title_Info);
+}
+
+function setInstanceReadyInfo() {
+    $(".img_list").empty();
+    //-------镜像
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/images?token=" + window.localStorage.token,
+        success: function(data) {
+            var images = JSON.parse(data)['images'];
+            var imag_str = "";
+            for (var i = 0; i < images.length; i++) {
+                var imag = images[i];
+                if (i % 2 == 0)
+                    imag_str += '<div class="row">';
+                imag_str += '<div class="col-sm-6 ">' +
+                    '<button type="button" class="btn btn-default btn-block img_buttons" id="' + imag.id + '">' +
+                    '<font >' + imag.name + '</font>' +
+                    '</button>' +
+                    '</div>';
+                if (i % 2 != 0)
+                    imag_str += "</div><br/>";
+            }
+            $(".img_list").append(imag_str);
+        }
+    });
+    //-------云主机类型的获取
+    $(".peizhi_select").empty();
+    var flag = 0;
+    var flavors_str = "";
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/flavors?token=" + window.localStorage.token,
+        success: function(data) {
+            localStorage.instance_temp = data;
+            flag++;
+            flavors_local = data;
+            var flavors = JSON.parse(data)['flavors'];
+            sort_data(flavors);
+            instance_Ram_Cpu(flavors[0].id, flavors);
+        }
+    });
+    //-------子网的获得
+    $(".subnetInfo_select").empty();
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/new_subnets?token=" + window.localStorage.token,
+        success: function(data) {
+            var subnet_infos = JSON.parse(data)['subnets'];
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/networks?token=" + window.localStorage.token,
+                success: function(data) {
+                    flag++;
+                    var servers = JSON.parse(data)['networks'];
+                    var option_str = "";
+                    for (var j = 0; j < servers.length; j++) {
+                        var server = servers[j];
+                        option_str += '<optgroup label = "' + server.name + '" >';
+                        for (var i = 0; i < subnet_infos.length; i++) {
+                            var subnet_info = subnet_infos[i];
+                            // console.error("server.id", server.id);
+                            if (subnet_info.network_id == server.id) {
+                                option_str += '<option id="' + server.id + '" name="' + subnet_info.id + '">' + subnet_info.name + '(' + subnet_info.cidr + ')' + '</option>';
+                            }
+                        }
+                        option_str += '</optgroup>';
+                    }
+                    //console.error(option_str);
+                    $(".subnetInfo_select").append(option_str);
+                }
+            });
+        }
+    });
+    //---------键值对
+    $(".key_select").empty();
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/keypairs?token=" + window.localStorage.token,
+        success: function(data) {
+            var keypairs = JSON.parse(data)['keypairs'];
+            var keypair_str = "";
+            for (var i = 0; i < keypairs.length; i++) {
+                var keypair = keypairs[i]['keypair'];
+                keypair_str += '<option  name="' + keypair.name + '"> ' + keypair.name + ' </option>';
+            }
+            $(".key_select").append(keypair_str);
+        }
+    });
+}
+//---------由cpu数量决定ram的值显示
+function setRAMInfo(cpu_checked, ram_temp) {
+    var ram_str = '<div class="col-sm-2"></div>';
+    var num = 0;
+    var start_ram = 0;
+    if (cpu_checked == 1) {
+        num = 4;
+        start_ram = 512;
+    } else if (cpu_checked == 2) {
+        num = 3;
+        start_ram = 2;
+    } else if (cpu_checked == 4) {
+        num = 3;
+        start_ram = 4;
+    } else if (cpu_checked == 8) {
+        num = 3;
+        start_ram = 8;
+    }
+    var fist_num;
+    for (var i = 0; i < num; i++) {
+        var num_temp = ((num == 4 && i == 0) ? (start_ram + "M") : ((num == 4 && i != 0) ? (Math.pow(2, i - 1) + "G") : (start_ram * Math.pow(2, i) + "G")));
+        if (i == 0)
+            fist_num = num_temp;
+        ram_str += '<div class="col-sm-2">' +
+            '<button type="button" id="' + num_temp.substr(0, num_temp.length - 1) + '" class="btn btn-default Ram_type" style="width:100%;height:35px;position:relative;">' +
+            '<font>' + num_temp + '</font>' +
+            '</button>' +
+            '</div>';
+    }
+    if (num == 3)
+        ram_str += '<div class="col-sm-2"></div><div class="col-sm-2"></div>';
+    else
+        ram_str += '<div class="col-sm-2"></div>';
+    $(".RAM_InfoShow").append(ram_str);
+    //------RAM的相应更新
+    if (ram_temp != 0) {
+        if ($(".Ram_type[id='" + ram_temp + "']").length > 0)
+            $(".Ram_type[id='" + ram_temp + "']").addClass("btn-primary");
+        else {
+            $(".Ram_type[id='" + fist_num.substr(0, fist_num.length - 1) + "']").addClass("btn-primary");
+            setSelect();
+        }
+    }
+}
+
+//---------主机类型决定cpu和ram的选择
+function instance_Ram_Cpu(curr_id, flavors) {
+    var curr_instance;
+    for (var i = 0; i < flavors.length; i++) {
+        var flavor = flavors[i];
+        if (flavor.id == curr_id) {
+            curr_instance = flavor;
+            break;
+        }
+    }
+    $(".cpu_type").removeClass("btn-primary");
+    $(".cpu_type[id='" + curr_instance.vcpus + "']").addClass("btn-primary");
+
+    $(".RAM_InfoShow").empty();
+    setRAMInfo(curr_instance.vcpus, 0);
+    $(".Ram_type").removeClass("btn-primary");
+    var ram_id = new Number(curr_instance.ram) / 1024;
+    if (ram_id == 0.5)
+        ram_id = 512;
+    $(".Ram_type[id='" + ram_id + "']").addClass(" btn-primary ");
+}
+//---------cpu和ram的选择决定主机类型
+function setSelect() {
+    var flavors = JSON.parse(localStorage.instance_temp)['flavors'];
+    var cpu_id = $(".cpu_type[class*='btn-primary']").attr('id');
+    var ram_id = $(".Ram_type[class*='btn-primary']").attr('id');
+    // console.error(cpu_id + " : " + ram_id);
+    var curr_instance = 0;
+    for (var i = 0; i < flavors.length; i++) {
+        var flavor = flavors[i];
+        var ram_id_1 = new Number(flavor.ram) / 1024;
+        if (ram_id_1 == 0.5)
+            ram_id_1 = 512;
+        console.error(ram_id_1 + " : " + ram_id + "   ---   " + flavor.vcpus + '  :  ' + cpu_id);
+        if (ram_id_1 == ram_id && flavor.vcpus == cpu_id) {
+            $(".peizhi_select option[value='" + flavor.id + "']").prop("selected");
+            curr_instance = flavor;
+            break;
+        }
+    }
+    if (curr_instance != 0)
+        $(".peizhi_select option[value='" + curr_instance.id + "']").attr("selected", true);
+    else {
+        alert("暂无 CPU:" + cpu_id + " RAM:" + (ram_id == 512 ? (512 + "M") : (ram_id + "G")) + " 配置的主机!");
+        $(".Ram_type[class*='btn-primary']").removeClass("btn-primary");
+    }
+}
+
+function submit_instanceInfo() {
+    //----------启动云主机----提交信息
+    var instance = {
+        "server": {
+            "security_groups": [],
+            "availability-zone": "",
+            "name": "",
+            "imageRef": "",
+            "flavorRef": "",
+            "max_count": 1,
+            "network_info": [],
+            "networks": [],
+            "key_name": ""
+        }
+    };
+    var server = instance['server'];
+    //---------可用域
+    //--------云主机名称
+    var instanceName = $(".instance_name").val();
+    if (instanceName != "")
+        server.name = instanceName;
+    if (instanceName == "") {
+        alert("云主机名称必填！");
+        $("#loading_monitor,#background_monitor").hide();
+        return;
+    }
+    //---------云主机类型
+    var instancetypeselect = $(".peizhi_select").val();
+    server.flavorRef = instancetypeselect;
+    //---------云主机数量
+    //----------云主机启动源
+    var selected_name = $(".img_buttons[class*='btn-primary']").attr("id");
+    if ($(".img_buttons[class*='btn-primary']").length == 0) {
+        alert("请选择镜像！");
+        $("#loading_monitor,#background_monitor").hide();
+        return;
+    }
+    server.imageRef = selected_name;
+    //----------键值对
+    var keyValue = $(".key_select").val();
+    server.key_name = keyValue;
+    //----------安全组
+    //----------网络
+    var server_id = $(".subnetInfo_select option:selected").attr("id");
+    var subnet_id = $(".subnetInfo_select option:selected").attr("name");
+    server.networks[0] = {
+        "uuid": server_id,
+    };
+    server.network_info[0] = {
+        "network_id": server_id,
+        "subnet_id": subnet_id,
+    };
+    console.error(JSON.stringify(instance));
+    //-------------------提交数据
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(instance),
+        contentType: "application/json",
+        url: config["host"] + "/servers/create?token=" + window.localStorage.token,
+        success: function(data) {
+            $("#loading_monitor").empty("span");
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+    });
+
+}
+
+function sort_data(flavors) {
+    var data_arr = new Array();
+    var flavor;
+    var temp_num = 0;
+    var temp_str = "";
+    var opt_str = "";
+    flavors.sort(compare("name"));
+    for (var i = 0; i < flavors.length; i++) {
+        flavor = flavors[i];
+        var temp_str_1 = flavor.name.split("-")[0];
+        if (temp_str != temp_str_1) {
+            if (temp_str == "")
+                opt_str += '<optgroup label="' + temp_str_1 + '">';
+            else
+                opt_str += '</optgroup><optgroup label="' + temp_str_1 + '">';
+            opt_str += '<option value="' + flavor.id + '">' + flavor.name + '</option>';
+            temp_str = temp_str_1;
+        } else {
+            opt_str += '<option value="' + flavor.id + '">' + flavor.name + '</option>';
+        }
+    }
+
+    $(".peizhi_select").append(opt_str);
+}
+
+function compare(propertyName) {
+    return function(object1, object2) {
+        var value1 = object1[propertyName];
+        var value2 = object2[propertyName];
+        if (value2 < value1) {
+            return 1;
+        } else if (value2 > value1) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+function setFireWallInfo(id_temp, body_str, instance, footer_showInfo) {
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/routers?token=" + window.localStorage.token,
+        success: function(data) {
+            localStorage.router_temp = data;
+            var allRounters = JSON.parse(data)['routers'];
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/firewall_policies?token=" + window.localStorage.token,
+                success: function(data) {
+                    // console.log(data);
+                    localStorage.policyTemp = data;
+                    var allPolicys = JSON.parse(data)['firewall_policies'];
+                    $.ajax({
+                        type: "GET",
+                        url: config["host"] + "/firewalls?token=" + window.localStorage.token,
+                        success: function(data) {
+                            localStorage.fireWallsInfo = data;
+                            var fireWalls = JSON.parse(data)['firewalls'];
+                            var fireWall;
+                            var curr_fireWall;
+                            var flag = false;
+                            localStorage.routerInfo = "";
+                            localStorage.policyInfo = "";
+                            var routerInfo = "[";
+                            var policyInfo = "[";
+                            for (var i = 0; i < fireWalls.length; i++) {
+                                fireWall = fireWalls[i];
+                                //---------------------跳转信息的处理
+                                //------路由
+                                var routerIds = fireWall.router_ids;
+                                var routerStr = "";
+                                for (var j = 0; j < routerIds.length; j++) {
+                                    if (routerInfo != "[")
+                                        routerInfo += ",[";
+                                    else
+                                        routerInfo += "[";
+                                    for (var k = 0; k < allRounters.length; k++) {
+                                        var allRouter = allRounters[k];
+                                        if (allRouter.id == routerIds[j]) {
+                                            if (routerStr == "")
+                                                routerStr += allRouter.name;
+                                            else
+                                                routerStr += "," + allRouter.name;
+                                            routerInfo += JSON.stringify(allRouter) + "]";
+                                        }
+                                    }
+                                }
+                                //console.log(localStorage.routerInfo);
+                                //------策略
+                                var policyId = fireWall.firewall_policy_id;
+                                var policyStr = "";
+                                for (var m = 0; m < allPolicys.length; m++) {
+                                    var policy = allPolicys[m];
+                                    if (policy.id == policyId) {
+                                        policyStr += policy.name;
+                                        if (policyInfo == "[")
+                                            policyInfo += JSON.stringify(policy);
+                                        else
+                                            policyInfo += "," + JSON.stringify(policy);
+                                        break;
+                                    }
+                                }
+                                //---------------------跳转信息的处理
+                                var routerIds = fireWall.router_ids;
+                                for (var j = 0; j < routerIds.length; j++) {
+                                    if (routerIds[j] == id_temp) {
+                                        curr_fireWall = fireWalls[i];
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if (flag)
+                                    break;
+                            }
+                            localStorage.policyInfo += policyInfo + "]";
+                            localStorage.routerInfo += routerInfo + "]";
+                            var rule_str = "";
+                            if (curr_fireWall != undefined) {
+                                body_str += '<font color="#C4C4C4"><B>名称&nbsp;&nbsp;</B></font><a class="close_model" href="javascript:void(0)" name="#/net/firewall-desc?' + curr_fireWall.id + '">' + curr_fireWall.name + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                var policy_id = curr_fireWall.firewall_policy_id;
+                                $.ajax({
+                                    type: "GET",
+                                    url: config["host"] + "/firewall_policies?token=" + window.localStorage.token,
+                                    success: function(data) {
+                                        var allPolicys = JSON.parse(data)['firewall_policies'];
+                                        for (var m = 0; m < allPolicys.length; m++) {
+                                            //  console.error(allPolicys[m].id + "  :   " + policy_id);
+                                            if (allPolicys[m].id == policy_id) {
+                                                var policy_rules = allPolicys[m].firewall_rules;
+                                                if (policy_rules.length != 0) {
+                                                    rule_str = '<table class="table table-striped">' +
+                                                        '<thead>' +
+                                                        '<tr>' +
+                                                        '<th>名称</th>' +
+                                                        '<th>源IP</th>' +
+                                                        '<th>源端口</th>' +
+                                                        '<th>目的IP</th>' +
+                                                        '<th>目的端口</th>' +
+                                                        '<th>动作</th>' +
+                                                        '</tr>' +
+                                                        '</thead>' +
+                                                        '<tbody>';
+                                                    body_str += "<br/><B>规则列表</B><br/>";
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        url: config["host"] + "/firewall_rules?token=" + window.localStorage.token,
+                                                        success: function(data) {
+                                                            localStorage.firewall_rules = data;
+                                                            setRuleInfo(data, policy_rules, rule_str, body_str, instance, footer_showInfo);
+                                                        }
+                                                    });
+                                                } else {
+                                                    footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                                    $(".delete_device").attr("id", instance.id);
+                                                    $(".devicebodyInfo").html(body_str);
+                                                    $(".devicebodyInfo").append(rule_str);
+                                                    $(".footer_str").html(footer_str);
+                                                }
+                                                //-------------防火墙规则
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                body_str += "&nbsp;&nbsp;&nbsp;&nbsp;<font color='#C4C4C4'><B>未关联防火墙</B></font>";
+                                footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                $(".delete_device").attr("id", instance.id);
+                                $(".devicebodyInfo").html(body_str);
+                                $(".footer_str").html(footer_str);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function setRuleInfo(data, policy_rules, rule_str, body_str, instance, footer_showInfo) {
+    var fireWallRulers = JSON.parse(data)['firewall_rules'];
+    var id = policy_rules[0];
+    console.error("fireWallRulers", fireWallRulers);
+    console.error("id", id);
+    for (var i = 0; i < fireWallRulers.length; i++) {
+        if (fireWallRulers[i].id == id) {
+            var data = fireWallRulers[i];
+            rule_str += '<tr>' +
+                '<td><a class="close_model" href="javascript:void(0)" name="#/net/firewall-ruleDesc?' + data.id + '">' + data.name + '</a></td>' +
+                '<td>' + data.source_ip_address + '</td>' +
+                '<td>' + data.source_port + '</td>' +
+                '<td>' + data.destination_ip_address + '</td>' +
+                '<td>' + data.destination_port + '</td>' +
+                '<td>' + (data.action == "allow" ? "允许" : "不允许") + '</td></tr>';
+        }
+    }
+    rule_str += '</tbody></table>';
+    footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/routerDesc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+    $(".delete_device").attr("id", instance.id);
+    $(".devicebodyInfo").html(body_str);
+    $(".devicebodyInfo").append(rule_str);
+    $(".footer_str").html(footer_str);
+}
+$(document).on("click", ".close_model", function() {
+    $(".close_model_toupu").click();
+    that = this;
+    setTimeout(function() {
+        location.href = $(that).attr("name");
+    }, 200);
+
+});
+/*$(document).on("click", ".close_model", function() {
+    $(".close_model_toupu").click();
+});*/
+
+function setSubnetInfo(instance, body_str, footer_showInfo) {
+    var id = instance.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/subnets?token=" + window.localStorage.token,
+        success: function(data) {
+            var subnet_infos = JSON.parse(data)['subnets'];
+            console.error(subnet_infos);
+            for (var i = 0; i < subnet_infos.length; i++) {
+                var subnet = subnet_infos[i];
+                if (subnet.id == id) {
+                    body_str += "<B>IP段 :           </B> " + subnet.cidr + "<br/>";
+                    body_str += "<B>网关 :     </B> " + subnet.gateway_ip + "<br/>";
+                    body_str += "<B>DHCP启用 :    </B> " + subnet.enable_dhcp + "<br/>";
+                    body_str += "<B>DNS :</B> ";
+                    for (var j = 0; j < subnet.dns_nameservers.length; j++) {
+                        var dns_info = subnet.dns_nameservers[j];
+                        body_str += dns_info + "&nbsp;nbsp;nbsp;nbsp;";
+                    }
+                    if (subnet.dns_nameservers.length == 0)
+                        body_str += "暂未分配DNS";
+                }
+            }
+            footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/subnet-desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+            $(".delete_device").attr("id", instance.id);
+            $(".devicebodyInfo").html(body_str);
+            $(".footer_str").html(footer_str);
+        }
+    });
+
+}
+
+function setInstanceInfo(instance, body_str, footer_showInfo) {
+    var id = instance.id;
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/security_groups?token=" + window.localStorage.token,
+        success: function(data) {
+            var securities = JSON.parse(data)['security_groups'];
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/instances?token=" + window.localStorage.token,
+                success: function(data) {
+                    var servers = JSON.parse(data)['servers'];
+                    for (var i = 0; i < servers.length; i++) {
+                        var server = servers[i];
+                        var rule_str = "";
+                        //-----------得到当前实例
+                        if (server.id == id) {
+                            console.error("选中的虚拟机：", server);
+                            var securities_names = server.security_groups;
+                            //---------处理重复的
+                            //console.error("1::", securities_names);
+                            securities_names.sort(function(a, b) {
+                                if (a.name > b.name)
+                                    return 1;
+                                else
+                                    return -1;
+                            });
+                            // console.error("2::", securities_names);
+                            var temp_name = 0;
+                            var new_arr = [];
+                            new_arr[0] = securities_names[0];
+                            for (var m = 1; m < securities_names.length; m++) {
+                                if (new_arr[temp_name].name != securities_names[m].name) {
+                                    new_arr[++temp_name] = securities_names[m];
+                                }
+                            }
+                            securities_names = new_arr;
+                            img_num = securities_names.length;
+                            for (var n = 1; n <= img_num; n++) {
+                                sub1_flag[n] = true;
+                            }
+                            // console.error("3::", securities_names);
+                            //---------处理重复的
+                            var temp = 0;
+                            var globle_num = 0;
+                            for (var k = 0; k < securities_names.length; k++) {
+                                var securities_name = securities_names[k].name;
+                                // console.error("分配的安全组", securities_names);
+                                for (var j = 0; j < securities.length; j++) {
+                                    var security = securities[j];
+                                    //   console.error("所有的安全组", securities);
+                                    //---------找到匹配的安全组
+                                    if (security.name == securities_name) {
+                                        ++globle_num;
+                                        rule_str = '<table class="table table-striped" >' +
+                                            '<thead>' +
+                                            '<tr>' +
+                                            '<th>方向</th>' +
+                                            '<th>端口范围</th>' +
+                                            '<th>远端IP前缀</th>' +
+                                            '</tr>' +
+                                            '</thead>' +
+                                            '<tbody>';
+                                        //     console.error("匹配的安全组", security);
+                                        temp++;
+                                        body_str += '<span name="' + globle_num + '" class="rule_control"><font color="#5CACEE"><i class="fa fa-angle-double-down info_pic' + globle_num + '" ></i></font>' + (globle_num) + "、" +
+                                            '名称&nbsp;&nbsp;</B>' + security.name + "</span>" + '&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/net/secGroup_desc?' + security.id + '">修改安全组<i class="fa fa-reply" aria-hidden="true"></i></a>';
+                                        var securitys_rules = security.security_group_rules;
+                                        //--------对应的安全组有规则
+                                        body_str += "<br/><div class='" + globle_num + "Info" + "' hidden><font color='#C4C4C4'><B>规则列表</B></font><br/>";
+                                        if (securitys_rules.length != 0) {
+                                            for (var i = 0; i < securitys_rules.length; i++) {
+                                                var rule = securitys_rules[i];
+                                                //--------数据的处理
+                                                if (rule.port_range_min != null && rule.port_range_min != rule.port_range_max)
+                                                    rule.port_range_min = rule.port_range_min + ":" + rule.port_range_max;
+                                                else if (rule.port_range_min == null)
+                                                    rule.port_range_min = "任何";
+                                                if (rule.remote_ip_prefix == null) {
+                                                    if (rule.ethertype == "IPv4")
+                                                        rule.remote_ip_prefix = "0.0.0.0/0";
+                                                    else
+                                                        rule.remote_ip_prefix = "::/0";
+                                                }
+                                                //--------数据的处理
+                                                rule_str += '<tr>' +
+                                                    '<td>' + (rule.direction == "egress" ? "出口" : "入口") + '</td>' +
+                                                    '<td>' + rule.port_range_min + '</td>' +
+                                                    '<td>' + rule.remote_ip_prefix + '</td></tr>';
+
+                                            }
+                                        } else { //--------对应的安全组没有规则
+                                            rule_str += '<tr><td colspan="3"><center>' + "暂未分配规则" + '</center></td></tr>';
+                                        }
+                                        rule_str += '</tbody></table>';
+                                        body_str += rule_str + "</div>";
+                                        console.error(body_str);
+                                    }
+                                }
+                            }
+                            //------是否有安全组
+                            if (temp > 0) {
+                                footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                $(".delete_device").attr("id", instance.id);
+                                $(".devicebodyInfo").html(body_str);
+                                $(".footer_str").html(footer_str);
+                            } else {
+                                footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                $(".delete_device").attr("id", instance.id);
+                                $(".devicebodyInfo").html(body_str);
+                                rule_str = "<font color='#C4C4C4'><B>暂未分配安全组</B></font>";
+                                $(".devicebodyInfo").append(rule_str);
+                                $(".footer_str").html(footer_str);
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+sub1_flag = [];
+$(document).on("click", ".rule_control", function() {
+    var id = $(this).attr("name");
+    $("." + id + "Info").slideToggle();
+    if (sub1_flag[id]) {
+        $(".info_pic" + id).removeClass("fa fa-angle-double-down");
+        $(".info_pic" + id).addClass("fa fa-angle-double-up");
+        sub1_flag[id] = false;
+    } else {
+        $(".info_pic" + id).removeClass("fa fa-angle-double-up");
+        $(".info_pic" + id).addClass("fa fa-angle-double-down");
+        sub1_flag[id] = true;
+    }
+});
+
+
+function getExtNetInfo() {
+    $.ajax({
+        type: "GET",
+        url: config['host'] + "/extnet?token=" + window.localStorage.token,
+        success: function(data) {
+            var ext_nets = JSON.parse(data)['ext_net'];
+            var str = "";
+            for (var i = 0; i < ext_nets.length; i++) {
+                str += "<option value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
+            }
+            $(".outNet_selected").append(str);
         }
     });
 }

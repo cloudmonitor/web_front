@@ -164,8 +164,10 @@ myApp.controller('instanceDescCtrl', function($scope) {
 
 // 网络与安全 -- 拓扑
 myApp.controller('topologyCtrl', function($scope) {
-    $scope.$parent.loadScript('js/topology/layout.js');
-    $scope.$parent.loadScript('js/topology/topology.js');
+
+    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/topology/topology.js', 'text/javascript', 'utf-8');
     $("head title").text("拓扑");
     $(".nav-sidebar a[href='#/net/topology']").css({
         "color": "#fff",

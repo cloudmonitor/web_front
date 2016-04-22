@@ -69,6 +69,7 @@ $(function() {
 });
 //0-32  16-31
 create_networkFun();
+
 function createNetAjax(network_json) {
     console.log(JSON.stringify(network_json));
     $.ajax({
@@ -81,12 +82,27 @@ function createNetAjax(network_json) {
         }
     });
 }
-//--------------删除
-$(document).on("change", ".net_check", function() {
-    if ($(".net_check:checked").length > 0) {
+//----------------全选的控制
+$(document).on("change", ".all_check", function() {
+    var isChecked = $(this).prop("checked");
+    $(".net_check").prop("checked", isChecked);
+    if (isChecked) {
         $(".delete_nets").attr("disabled", false);
     } else {
         $(".delete_nets").attr("disabled", true);
+    }
+});
+//--------------删除
+$(document).on("change", ".net_check", function() {
+    if ($(".net_check:checked").length == $(".net_check").length) {
+        $(".delete_nets").attr("disabled", false);
+        $(".all_check").prop("checked", true);
+    } else if ($(".net_check:checked").length > 0) {
+        $(".delete_nets").attr("disabled", false);
+        $(".all_check").prop("checked", false);
+    } else {
+        $(".delete_nets").attr("disabled", true);
+        $(".all_check").prop("checked", false);
     }
 });
 //------多删

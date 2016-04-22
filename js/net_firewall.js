@@ -27,7 +27,7 @@ $(function() {
                         url: config["host"] + "/firewalls?token=" + window.localStorage.token,
                         success: function(data) {
                             var fireWalls = JSON.parse(data)['firewalls'];
-                            localStorage.fireWallsInfo = JSON.stringify(fireWalls);
+                            localStorage.fireWallsInfo = data;
                             localStorage.routerInfo = "";
                             localStorage.policyInfo = "";
                             var routerInfo = "[";
@@ -84,7 +84,7 @@ $(function() {
                                     }
                                 }
 
-                                setFireWallList(fireWall, routerStr, policyStr, i);
+                                setFireWallList(fireWall, routerStr, policyStr, fireWalls[i].id);
                             }
                             localStorage.policyInfo += policyInfo + "]";
                             localStorage.routerInfo += routerInfo + "]";
@@ -244,6 +244,29 @@ $(function() {
 
     });
 
+    //----------------全选的控制
+    $(document).on("change", ".all_check3", function() {
+        var isChecked = $(this).prop("checked");
+        $(".rule_id").prop("checked", isChecked);
+        if (isChecked) {
+            $("#rule_del").attr("disabled", false);
+        } else {
+            $("#rule_del").attr("disabled", true);
+        }
+    });
+    //-----------------删除云主机
+    $(document).on("change", ".rule_id", function() {
+        if ($(".rule_id:checked").length == $(".rule_id").length) {
+            $("#rule_del").attr("disabled", false);
+            $(".all_check3").prop("checked", true);
+        } else if ($(".rule_id:checked").length > 0) {
+            $("#rule_del").attr("disabled", false);
+            $(".all_check3").prop("checked", false);
+        } else {
+            $("#rule_del").attr("disabled", true);
+            $(".all_check3").prop("checked", false);
+        }
+    });
     //--------------删除规则
     $("#rule_del").click(function() {
         var count = 0;
@@ -487,12 +510,29 @@ $(document).on('click', ".delete_simplePolicy", function() {
     }
 
 });
+//----------------全选的控制
+$(document).on("change", ".all_check2", function() {
+    var isChecked = $(this).prop("checked");
+    $(".policy_id").prop("checked", isChecked);
+    if (isChecked) {
+        $(".delete_policy").attr("disabled", false);
+    } else {
+        $(".delete_policy").attr("disabled", true);
+    }
+});
 //------------批量删除
 $(document).on('change', ".policy_id", function() {
-    if ($(".policy_id:checked").length == 0)
-        $(".delete_policy").attr("disabled", true);
-    else
+    if ($(".policy_id:checked").length == $(".policy_id").length) {
         $(".delete_policy").attr("disabled", false);
+        $(".all_check2").prop("checked", true);
+    } else if ($(".policy_id:checked").length >= 0) {
+        $(".delete_policy").attr("disabled", false);
+        $(".all_check2").prop("checked", false);
+    } else {
+        $(".delete_policy").attr("disabled", true);
+        $(".all_check2").prop("checked", false);
+    }
+
 });
 
 $(".delete_policy").click(function() {
@@ -886,12 +926,28 @@ $(document).on("click", ".delete_fireWallSimple", function() {
     var json_array = '{"firewall_ids":["' + id + '"]}';
     deleteAjaxInfo(json_array);
 });
+//----------------全选的控制
+$(document).on("change", ".all_check1", function() {
+    var isChecked = $(this).prop("checked");
+    $(".fireWall_check").prop("checked", isChecked);
+    if (isChecked) {
+        $(".delete_fireWalls").attr("disabled", false);
+    } else {
+        $(".delete_fireWalls").attr("disabled", true);
+    }
+});
 //------------批量删除
 $(document).on('change', ".fireWall_check", function() {
-    if ($(".fireWall_check:checked").length == 0)
-        $(".delete_fireWalls").attr("disabled", true);
-    else
+    if ($(".fireWall_check:checked").length == $(".fireWall_check").length) {
         $(".delete_fireWalls").attr("disabled", false);
+        $(".all_check1").prop("checked", true);
+    } else if ($(".fireWall_check:checked").length > 0) {
+        $(".delete_fireWalls").attr("disabled", false);
+        $(".all_check1").prop("checked", false);
+    } else {
+        $(".delete_fireWalls").attr("disabled", true);
+        $(".all_check1").prop("checked", false);
+    }
 });
 $(".delete_fireWalls").click(function() {
     var json_array = '{"firewall_ids":[';

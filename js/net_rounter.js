@@ -1,21 +1,21 @@
 $(function() {
-/*    if (localStorage.net_tempInfo != null && localStorage.net_tempInfo != "undefined") {
-        var networks = JSON.parse(localStorage.net_tempInfo)['networks'];
-        localStorage.net = JSON.stringify(networks);
-        rount_netInfo(networks);
-    } else {*/
-        $.ajax({
-            type: "GET",
-            url: config["host"] + "/all_networks?token=" + window.localStorage.token,
-            success: function(data) {
-                var networks = JSON.parse(data)['networks'];
-                localStorage.net = JSON.stringify(networks);
-                rount_netInfo(networks);
-            },
-            error: function() {
-                createAndHideAlert("获取网络失败！");
-            }
-        });
+    /*    if (localStorage.net_tempInfo != null && localStorage.net_tempInfo != "undefined") {
+            var networks = JSON.parse(localStorage.net_tempInfo)['networks'];
+            localStorage.net = JSON.stringify(networks);
+            rount_netInfo(networks);
+        } else {*/
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/all_networks?token=" + window.localStorage.token,
+        success: function(data) {
+            var networks = JSON.parse(data)['networks'];
+            localStorage.net = JSON.stringify(networks);
+            rount_netInfo(networks);
+        },
+        error: function() {
+            createAndHideAlert("获取网络失败！");
+        }
+    });
     /*}*/
 });
 var router_len = 0;
@@ -90,11 +90,27 @@ $(".createRouter_OK").click(function() {
 });
 //------------------------------------创建路由----end
 //------------------------------------删除路由-----start
-$(document).on('change', ".router_check", function() {
-    if ($(".router_check:checked").length == 0)
-        $(".delete_router").attr("disabled", true);
-    else
+//----------------全选的控制
+$(document).on("change", ".all_check", function() {
+    var isChecked = $(this).prop("checked");
+    $(".router_check").prop("checked", isChecked);
+    if (isChecked) {
         $(".delete_router").attr("disabled", false);
+    } else {
+        $(".delete_router").attr("disabled", true);
+    }
+});
+$(document).on('change', ".router_check", function() {
+    if ($(".router_check:checked").length == $(".router_check").length) {
+        $(".delete_router").attr("disabled", false);
+        $(".all_check").prop("checked", true);
+    } else if ($(".router_check:checked").length > 0) {
+        $(".delete_router").attr("disabled", false);
+        $(".all_check").prop("checked", false);
+    } else {
+        $(".delete_router").attr("disabled", true);
+        $(".all_check").prop("checked", false);
+    }
 });
 //--------多删
 $(".delete_router").click(function() {
@@ -190,9 +206,9 @@ $(document).on('click', ".addExtNet_ok", function() {
         contentType: "application/json",
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
-/*            var name = $(".setoutNet_selected").find("option:selected").text();
-            $("td[id='" + router_id + "']").text(name);
-            $(".setoutNet_selected").empty();*/
+            /*            var name = $(".setoutNet_selected").find("option:selected").text();
+                        $("td[id='" + router_id + "']").text(name);
+                        $(".setoutNet_selected").empty();*/
             window.location.reload();
         }
     });
@@ -224,9 +240,9 @@ $(document).on('click', ".edit_router", function() {
     var infos = $(this).attr("name").split(":");
     $(".edit_router_name").val(infos[0]);
     if (infos[1] == "上")
-        $(".managerStatus_selected option[value='up']").attr("selected",true);
+        $(".managerStatus_selected option[value='up']").attr("selected", true);
     else
-        $(".managerStatus_selected option[value='down']").attr("selected",true);
+        $(".managerStatus_selected option[value='down']").attr("selected", true);
 });
 $(".editRouter_ok").click(function() {
     var router_temp = {
@@ -255,7 +271,7 @@ $(".editRouter_ok").click(function() {
 
 function setList(data, out_net) {
     var str = "<tr><td><input type='checkbox' class='router_check' id='" + data.id + "'></td>" +
-        "<td><a href='#/net/routerDesc?" + data.id + "&"+out_net+"'>" + data.name + "</a></td>" +
+        "<td><a href='#/net/routerDesc?" + data.id + "&" + out_net + "'>" + data.name + "</a></td>" +
         "<td>" + data.status + "</td>" +
         "<td id='" + data.id + "'>" + out_net + "</td>" +
         "<td>" + data.admin_state_up +
@@ -301,7 +317,7 @@ function dealRouterInfo(rounter, networks) {
     else
         rounter.admin_state_up = "下";
     //---外部网络
-    console.error("rounter:",rounter);
+    console.error("rounter:", rounter);
     if (rounter.external_gateway_info != null && rounter.external_gateway_info != "") {
         console.error(JSON.stringify(networks));
         for (var j = 0; j < networks.length; j++) {
@@ -309,7 +325,7 @@ function dealRouterInfo(rounter, networks) {
             console.error(rounter.external_gateway_info.network_id);
             if (networks[j].id == rounter.external_gateway_info.network_id) {
                 setList(rounter, networks[j].name);
-               // break;
+                // break;
             }
         }
     } else {

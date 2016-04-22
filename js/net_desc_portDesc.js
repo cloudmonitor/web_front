@@ -1,8 +1,21 @@
 $(function() {
     var id = window.location.href.split("?")[1];
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/ports?token=" + window.localStorage.token,
+        success: function(data) {
+            localStorage.portInfos = data;
+            setInfo(id);
+        }
+    });
+});
+
+function setInfo(id) {
     var temp = id.substr(0, 4);
     if (temp != "gate") {
         var port_Info;
+        console.error(localStorage.portInfos);
+        console.error(id);
         var port_Infos = JSON.parse(localStorage.portInfos)["ports"];
         for (var i = 0; i < port_Infos.length; i++) {
             if (port_Infos[i].id == id) {
@@ -10,6 +23,7 @@ $(function() {
                 break;
             }
         }
+        console.error("port_Info", port_Info);
         if (port_Info.name == null || port_Info.name == "") {
             port_Info.name = "无";
         }
@@ -33,10 +47,7 @@ $(function() {
         $("#port_deviceOwner").html(port_Info.device_owner);
         $("#port_deviceId").html(port_Info.device_id);
         $("#port_VNCType").html(port_Info["binding:vnic_type"]);
-
     } else {
         window.location = "#/net/topology";
     }
-
-
-});
+}

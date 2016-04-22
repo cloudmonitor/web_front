@@ -1,10 +1,20 @@
 $(function() {
-    var num = window.location.href.split("?")[1];
-    var fireWall = JSON.parse(localStorage.fireWallsInfo)[num];
+    var id = window.location.href.split("?")[1];
+    var fireWalls = JSON.parse(localStorage.fireWallsInfo)['firewalls'];
+    var fireWall;
+    var num = 0;
+    for (var i = 0; i < fireWalls.length; i++) {
+        if (fireWalls[i].id == id) {
+            fireWall = fireWalls[i];
+            num = i;
+            break;
+        }
+    }
     var policy_Info = JSON.parse(localStorage.policyInfo)[num];
     var router_Infos = JSON.parse(localStorage.routerInfo)[num];
     //console.log(localStorage.routerInfo);
     //-----状态的转换
+   // console.error(fireWall);
     if (fireWall.status == "ACTIVE")
         fireWall.status = "运行中";
     else
@@ -37,7 +47,7 @@ $(function() {
             str += router.name + "<br/>"
         }
     else
-        str="-<br/>";
-        $("#fireWall_router").html(str);
+        str = "-<br/>";
+    $("#fireWall_router").html(str);
 
 });

@@ -40,24 +40,33 @@ $(function() {
     });
     //天时分改变
     $('#option1').click(function() {
+        changeStatus(this);
         ajaxbg.show();
         curr_type = "minute";
         var arr = [0, 0, 0, 0, 0];
         preSetAjax(cur_id, curr_type, arr);
     });
     $('#option2').click(function() {
+        changeStatus(this);
         ajaxbg.show();
         curr_type = "hour";
         var arr = [0, 0, 0, 0, 0];
         preSetAjax(cur_id, curr_type, arr);
     });
     $('#option3').click(function() {
+        changeStatus(this);
         ajaxbg.show();
         curr_type = "day";
         var arr = [0, 0, 0, 0, 0];
         preSetAjax(cur_id, curr_type, arr);
     });
 });
+
+function changeStatus(that) {
+    for (var i = 1; i < 4; i++)
+        $("#option" + i).removeClass("active");
+    $(that).addClass("active");
+}
 //servers[0].id
 function preSetAjax(id, curr_type, arr) {
     setTimeout("ajaxbg.hide()", 3000);

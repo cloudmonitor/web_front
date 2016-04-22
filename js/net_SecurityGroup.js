@@ -4,8 +4,8 @@ $(function() {
         type: "GET",
         url: config["host"] + "/security_groups?token=" + window.localStorage.token,
         success: function(data) {
-/*            console.log("---------------");
-            console.log(data);*/
+            /*            console.log("---------------");
+                        console.log(data);*/
             window.localStorage.securitys_temp = data;
             var securitys = JSON.parse(data)['security_groups'];
             for (var i = 0; i < securitys.length; i++) {
@@ -30,12 +30,12 @@ $(function() {
         name = $(".sg_name").val();
         var desc = $(".sg_desc").val();
         var sec_group;
-            sec_group = {
-                "security_group": {
-                    "name": null,
-                    "description": null
-                }
+        sec_group = {
+            "security_group": {
+                "name": null,
+                "description": null
             }
+        }
 
         var sec_gourp_temp = sec_group['security_group'];
         if (name.trim().length != 0 && name != "default")
@@ -65,14 +65,14 @@ $(function() {
                 }
             });
         } else {
-           sg_id = createOrupdate;
+            sg_id = createOrupdate;
             createOrupdate = 0;
             //console.log(JSON.stringify(sec_group));
             $.ajax({
                 type: "POST",
                 data: JSON.stringify(sec_group),
                 contentType: "application/json",
-                url: config["host"] + "/security_groups/update/"+sg_id+"?token=" + window.localStorage.token,
+                url: config["host"] + "/security_groups/update/" + sg_id + "?token=" + window.localStorage.token,
                 success: function(data) {
                     $(".close_temp").click();
                     $("#" + JSON.parse(data)['security_group'].id + "").parent().parent().remove();
@@ -86,8 +86,30 @@ $(function() {
                 }
             });
         }
+    });
 
-
+    //----------------全选的控制
+    $(document).on("change", ".all_check", function() {
+        var isChecked = $(this).prop("checked");
+        $(".secGoup_id").prop("checked", isChecked);
+        if (isChecked) {
+            $(".sg_del").attr("disabled", false);
+        } else {
+            $(".sg_del").attr("disabled", true);
+        }
+    });
+    //-----------------删除云主机
+    $(document).on("change", ".secGoup_id", function() {
+        if ($(".secGoup_id:checked").length == $(".secGoup_id").length) {
+            $(".sg_del").attr("disabled", false);
+            $(".all_check").prop("checked", true);
+        } else if ($(".instance_checks:checked").length > 0) {
+            $(".sg_del").attr("disabled", false);
+            $(".all_check").prop("checked", false);
+        } else {
+            $(".sg_del").attr("disabled", true);
+            $(".all_check").prop("checked", false);
+        }
     });
     //--------------删除安全组  tenant_id
     $(".sg_del").click(function() {

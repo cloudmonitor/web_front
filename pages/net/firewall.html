@@ -20,7 +20,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox">
+                                <input type="checkbox" class="all_check1">
                             </th>
                             <th>名称</th>
                             <th>描述</th>
@@ -51,7 +51,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox">
+                                <input type="checkbox" class="all_check2">
                             </th>
                             <th>名称</th>
                             <th>描述</th>
@@ -100,15 +100,15 @@
             <div class="row">
                 <li class="li-btn">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_create_rule"><i class="fa fa-plus-square"></i>添加规则</button>
-                    <button type="button" class="btn btn-danger" id="rule_del"><i class="fa fa-times"></i>删除规则</button>
+                    <button type="button" class="btn btn-danger" id="rule_del" disabled><i class="fa fa-times"></i>删除规则</button>
                 </li>
             </div>
             <div>
-                <table class="table table-striped instance_info firewallRules">
+                <table class="table table-striped instance_info ">
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox">
+                                <input type="checkbox" class="all_check3">
                             </th>
                             <th>名称</th>
                             <th>描述</th>
@@ -124,32 +124,9 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!--                         <tr>
-    <td>
-        <input type="checkbox">
-    </td>
-    <td><a href="network_firewall_rule_desc.html">ALLOW_HTTP</a></td>
-    <td></td>
-    <td>TCP</td>
-    <td>src_IP</td>
-    <td>src_port</td>
-    <td>dst_IP</td>
-    <td>dst_port</td>
-    <td>允许</td>
-    <td>False</td>
-    <td>True</td>
-    <td><a href="network_firewall_strategy_desc.html">test-policy03</a></td>
-    <td>
-        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_set_rule">编辑规则</button>
-    </td>
-</tr> -->
+                    <tbody class="firewallRules">
                     </tbody>
                     <tfoot class="rule_footer">
-                        <!--                       <tr class="active tfoot-dsp">
-      <td colspan="2">这里有两列</td>
-      <td colspan="13">Displaying <span id="item_count">1</span> items</td>
-  </tr> -->
                     </tfoot>
                 </table>
             </div>

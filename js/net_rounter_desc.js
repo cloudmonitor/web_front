@@ -50,7 +50,7 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/router_ports/" + $(".routerDesc_id").text() + "?token=" + window.localStorage.token,
                 success: function(data) {
-                    localStorage.portInfos=data;
+                    localStorage.portInfos = data;
                     var ports = JSON.parse(data)['ports'];
                     for (var i = 0; i < ports.length; i++) {
                         var port = ports[i];
@@ -217,18 +217,33 @@ $(".addInteface_OK").click(function() {
     }
 
 });
-//---------删除接口
-$(document).on("change", ".port_check", function() {
-    if ($(".port_check:checked").length != 0) {
+//----------------全选的控制
+$(document).on("change", ".all_check", function() {
+    var isChecked = $(this).prop("checked");
+    $(".port_check").prop("checked", isChecked);
+    if (isChecked) {
         $(".deleteport").attr("disabled", false);
     } else {
         $(".deleteport").attr("disabled", true);
     }
 });
+//---------删除接口
+$(document).on("change", ".port_check", function() {
+    if ($(".port_check:checked").length == $(".port_check").length) {
+        $(".deleteport").attr("disabled", false);
+        $(".all_check").prop("checked", true);
+    } else if ($(".port_check:checked").length > 0) {
+        $(".deleteport").attr("disabled", false);
+        $(".all_check").prop("checked", false);
+    } else {
+        $(".deleteport").attr("disabled", true);
+        $(".all_check").prop("checked", false);
+    }
+});
 //-----多删
 $(".deleteport").click(function() {
-    var i = 0; 
-    var router_ports={
+    var i = 0;
+    var router_ports = {
         "router_ports": [{
             "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
         }, {
@@ -243,7 +258,7 @@ $(".deleteport").click(function() {
 });
 //----单删
 $(document).on("click", ".deletePortSimple", function() {
-    var router_ports={
+    var router_ports = {
         "router_ports": [{
             "subnet_id": "a2f1f29d-571b-4533-907f-5803ab96ead1"
         }]
@@ -269,7 +284,7 @@ function deleteAjax(data) {
 function sertPortList(data) {
     var str = '<tr>' +
         '<td><input type="checkbox" class="port_check" id="' + data['fixed_ips'][0]['subnet_id'] + '"></td>' +
-        '<td><a href="#/net/port-desc?'+data.id+'">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
+        '<td><a href="#/net/port-desc?' + data.id + '">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
         '<td>' + data.fixed_ips[0].ip_address + '</td>' +
         '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
         '<td>' + (data['binding:vnic_type'] == 'normal' ? "内部接口" : "外部接口") + '</td>' +

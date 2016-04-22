@@ -1,29 +1,22 @@
 $(function() {
     var id = window.location.href.split("?")[1];
     console.log(localStorage.subnets_tempInfo);
-    if (localStorage.subnets_tempInfo != null && localStorage.subnets_tempInfo != "" && localStorage.subnets_tempInfo != "undefined") {
-        var sub_netInfos = JSON.parse(localStorage.subnets_tempInfo)['subnets'];
-        setInfo(id, sub_netInfos);
-    } else {
-        $.ajax({
-            type: "GET",
-            url: config["host"] + "/subnets?token=" + window.localStorage.token,
-            success: function(data) {
-                var subnet_infos = JSON.parse(data)['subnets'];
-                setInfo(id, sub_netInfos);
-            },
-            error: function(data) {
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/subnets?token=" + window.localStorage.token,
+        success: function(data) {
+            var subnet_infos = JSON.parse(data)['subnets'];
+            setInfo(id, subnet_infos);
+        },
+        error: function(data) {
             createAndHideAlert("子网信息获取失败!");
-            }
-        });
-
-    }
+        }
+    });
 
 });
 
 function setInfo(id, sub_netInfos) {
     var sub_netInfo;
-    console.log(id);
     for (var i = 0; i < sub_netInfos.length; i++) {
         console.log(sub_netInfos[i].id);
         if (sub_netInfos[i].id == id) {
@@ -40,9 +33,9 @@ function setInfo(id, sub_netInfos) {
         $("#sub_resource").html(sub_netInfo.subnetpool_id);
         $("#sub_ipVersion").html("IPv" + sub_netInfo.ip_version);
         $("#sub_CIDR").html(sub_netInfo.cidr);
-       // console.error(sub_netInfo);
-        $("#start_ip").html((sub_netInfo.allocation_pools.length==0?"(未分配)":sub_netInfo.allocation_pools[0].start) + "&nbsp;&nbsp;&nbsp;");
-        $("#end_ip").html(sub_netInfo.allocation_pools.length==0?"(未分配)":sub_netInfo.allocation_pools[0].end);
+        // console.error(sub_netInfo);
+        $("#start_ip").html((sub_netInfo.allocation_pools.length == 0 ? "(未分配)" : sub_netInfo.allocation_pools[0].start) + "&nbsp;&nbsp;&nbsp;");
+        $("#end_ip").html(sub_netInfo.allocation_pools.length == 0 ? "(未分配)" : sub_netInfo.allocation_pools[0].end);
         $("#sub_gateIP").html(sub_netInfo.gateway_ip);
         $("#sub_DHCP").html(sub_netInfo.enable_dhcp);
         if (sub_netInfo.host_routes == null || sub_netInfo.host_routes == "")

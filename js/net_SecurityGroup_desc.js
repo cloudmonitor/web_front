@@ -1,25 +1,23 @@
 $(function() {
     var rules_len = 0;
     var id = window.location.href.split("?")[1];
-    var securitys_groups = JSON.parse(window.localStorage.securitys_temp)['security_groups'];
-    var securitys_rules;
-    //---------相应安全组的规则
-    for (var i = 0; i < securitys_groups.length; i++) {
-        var securitys_group = securitys_groups[i];
-        console.log(securitys_group.id);
-        if (id == securitys_group.id) {
-            $(".securitys_group_Id").html(securitys_group.name + " (" + id + ")");
-            securitys_rules = securitys_group.security_group_rules;
-            break;
+    // if (localStorage.securitys_temp == undefined||localStorage.securitys_temp == "undefined") {
+    $.ajax({
+        type: "GET",
+        url: config["host"] + "/security_groups?token=" + window.localStorage.token,
+        success: function(data) {
+            window.localStorage.securitys_temp = data;
+            console.error("securitys_groups", JSON.parse(window.localStorage.securitys_temp)['security_groups']);
+            setInfo(rules_len, id);
         }
-    }
-    //--------规则的操作
-    for (var i = 0; i < securitys_rules.length; i++) {
-        setRule(securitys_rules[i]);
-    }
-    rules_len = securitys_rules.length;
-    var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + rules_len + '</span> items</td></tr>';
-    $(".rule_footer").append(str_footer);
+    });
+    /*    }
+        else
+        {
+            alert(typeof(localStorage.securitys_temp));
+            console.error(localStorage.securitys_temp);
+            setInfo(rules_len,id);
+        }*/
 
     //------------单个删除操作·！！！！！！
     $(document).on("click", ".delete_rule", function() {
@@ -51,12 +49,29 @@ $(function() {
         });
 
     });
-    //——————————————批量删除！！！！
-    $(".rule_id").change(function() {
-        if ($(".rule_id:checked").length == 0)
-            $(".delete_rule_multi").attr("disabled", true);
-        else
+
+    //----------------全选的控制
+    $(document).on("change", ".all_check", function() {
+        var isChecked = $(this).prop("checked");
+        $(".rule_id").prop("checked", isChecked);
+        if (isChecked) {
             $(".delete_rule_multi").attr("disabled", false);
+        } else {
+            $(".delete_rule_multi").attr("disabled", true);
+        }
+    });
+    //——————————————批量删除！！！！
+    $(document).on("change", ".rule_id", function() {
+        if ($(".rule_id:checked").length == $(".rule_id").length) {
+            $(".delete_rule_multi").attr("disabled", false);
+            $(".all_check").prop("checked", true);
+        } else if ($(".rule_id:checked").length > 0) {
+            $(".delete_rule_multi").attr("disabled", false);
+            $(".all_check").prop("checked", false);
+        } else {
+            $(".delete_rule_multi").attr("disabled", true);
+            $(".all_check").prop("checked", false);
+        }
     });
 
     $(".delete_rule_multi").click(function() {
@@ -160,12 +175,33 @@ $(function() {
 
             }
         });
-
-
     });
 
 
 });
+
+function setInfo(rules_len, id) {
+    var securitys_groups = JSON.parse(window.localStorage.securitys_temp)['security_groups'];
+    var securitys_rules;
+    //---------相应安全组的规则
+
+    console.error("id", id);
+    for (var i = 0; i < securitys_groups.length; i++) {
+        var securitys_group = securitys_groups[i];
+        if (id == securitys_group.id) {
+            $(".securitys_group_Id").html(securitys_group.name + " (" + id + ")");
+            securitys_rules = securitys_group.security_group_rules;
+            break;
+        }
+    }
+    //--------规则的操作
+    for (var i = 0; i < securitys_rules.length; i++) {
+        setRule(securitys_rules[i]);
+    }
+    rules_len = securitys_rules.length;
+    var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + rules_len + '</span> items</td></tr>';
+    $(".rule_footer").append(str_footer);
+}
 
 function setSecurityRulesList(data) {
     var str = "<tbody><tr><td><input class='rule_id' type='checkbox' id='" + data.id + "'>" +
@@ -178,7 +214,6 @@ function setSecurityRulesList(data) {
         "</td><td><a href='javascript:void(0)' class='btn btn-primary delete_rule' style='background:white'><font style = 'color:black'> <i class = 'fa fa-plus' > </i>" + "删除规则" +
         "</font></a></td></tr>";
     $(".fireWallRule_info").append(str);
-
 }
 
 function setRule(rule) {
