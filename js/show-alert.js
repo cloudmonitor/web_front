@@ -1,3 +1,17 @@
+// 创建alert容器框
+var createAlertContainer = function() {
+    var containerAlert = document.createElement("div");
+    $(containerAlert).attr({ "id": "alert-container" });
+    $(containerAlert).css({
+        "position": "fixed",
+        "top": "70px",
+        "right": "40px",
+        "float": "right",
+        "width": "300px",
+        "z-index": "1100"
+    });
+    $("header").after(containerAlert);
+}();
 var createAndHideAlert = function(object) {
     // showAlert函数用来创建警告框
     var showAlert = (function(object) {
@@ -9,7 +23,6 @@ var createAndHideAlert = function(object) {
             "class": "close",
             "data-dismiss": "alert"
         });
-
         $(alertA).html("&times;");
 
         // 新建 div 元素

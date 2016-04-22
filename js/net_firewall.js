@@ -93,20 +93,20 @@ $(function() {
                             $(".fireWall_footer").append(footer_str);
                         },
                         error: function(data) {
-                            alert("信息获取失败");
+                            createAndHideAlert("信息获取失败");
                             console.log(data);
                         }
                     });
                 },
                 error: function(data) {
-                    alert("信息获取失败");
+                    createAndHideAlert("信息获取失败");
                     console.log(data);
                 }
             });
 
         },
         error: function(data) {
-            alert("路由信息获取失败！");
+            createAndHideAlert("路由信息获取失败！");
             console.log(data);
         }
     });
@@ -210,14 +210,14 @@ $(function() {
         if ($(".rule_destinationPort").val() != null && $(".rule_destinationPort").val() != "")
             fireWallRule_temp.destination_port = $(".rule_destinationPort").val();
         if ($(".rule_share").val() != null && $(".rule_share").val() != "") {
-            // alert("share"+$(".rule_share").prop('checked'));
+            // createAndHideAlert("share"+$(".rule_share").prop('checked'));
             if ($(".rule_share").prop('checked') != false)
                 fireWallRule_temp.shared = true;
             else
                 fireWallRule_temp.shared = false;
         }
         if ($(".rule_active").val() != null && $(".rule_active").val() != "") {
-            // alert("active:"+$(".rule_active").prop('checked'));
+            // createAndHideAlert("active:"+$(".rule_active").prop('checked'));
             if ($(".rule_active").prop('checked') != false)
                 fireWallRule_temp.enabled = true;
             else
@@ -250,7 +250,7 @@ $(function() {
         var json_array = '{"firewall_rule_ids":[';
         $(".rule_id:checked").each(function() {
             if ($(this).attr("name") != null && $(this).attr("name") != "-")
-                alert($(this).attr("id") + "不可删除！");
+                createAndHideAlert($(this).attr("id") + "不可删除！");
             else {
                 count++;
                 if (json_array != '{"firewall_rule_ids":[')
@@ -271,13 +271,13 @@ $(function() {
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
-                            alert(x + "删除成功！");
+                            createAndHideAlert(x + "删除成功！");
                             $("#" + x + "").parent().parent().remove();
                             $(".footerID").remove();
                             var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + (--rules_len) + '</span> items</td></tr>';
                             $(".rule_footer").append(str_footer);
                         } else
-                            alert(x + "删除失败");
+                            createAndHideAlert(x + "删除失败");
                     }
                     //window.location.reload();
                 },
@@ -321,14 +321,14 @@ $(function() {
         if ($("#fir_desPort").val() != null && $("#fir_desPort").val() != "")
             fireWallRule_temp.destination_port = $("#fir_desPort").val();
         if ($("#fir_shared").val() != null && $("#fir_shared").val() != "") {
-            // alert("share"+$(".rule_share").prop('checked'));
+            // createAndHideAlert("share"+$(".rule_share").prop('checked'));
             if ($("#fir_shared").prop('checked') != false)
                 fireWallRule_temp.shared = true;
             else
                 fireWallRule_temp.shared = false;
         }
         if ($("#fir_enabled").val() != null && $("#fir_enabled").val() != "") {
-            // alert("active:"+$(".rule_active").prop('checked'));
+            // createAndHideAlert("active:"+$(".rule_active").prop('checked'));
             if ($("#fir_enabled").prop('checked') != false)
                 fireWallRule_temp.enabled = true;
             else
@@ -401,7 +401,7 @@ $(".add_policy").click(function() {
     temp.shared = false;
     temp.audited = false;
     if (temp.name == "") {
-        alert("名称必填！");
+        createAndHideAlert("名称必填！");
         return;
     }
     if ($(".policy_shared").prop("checked"))
@@ -474,7 +474,7 @@ $(document).on('click', ".updatePolicy_simple", function() {
         $(".policy_audit").attr("checked", false);
     policy_flag = 1;
     policy_id = $(this).parent().parent().siblings(":eq(0)").children().first().attr("id");
-    // alert(policy_id);
+    // createAndHideAlert(policy_id);
 });
 
 //-------------删除策略
@@ -518,17 +518,17 @@ function deletePolicyAjax(json_array) {
             var id_status = JSON.parse(data);
             for (var x in id_status) {
                 if (id_status[x] == 204) {
-                    alert(x + "删除成功！");
+                    createAndHideAlert(x + "删除成功！");
                     $("#" + x + "").parent().parent().remove();
                     $(".policy_footerID").remove();
                     var str_footer = '<tr class="active tfoot-dsp policy_footerID"><td colspan="13">Displaying <span id="item_count">' + (--policy_len) + '</span> items</td></tr>';
                     $(".policy_footer").append(str_footer);
                 } else
-                    alert(x + "删除失败");
+                    createAndHideAlert(x + "删除失败");
             }
         },
         error: function(data) {
-            alert("删除失败");
+            createAndHideAlert("删除失败");
         }
     });
 }
@@ -869,7 +869,7 @@ $(".addFireWall_OK").click(function() {
             window.location.reload();
         },
         error: function(data) {
-            alert("我在浪费时间，我在挥霍时光，我在模糊现在，我在恐惧未来。");
+            createAndHideAlert("我在浪费时间，我在挥霍时光，我在模糊现在，我在恐惧未来。");
         }
     });
 
@@ -920,17 +920,17 @@ function deleteAjaxInfo(json_array) {
             var id_status = JSON.parse(data);
             for (var x in id_status) {
                 if (id_status[x] == 204) {
-                    alert(x + "删除成功！");
+                    createAndHideAlert(x + "删除成功！");
                     $(".fireWall_tr").remove();
                     $("#" + x + "").parent().parent().remove();
                     var footer_str = "<tr class='active tfoot-dsp fireWall_tr'><td colspan='8'>Displaying <span id='item_count'>" + (--fireWall_len) + "</span> items</td></tr>";
                     $(".fireWall_footer").append(footer_str);
                 } else
-                    alert(x + "删除失败");
+                    createAndHideAlert(x + "删除失败");
             }
         },
         error: function(data) {
-            alert("error!");
+            createAndHideAlert("error!");
         }
     });
 }

@@ -14,6 +14,17 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
         });
     });
 
+    $scope.showPasswd = function(){
+        var isShow = $scope.checkPasswd;
+        console.info("显示密码:", isShow);
+        if (isShow) {
+            // 显示密码
+            $("input[type='password']").attr("type", "text");
+        } else {
+            $("input[type='text']").attr("type", "password");
+        }
+    };
+
     $scope.submitted = false;
     // 密码表单验证
     $scope.submitForm = function() {
@@ -40,7 +51,6 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
 
         // 新密码与原密码相同
         if (newPasswd === curPasswd) return;
-
 
         // 修改密码POST请求
         var postModPasswd = function() {

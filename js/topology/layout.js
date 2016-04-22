@@ -151,10 +151,10 @@ function success(data) {
     var requestSize = json["requestSize"];
 
     if (result == 'notLogin') {
-        alert("未登录，请先登录！");
+        createAndHideAlert("未登录，请先登录！");
         window.location.href = 'login.html';
     } else if (result == 'insufficient') {
-        alert("操作提示", "请求资源不足，请稍后再试！", "info");
+        createAndHideAlert("操作提示", "请求资源不足，请稍后再试！", "info");
     } else if (result == 'reSubmit') {
         $.messager.alert("操作提示", "您已提交过实验，无需重复提交", "info");
     } else if (result == 'confirm') {
@@ -212,7 +212,7 @@ function endExpSuccess(data) {
     var result = json["result"];
     if (result != 'success') {
         if (result == 'notLogin') {
-            alert("未登录，请先登录！");
+            createAndHideAlert("未登录，请先登录！");
             window.location.href = 'login.html';
         }
         return;

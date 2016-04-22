@@ -102,7 +102,7 @@ $(function() {
         if ($(".setoutNetdesc_selected").val() != "test")
             router['external_gateway_info']['network_id'] = $(".setoutNetdesc_selected").val();
         else {
-            alert("请选择外部网络！！！");
+            createAndHideAlert("请选择外部网络！！！");
             return;
         }
         $.ajax({
@@ -123,7 +123,7 @@ $(function() {
         router_id = $(".routerDesc_id").text();
         $(".edit_routerdesc_id").val(router_id);
         $(".edit_routerdesc_name").val($(".routerDesc_name").text());
-        // alert($(".routerDesc_managerStatus").text());
+        // createAndHideAlert($(".routerDesc_managerStatus").text());
         if ($(".routerDesc_managerStatus").text() == "上") {
             $(".managerStatusdesc_selected option[value='up']").attr("selected", true);
         } else {
@@ -213,7 +213,7 @@ $(".addInteface_OK").click(function() {
             }
         });
     } else {
-        alert("子网字段必选！");
+        createAndHideAlert("子网字段必选！");
     }
 
 });
@@ -322,7 +322,7 @@ function deleteAjax_routerInfo(json_array) {
             window.location.href = "#/net/router";
         },
         error: function(data) {
-            alert("error!");
+            createAndHideAlert("error!");
         }
     });
 }

@@ -45,7 +45,7 @@ $(function() {
                 $("#policy_rules").append("-");
         },
         error: function(data) {
-            alert("信息获取失败");
+            createAndHideAlert("信息获取失败");
             console.log(data);
         }
     });

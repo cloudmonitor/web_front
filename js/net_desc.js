@@ -74,7 +74,7 @@ $(function() {
                 $(".port_infos").append(footer_info);
             },
             error: function(data) {
-                alert("端口获取失败！");
+                createAndHideAlert("端口获取失败！");
             }
         });
 
@@ -112,12 +112,12 @@ $(function() {
                         var subnet_Info = [];
                         var temp_i=0;
                         for (var j = 0; j < subnets.length; j++) {
-                            // alert(subnets.length);
+                            // createAndHideAlert(subnets.length);
                             for (var k = 0; k < subnet_infos.length; k++) {
-                                //alert(subnets[i]+"=="+subnet_infos[j].id);
+                                //createAndHideAlert(subnets[i]+"=="+subnet_infos[j].id);
                                 if (subnets[j] == subnet_infos[k].id) {
                                     console.error(subnet_Info);
-                                    // alert(subnets[i]);
+                                    // createAndHideAlert(subnets[i]);
                                     subnet_Info[temp_i++]=subnet_infos[k];
                                 }
                             }
@@ -170,7 +170,7 @@ $(function() {
                                 $(".port_infos").append(footer_info);
                             },
                             error: function(data) {
-                                alert("端口获取失败！");
+                                createAndHideAlert("端口获取失败！");
                             }
                         });
 
@@ -279,7 +279,7 @@ function createSubnetAJAX(subnet) {
         success: function(data) {
             if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
                 console.log(data);
-                alert("请检查子网配置格式！");
+                createAndHideAlert("请检查子网配置格式！");
             } else {
                 window.location.reload();
                 window.location.href = "#/net/net";

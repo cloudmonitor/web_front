@@ -21,7 +21,7 @@ myApp.config(function($routeProvider) {
         // 计算 -- 实例详情
         .when('/compute/instance_desc', {
             templateUrl: 'pages/compute/instance_desc.html',
-            controller: 'instanceDesc'
+            controller: 'instanceDescCtrl'
         })
         // 计算 -- 密钥对
         .when('/compute/key-pair', {
@@ -144,7 +144,7 @@ myApp.controller('instanceCtrl', function($scope) {
     });
 });
 // 计算 -- 实例详情
-myApp.controller('instanceDesc', function($scope) {
+myApp.controller('instanceDescCtrl', function($scope) {
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance_desc.js');

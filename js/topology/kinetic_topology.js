@@ -104,7 +104,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                         var status = $(".create_router_status").val();
                         var outNet = $(".outNet_selected").val();
                         if (name == "" || name == "undefined" || name == null) {
-                            alert("名称为必填项！");
+                            createAndHideAlert("名称为必填项！");
                             return;
                         }
                         if (status == "true")
@@ -198,7 +198,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                             success: function(data) {
                                 if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
                                     console.log(data);
-                                    alert("请检查子网配置格式！");
+                                    createAndHideAlert("请检查子网配置格式！");
                                 } else {
                                     window.location.reload();
                                     window.location.href = "#/net/net";
@@ -250,13 +250,13 @@ Kinetic.Topology = Kinetic.Class.extend({
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
                             that.currentObject.remove();
-                            alert(x + "删除成功！");
+                            createAndHideAlert(x + "删除成功！");
                         } else
-                            alert(x + "删除失败");
+                            createAndHideAlert(x + "删除失败");
                     }
                 },
                 error: function(data) {
-                    alert("error!");
+                    createAndHideAlert("error!");
                 }
             });
         } else if (type == "network") {
@@ -273,9 +273,9 @@ Kinetic.Topology = Kinetic.Class.extend({
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
                             that.currentObject.remove();
-                            alert(x + "删除成功！");
+                            createAndHideAlert(x + "删除成功！");
                         } else
-                            alert(x + "删除失败");
+                            createAndHideAlert(x + "删除失败");
                     }
                 }
             });
@@ -293,9 +293,9 @@ Kinetic.Topology = Kinetic.Class.extend({
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
                             that.currentObject.remove();
-                            alert(x + "删除成功！");
+                            createAndHideAlert(x + "删除成功！");
                         } else
-                            alert(x + "删除失败");
+                            createAndHideAlert(x + "删除失败");
                     }
                 }
             });
@@ -1120,13 +1120,13 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                 } else {
                     // console.error("该设备间不可连接！");
                     if (ori_dev == des_dev)
-                        alert("该设备间不可连接！");
+                        createAndHideAlert("该设备间不可连接！");
                 }
             }
 
         });
         this.connectorImage.on("dragmove", function(evt) {
-            //alert(1062);
+            //createAndHideAlert(1062);
             var connector = evt.shape;
             var device = instance.getDevice();
             var shape = device.getDeviceImage();
@@ -1178,7 +1178,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         this.config.topology.getLayer().draw();
     },
     redraw: function() {
-        //alert(1114);
+        //createAndHideAlert(1114);
         var srcElement = this.config.srcDevice.getDeviceImage();
         var x1 = srcElement.getX() + srcElement.getWidth() / 2;
         var y1 = srcElement.getY() + srcElement.getHeight() / 2;
@@ -1190,7 +1190,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         this.lineObject.saveImageData();
     },
     remove: function() {
-        alert(1126);
+        createAndHideAlert(1126);
         if (this.lineObject != null) {
             var lines = this.config.topology.getLines();
             if (lines != null && lines.length > 0) { //删除拓扑图中注册的线信息
@@ -1208,7 +1208,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         }
     },
     draw: function() {
-        // alert(1144);
+        // createAndHideAlert(1144);
         /*        console.log("Line_draw________________________");
                 console.log(this);*/
         var srcElement = this.config.srcDevice.getDeviceImage();
@@ -1250,7 +1250,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         //    });
         /////////////////////////////////////ctt-codeStart///////////////////////////////////////////////////////////////
         this.lineObject.on("click", function(evt) {
-            alert(1186);
+            createAndHideAlert(1186);
             document.body.style.cursor = "pointer";
             $("#infoDialog").show();
             if (evt.button == 0) {
@@ -1566,7 +1566,7 @@ function drop(ev) {
     var id = $(ev.target).attr("id");
     var parent_tag = $(ev.target).attr("parent_tag");
     var data = ev.dataTransfer.getData("Text");
-    // alert(new String(id));
+    // createAndHideAlert(new String(id));
     var move_tag = $("#" + data).attr("tag");
     if (id == "selected_subnet") {
         $("#" + data).find("button").removeClass("net_add");

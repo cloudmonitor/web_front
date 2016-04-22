@@ -1,7 +1,7 @@
 //$(window).load(function(){$("#loading").hide();});
 var ajaxbg = $("#loading_monitor,#background_monitor");
 ajaxbg.show();
-//alert(ajaxbg);
+//createAndHideAlert(ajaxbg);
 setTimeout("ajaxbg.hide()", 3000);
 $(function() {
     $('#option1').click();
@@ -27,7 +27,7 @@ $(function() {
             }
         },
         error: function(data) {
-            alert("主机信息获取失败！");
+            createAndHideAlert("主机信息获取失败！");
         }
     });
     //select事件
@@ -115,7 +115,7 @@ function setAjax(id, curr_type, meter_name, arr) {
                     if (arr[3] != 0 && arr[4] != 0)
                         sertDisk(arr[1], arr[2]);
                 }
-                // alert(arr[0] + arr[1] + arr[2] + arr[3] + arr[4]);
+                // createAndHideAlert(arr[0] + arr[1] + arr[2] + arr[3] + arr[4]);
                 if ((arr[0] + arr[1] + arr[2] + arr[3] + arr[4]) != 0)
                     ajaxbg.hide();
 
@@ -145,7 +145,7 @@ function setAjax(id, curr_type, meter_name, arr) {
             }
         },
         error: function(data) {
-            alert("信息获取失败！");
+            createAndHideAlert("信息获取失败！");
         }
     });
 }

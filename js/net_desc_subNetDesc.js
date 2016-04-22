@@ -13,7 +13,7 @@ $(function() {
                 setInfo(id, sub_netInfos);
             },
             error: function(data) {
-            alert("子网信息获取失败!");
+            createAndHideAlert("子网信息获取失败!");
             }
         });
 

@@ -17,7 +17,7 @@ $(function() {
             $(".security_info").append(footer_info);
         },
         error: function(data) {
-            alert("信息获取失败");
+            createAndHideAlert("信息获取失败");
             console.log(data);
         }
     });
@@ -61,7 +61,7 @@ $(function() {
                     $(".rule_footer").append(footer_info);
                 },
                 error: function(data) {
-                    alert("创建失败！");
+                    createAndHideAlert("创建失败！");
                 }
             });
         } else {
@@ -82,7 +82,7 @@ $(function() {
 
                 },
                 error: function(data) {
-                    alert("更新失败！");
+                    createAndHideAlert("更新失败！");
                 }
             });
         }
@@ -95,7 +95,7 @@ $(function() {
         var json_array = '{"sg_ids":[';
         $(".secGoup_id:checked").each(function() {
             if ($(this).attr("name") == "default")
-                alert($(this).attr("name") + "不可删除！");
+                createAndHideAlert($(this).attr("name") + "不可删除！");
             else {
                 count++;
                 if (json_array != '{"sg_ids":[')
@@ -116,13 +116,13 @@ $(function() {
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
-                            alert(x + "删除成功！");
+                            createAndHideAlert(x + "删除成功！");
                             $("#" + x + "").parent().parent().remove();
                             $(".footerID").remove();
                             var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + (--sec_group_count) + '</span> items</td></tr>';
                             $(".rule_footer").append(str_footer);
                         } else
-                            alert(x + "删除失败");
+                            createAndHideAlert(x + "删除失败");
                     }
                     //window.location.reload();
                 },
@@ -142,7 +142,7 @@ $(function() {
     $("#update_info").click(function() {
         createOrupdate = 0;
         if ($(".secGoup_id:checked").length != 1) {
-            alert("请选择一条信息进行修改 ^.^");
+            createAndHideAlert("请选择一条信息进行修改 ^.^");
             return;
         } else {
             $("#update_info").attr("data-toggle", "modal");

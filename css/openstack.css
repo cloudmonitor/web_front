@@ -135,13 +135,24 @@ body {
     background-color: rgb(188, 188, 188);
 }
 
+#alert-container {
+    position: fixed;
+    top: 70px;
+    right: 40px;
+    float: right;
+    width: 300px;
+    z-index: 1100;
+}
+
 
 /*
  * 内容显示区域
  */
-.setHeight{
-   height: 500px;
+
+.setHeight {
+    height: 500px;
 }
+
 .main {
     padding: 0 20px 70px 20px;
     overflow-y: auto;
@@ -209,24 +220,26 @@ i {
     height: 200px;
 }
 
-
-#resSize tr td:first-child {
-    width: 30%;
+#resSize tr td:nth-child(1) {
+    width: 20%;
     padding-left: 20px;
 }
 
-#resSize tr td:last-child > div {
-    width: 80%;
+#resSize tr td:nth-child(2) {
+    width: 20%;    
+}
+
+#resSize tr td:nth-child(2) > div {
     margin-top: 0;
     margin-bottom: 0;
 }
+
 
 /* 计算 -- 实例 */
 
 .form-btn {
     float: right;
 }
-
 
 
 /*　启动云主机：详情　*/
@@ -475,17 +488,6 @@ i {
     color: red !important;
 }
 
-#alert-container {
-    position: fixed;
-    top: 70px;
-    right: 40px;
-    float: right;
-    width: 300px;
-    /*让alert框离用户最近, 并且大于modal框的z-index*/
-    z-index: 1100;
-    /*background-color: blue;*/
-}
-
 
 /* 网络与安全 -- 网络页面 -- "搜索"字体图标在输入框右侧内部 */
 
@@ -516,6 +518,7 @@ tfoot .tfoot-dsp {
     padding: 7px 0 0 0;
     font: bold 11px Arial, Helvetica, sans-serif;
 }
+
 #loading_monitor1 {
     position: absolute;
     width: 300px;
@@ -539,6 +542,7 @@ tfoot .tfoot-dsp {
     left: 0;
     z-index: 2000;
 }
+
 #background_monitor1 {
     display: block;
     width: 100%;
@@ -699,10 +703,8 @@ tfoot .tfoot-dsp {
 
 .icon-btn {
     display: inline;
-
     padding: 0;
     background-color: transparent;
     border: 0;
-
     margin-left: -25px;
 }

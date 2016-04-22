@@ -8,7 +8,7 @@ $(function() {
 
         },
         error: function(data) {
-            alert("获取信息错误！");
+            createAndHideAlert("获取信息错误！");
         }
     });
 

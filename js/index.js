@@ -9,7 +9,7 @@ $(function() {
         type: "GET",
         url: config["host"] + "/tenants?token=" + window.localStorage.token,
         success: function(data) {
-            // alert(data);
+            // createAndHideAlert(data);
             var data = JSON.parse(data);
             var tenantname;
             window.localStorage.tenants = JSON.stringify(data.tenants);
@@ -52,7 +52,7 @@ $(function() {
 
         },
         error: function(data) {
-            alert("信息获取失败");
+            createAndHideAlert("信息获取失败");
             console.log(data);
         }
     });
@@ -81,18 +81,18 @@ function getDevice_info(tenantname) {
                     // var data = JSON.parse(data);
                     // console.log(data);
                     localStorage.limits=data;
-                    // alert(localStorage.limits);
+                    // createAndHideAlert(localStorage.limits);
                     console.warn("data",data);
                     draw_charts(data);
                 },
                 error: function(data) {
-                    alert("信息获取失败");
+                    createAndHideAlert("信息获取失败");
                     console.log(data);
                 }
             });
         },
         error: function(data) {
-            alert("信息获取失败");
+            createAndHideAlert("信息获取失败");
             console.log(data);
         }
     });
@@ -101,9 +101,9 @@ function getDevice_info(tenantname) {
 //draw_charts(chart_data);
 function draw_charts(chart_data) {
     var chart_info = JSON.parse(chart_data)["limits"]["absolute"];
-    // alert("ok");
-    // alert(chart_info);
-    //alert(chart_info.maxTotalInstances);
+    // createAndHideAlert("ok");
+    // createAndHideAlert(chart_info);
+    //createAndHideAlert(chart_info.maxTotalInstances);
     var myChart1 = echarts.init(document.getElementById('main1'));
     var myChart2 = echarts.init(document.getElementById('main2'));
     var myChart3 = echarts.init(document.getElementById('main3'));

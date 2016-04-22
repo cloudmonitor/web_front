@@ -27,11 +27,11 @@ $(function() {
                         //console.log(subnets + "=====" + i);
                         var subnet_Info = "[";
                         for (var j = 0; j < subnets.length; j++) {
-                            // alert(subnets.length);
+                            // createAndHideAlert(subnets.length);
                             for (var k = 0; k < subnet_infos.length; k++) {
-                                //alert(subnets[i]+"=="+subnet_infos[j].id);
+                                //createAndHideAlert(subnets[i]+"=="+subnet_infos[j].id);
                                 if (subnets[j] == subnet_infos[k].id) {
-                                    // alert(subnets[i]);
+                                    // createAndHideAlert(subnets[i]);
                                     sub_str += "<b>" + subnet_infos[k].name + "</b> " + subnet_infos[k].cidr + "<br/>";
                                     if (subnet_Info = "[")
                                         subnet_Info += JSON.stringify(subnet_infos[k]);
@@ -57,12 +57,12 @@ $(function() {
                     }
                 },
                 error: function(data) {
-                    alert("信息获取失败！");
+                    createAndHideAlert("信息获取失败！");
                 }
             });
         },
         error: function(data) {
-            alert("配置获取失败！");
+            createAndHideAlert("配置获取失败！");
         }
     });
 
@@ -243,12 +243,12 @@ $(".create_subnetworkOk").click(function() {
     }
     var subnetInfo = subnet['subnet'];
     if (sub_name == "") {
-        alert("子网名称必填！");
+        createAndHideAlert("子网名称必填！");
         return;
     }
     subnetInfo.name = sub_name;
     if (private_net == "test") {
-        alert("请选择私有网络！");
+        createAndHideAlert("请选择私有网络！");
         return;
     }
     subnetInfo.network_id = private_net;
@@ -268,7 +268,7 @@ $(".create_subnetworkOk").click(function() {
         for (var i = 0; i < arr.length; i++) {
             temp = arr[i].split(",");
             if (temp.length % 2 != 0) {
-                alert("地址池起始地址有误！");
+                createAndHideAlert("地址池起始地址有误！");
                 return;
             }
             object.start = temp[0];
@@ -297,7 +297,7 @@ function createSubnetAJAX(subnet) {
         success: function(data) {
             if (JSON.parse(data)['subnet'] == null || JSON.parse(data)['subnet'] == "undefined") {
                 console.log(data);
-                alert("请检查子网配置格式！");
+                createAndHideAlert("请检查子网配置格式！");
             } else
                 window.location.reload();
         }

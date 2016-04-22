@@ -54,12 +54,15 @@ function floatingIPCtrl($scope, $http) {
         var url = config.host + "/floatingips?token=" + window.localStorage.token;
         $http.get(url).then(function(response) {
             var len = response.data.floatingips.length;
+            if (len == 0) return;
             console.info("获取floating_ips:\n%o", response.data);
             console.info("取回了数据条数", len);
             // 将资源池的名字合并到ip列表中 
             // data 是一个对象数组
             var dataIP = response.data.floatingips;
             var dataRes = $scope.resLists;
+            console.info("dataRes = ", dataRes);
+            if (dataRes === undefined) return;
             for (var i = 0, len; i < len; i++) {
                 for (var j = 0, len2 = dataRes.length; j < len2; j++) {
                     if (dataIP[i].floating_network_id === dataRes[j].id) {

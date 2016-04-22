@@ -13,7 +13,7 @@ $(function() {
                 rount_netInfo(networks);
             },
             error: function() {
-                alert("获取网络失败！");
+                createAndHideAlert("获取网络失败！");
             }
         });
     /*}*/
@@ -45,7 +45,7 @@ $(".createRouter_OK").click(function() {
     var status = $(".create_router_status").val();
     var outNet = $(".outNet_selected").val();
     if (name == "" || name == "undefined" || name == null) {
-        alert("名称为必填项！");
+        createAndHideAlert("名称为必填项！");
         return;
     }
     if (status == "true")
@@ -127,17 +127,17 @@ function deleteAjax_routerInfo(json_array) {
             var id_status = JSON.parse(data);
             for (var x in id_status) {
                 if (id_status[x] == 204) {
-                    alert(x + "删除成功！");
+                    createAndHideAlert(x + "删除成功！");
                     $(".router_tr").remove();
                     $("#" + x + "").parent().parent().remove();
                     var footer_str = "<tr class='active tfoot-dsp router_tr'><td colspan='8'>Displaying <span id='item_count'>" + (--router_len) + "</span> items</td></tr>";
                     $(".Router_footer").append(footer_str);
                 } else
-                    alert(x + "删除失败");
+                    createAndHideAlert(x + "删除失败");
             }
         },
         error: function(data) {
-            alert("error!");
+            createAndHideAlert("error!");
         }
     });
 }
@@ -145,12 +145,12 @@ function deleteAjax_routerInfo(json_array) {
 //----------------设置网关
 var router_id;
 $(document).on('click', ".setExtNet", function() {
-    // alert($(".setoutNet_selected option").length);
+    // createAndHideAlert($(".setoutNet_selected option").length);
     router_id = $(this).attr("id");
     $(".setoutNet_selected").empty();
     $(".setoutNet_selected").append(' <option value="test" >选择网络</option>');
 
-    // alert("?: "+$(".setoutNet_selected option").length);
+    // createAndHideAlert("?: "+$(".setoutNet_selected option").length);
     $.ajax({
         type: "GET",
         url: config["host"] + "/extnet?token=" + window.localStorage.token,
@@ -163,7 +163,7 @@ $(document).on('click', ".setExtNet", function() {
                 str += "<option name='" + ext_nets[i].name + "' value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
             }
             $(".setoutNet_selected").append(str);
-            //alert($(".setoutNet_selected option").length);
+            //createAndHideAlert($(".setoutNet_selected option").length);
         }
     });
     $(".router_name").val($(this).attr("name"));
@@ -181,7 +181,7 @@ $(document).on('click', ".addExtNet_ok", function() {
     if ($(".setoutNet_selected").val() != "test")
         router['external_gateway_info']['network_id'] = $(".setoutNet_selected").val();
     else {
-        alert("请选择外部网络！！！");
+        createAndHideAlert("请选择外部网络！！！");
         return;
     }
     $.ajax({

@@ -69,12 +69,12 @@ function pretty_adrr1(addrs_temp) {
 function getTimeLen(date_temp) {
     var UTC8_time = moment(date_temp).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
     var now = moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
-    //alert(UTC8_time+"==="+now);
+    //createAndHideAlert(UTC8_time+"==="+now);
     var time = moment.utc((moment(moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss'))).diff(UTC8_time)).zone(-8) / 1000; //.format("DD天 HH小时");
     var weekend = parseInt(time / (60 * 60 * 24 * 7));
     var zday = parseInt(time / (60 * 60 * 24)) - weekend * 7;
     var zhour = parseInt(time / (60 * 60)) - zday * 24 - weekend * 7 * 24;
-    // alert(weekend+"/"+zday+"/"+zhour);
+    // createAndHideAlert(weekend+"/"+zday+"/"+zhour);
     var time_str = "";
     if (weekend != 0) {
         time_str += weekend + "周 ";
@@ -99,7 +99,7 @@ function flvors_info() {
         url: config["host"] + "/flavors?token=" + window.localStorage.token,
         success: function(data) {
             var flavor = JSON.parse(data).flavors;
-            //alert(">>>" + flavor_id);
+            //createAndHideAlert(">>>" + flavor_id);
             for (var i = 0; i < flavor.length; i++) {
                 if (flavor[num].id == flavor_id) {
                     peizhi = flavor[num].name;
@@ -107,7 +107,7 @@ function flvors_info() {
             }
         },
         error: function(data) {
-            alert("配置获取失败！");
+            createAndHideAlert("配置获取失败！");
         }
     });
 }
@@ -354,7 +354,7 @@ function createInstanceFun() {
         if (instanceName != "")
             server.name = instanceName;
         if (instanceName == "") {
-            alert("云主机名称必填！");
+            createAndHideAlert("云主机名称必填！");
             return;
         }
         //---------云主机类型
@@ -370,7 +370,7 @@ function createInstanceFun() {
             if ($(".instance_imageSelect").val() != "test") {
                 server.imageRef = $(".instance_imageSelect").val();
             } else {
-                alert("请选择镜像！");
+                createAndHideAlert("请选择镜像！");
                 return;
             }
         } else if (selected_name == "snap") {
@@ -378,7 +378,7 @@ function createInstanceFun() {
                 //-------不做该功能 
             }
         } else {
-            alert("请选择启动源！");
+            createAndHideAlert("请选择启动源！");
             return;
         }
         //----------键值对
@@ -398,11 +398,11 @@ function createInstanceFun() {
         var temp0 = 0,
             temp1 = 0;
         if ($(".selected_netTag") == 'undefined' || $(".selected_netTag") == null) {
-            alert("请选择子网！");
+            createAndHideAlert("请选择子网！");
             return;
         }
         if ($(".selected_netTag").length < 1) {
-            alert("请选择子网！");
+            createAndHideAlert("请选择子网！");
             return;
         }
         $(".selected_netTag").each(function() {
@@ -416,7 +416,7 @@ function createInstanceFun() {
             obj.network_id = $(this).attr("id");
             obj.subnet_id = $(this).attr("name");
             obj1.uuid = $(this).attr("id");
-            //alert(typeof($(this).attr("id")));
+            //createAndHideAlert(typeof($(this).attr("id")));
             if ($(this).attr("id") != "" && $(this).attr("id") != 'undefined') {
                 server.network_info[temp0++] = obj;
                 if (temp1 == 0)
@@ -548,7 +548,7 @@ function create_networkFun() {
             subnet.name = subnet_name;
             subnet.cidr = str_ip;
             if (subnet_name == "") {
-                alert("请填写子网名称和地址！");
+                createAndHideAlert("请填写子网名称和地址！");
             } else {
                 createNetAjax(netWork_info);
             }
@@ -636,12 +636,12 @@ function create_subnetFun() {
         }
         var subnetInfo = subnet['subnet'];
         if (sub_name == "") {
-            alert("子网名称必填！");
+            createAndHideAlert("子网名称必填！");
             return;
         }
         subnetInfo.name = sub_name;
         if (private_net == "test") {
-            alert("请选择私有网络！");
+            createAndHideAlert("请选择私有网络！");
             return;
         }
         subnetInfo.network_id = private_net;
@@ -661,7 +661,7 @@ function create_subnetFun() {
             for (var i = 0; i < arr.length; i++) {
                 temp = arr[i].split(",");
                 if (temp.length % 2 != 0) {
-                    alert("地址池起始地址有误！");
+                    createAndHideAlert("地址池起始地址有误！");
                     return;
                 }
                 object.start = temp[0];

@@ -36,13 +36,13 @@ $(function() {
                 var id_status = JSON.parse(data);
                 for (var x in id_status) {
                     if (id_status[x] == 204) {
-                        alert(x + "删除成功！");
+                        createAndHideAlert(x + "删除成功！");
                         $("#" + x + "").parent().parent().remove();
                         $(".footerID").remove();
                         var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + (--rules_len) + '</span> items</td></tr>';
                         $(".rule_footer").append(str_footer);
                     } else
-                        alert(x + "删除失败");
+                        createAndHideAlert(x + "删除失败");
                 }
             },
             error: function(data) {
@@ -78,17 +78,17 @@ $(function() {
                 var id_status = JSON.parse(data);
                 for (var x in id_status) {
                     if (id_status[x] == 204) {
-                        alert(x + "删除成功！");
+                        createAndHideAlert(x + "删除成功！");
                         $("#" + x + "").parent().parent().remove();
                         $(".footerID").remove();
                         var str_footer = '<tr class="active tfoot-dsp footerID"><td colspan="13">Displaying <span id="item_count">' + (--rules_len) + '</span> items</td></tr>';
                         $(".rule_footer").append(str_footer);
                     } else
-                        alert(x + "删除失败");
+                        createAndHideAlert(x + "删除失败");
                 }
             },
             error: function(data) {
-                alert(x + "删除失败");
+                createAndHideAlert(x + "删除失败");
             }
         });
     });
@@ -127,7 +127,7 @@ $(function() {
         ruleVlue.protocol = $(".select_rule").val();
         ruleVlue.direction = $(".director").val();
         var port_temp = $(".port_selected").val();
-        // alert($(".port_text").val());
+        // createAndHideAlert($(".port_text").val());
         if (($(".port_text").val() != null && $(".port_text").val() != "") || ($(".portmin_text").val() != null && $(".portmin_text").val() != "")) {
             if (port_temp == "port") {
                 ruleVlue.port_range_min = $(".port_text").val();
@@ -137,7 +137,7 @@ $(function() {
                 ruleVlue.port_range_max = $(".portmax_text").val();
             }
         } else {
-            alert("请填写端口....^-^");
+            createAndHideAlert("请填写端口....^-^");
         }
 
         if ($(".CIDR_val").val() != null && $(".CIDR_val").val() != "")

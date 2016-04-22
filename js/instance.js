@@ -66,12 +66,12 @@ $(function() {
                     }
                 },
                 error: function(data) {
-                    alert("信息获取失败！");
+                    createAndHideAlert("信息获取失败！");
                 }
             });
         },
         error: function(data) {
-            alert("配置获取失败！");
+            createAndHideAlert("配置获取失败！");
         }
     });
 });
@@ -104,7 +104,7 @@ function drop(ev) {
     var id = $(ev.target).attr("id");
     var parent_tag = $(ev.target).attr("parent_tag");
     var data = ev.dataTransfer.getData("Text");
-    // alert(new String(id));
+    // createAndHideAlert(new String(id));
     var move_tag = $("#" + data).attr("tag");
     if (id == "selected_subnet") {
         $("#" + data).find("button").removeClass("net_add");
@@ -377,7 +377,7 @@ $(".instance_run").click(function() {
     if (instanceName != "")
         server.name = instanceName;
     if (instanceName == "") {
-        alert("云主机名称必填！");
+        createAndHideAlert("云主机名称必填！");
         return;
     }
     //---------云主机类型
@@ -393,7 +393,7 @@ $(".instance_run").click(function() {
         if ($(".instance_imageSelect").val() != "test") {
             server.imageRef = $(".instance_imageSelect").val();
         } else {
-            alert("请选择镜像！");
+            createAndHideAlert("请选择镜像！");
             return;
         }
     } else if (selected_name == "snap") {
@@ -401,7 +401,7 @@ $(".instance_run").click(function() {
             //-------不做该功能 
         }
     } else {
-        alert("请选择启动源！");
+        createAndHideAlert("请选择启动源！");
         return;
     }
     //----------安全组
@@ -417,11 +417,11 @@ $(".instance_run").click(function() {
     var temp0 = 0,
         temp1 = 0;
     if ($(".selected_netTag") == 'undefined' || $(".selected_netTag") == null) {
-        alert("请选择子网！");
+        createAndHideAlert("请选择子网！");
         return;
     }
     if ($(".selected_netTag").length < 1) {
-        alert("请选择子网！");
+        createAndHideAlert("请选择子网！");
         return;
     }
     $(".selected_netTag").each(function() {

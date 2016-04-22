@@ -1,0 +1,47 @@
+{ 
+  "total": {
+    "subnet": 10,            子网
+    "ram": 51200,            内存 (MB)
+    "network": 10,           网络
+    "floatingip": 50,        浮动IP
+    "security_group_rule": 100,  安全组规则
+    "instances": 10,        实例
+    "cores": 20,            虚拟内核
+    "security_group": 10,   安全组
+    "router": 10,           路由
+    "rbac_policy": 10,      
+    "port": 50              端口
+  },
+  "used": {
+    "metadata_items": 129,
+    "subnet": 10,
+    "injected_file_content_bytes": 10240,
+    "ram": 51200,
+    "network": 10,
+    "floatingip": 50,
+    "tenant_id": "a731cb94fb094492a13bde53c243871e",
+    "subnetpool": -1,
+    "security_group_rule": 100,
+    "instances": 10,
+    "injected_files": 5,
+    "cores": 20,
+    "security_group": 10,
+    "router": 10,
+    "rbac_policy": 10,
+    "port": 50
+  }
+}
+
+
+{
+    "subnet": 4,  --子网
+    "network": 1, -- 网络
+    "floatingip": 3, --浮动IP
+    "ram": 8192,     --内存
+    "security_group_rule": 0, --安全组个数
+    "instances": 2,   -- 实例数
+    "cores": 2,       --虚拟内核
+    "security_group": 1,  --安全组
+    "router": 2,      --路由
+    "port": 28        --端口
+}

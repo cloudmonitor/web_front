@@ -13,7 +13,7 @@ $(function() {
         var time_str = getTimeLen(serverInfo['servers'][id].created);
 
         var curr_flavor = JSON.parse(localStorage.flavor).flavors[num];
-        //alert(curr_flavor);
+        //createAndHideAlert(curr_flavor);
         $("#server_AvailabilityZone").html(zone); //
         $("#server_Timesincecreated").html(time_str);
         $("#server_IPAddresses").html(addrs);
@@ -69,12 +69,12 @@ $(function() {
                         };
                     },
                     error: function(data) {
-                        alert("信息获取失败！");
+                        createAndHideAlert("信息获取失败！");
                     }
                 });
             },
             error: function(data) {
-                alert("配置获取失败！");
+                createAndHideAlert("配置获取失败！");
             }
         });
 

@@ -1,13 +1,6 @@
 <!-- 修改密码 -->
 <!-- 内容显示界面 -->
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <!-- alert-container div用来显示警告框alert -->
-    <div id="alert-container">
-        <!-- <div class="alert alert-warning">
-            <a href="" class="close" data-dismiss="alert">&times;</a>
-            <strong>警告！</strong>您的网络连接有问题。
-        </div> -->
-    </div>
     <div class="desc">
         修改密码
     </div>
@@ -19,7 +12,6 @@
                 <div class="form-group" ng-class="{'has-error': submitted && (form.curPasswd.$error.curPasswd || (form.curPasswd.$modelValue != corPasswd))}">
                     <label for="curPasswd">当前密码<span class="span-stand"> *</span></label>
                     <input type="password" class="form-control" name="curPasswd" ng-model="curPasswd" ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }" required>
-                    <!-- <button class="icon-btn"><i class="fa fa-eye" aria-hidden="true"></i></button> -->
                     <span class="help-block" ng-show="submitted && form.curPasswd.$error.curPasswd">密码格式有误</span>
                     <span class="help-block" ng-show="submitted && form.curPasswd.$pristine">密码不能为空</span>
                     <span class="help-block" ng-show="submitted && form.curPasswd.$dirty && (curPasswd != corPasswd)">密码不正确</span>
@@ -39,6 +31,9 @@
                     <span class="help-block" ng-show="submitted && form.confirmPasswd.$error.confirmPasswd">密码格式有误</span>
                     <span class="help-block" ng-show="submitted && form.confirmPasswd.$pristine">密码不能为空</span>
                     <span class="help-block" ng-show="submitted && form.confirmPasswd.$dirty && (confirmPasswd != newPasswd)">密码输入不一致</span>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkPasswd" ng-change="showPasswd()">查看密码</label>
                 </div>
                 <button type="submit" class="btn btn-primary">修改</button>
             </form>
