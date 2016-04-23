@@ -1290,13 +1290,15 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
             instance.config.topology.setCurrentObject(instance);
             //提示信息
             timer = setTimeout(function() {
-                $(".showLineModel").show();
+                $(".line_ids").empty();
                 var src_type = instance.config.srcDevice.config.data.device_name;
                 var dts_type = instance.config.dstDevice.config.data.device_name;
                 console.error(instance.config);
+                console.error(instance);
                 var ip_addr, src_name, dst_name;
                 //-----显示删除外网和路由间的线
                 if (src_type == "ext_net" || dts_type == "ext_net") {
+                    $(".showLineModel").show();
                     if (src_type == "router") {
                         ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
@@ -1310,33 +1312,8 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 }
                 //-----显示删除路由和网络间的线
                 else if ((src_type == "router" && dts_type == "network") || (src_type == "network" && dts_type == "router")) {
+                    $(".showLineModel").show();
                     if (src_type == "router") {
-                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
-                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                    } else {
-                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                        src_name = instance.config.srcDevicedstDevice.deviceImage.attrs.name;
-                    }
-                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>网络: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
-                }
-                //-----显示删除网络和子网间的线
-                else if ((src_type == "subnet" && dts_type == "network") || (src_type == "network" && dts_type == "subnet")) {
-                    if (src_type == "subnet") {
-                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
-                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                    } else {
-                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
-                    }
-                    $(".line_ids").html('<font color="white">网络: ( ' + dst_name + ' )<br/>子网: ( ' + src_name + ' ) <br/>网关: ' + ip_addr + '</font>');
-                }
-                //-----显示删除子网和主机间的线
-                else if ((src_type == "subnet" && dts_type == "server") || (src_type == "server" && dts_type == "subnet")) {
-                    if (src_type == "subnet") {
                         ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
@@ -1345,7 +1322,35 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
                     }
-                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>外网: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>网络: ( ' + dst_name + ' ) <br/>接口: ' + ip_addr + '</font>');
+                }
+                //-----显示删除网络和子网间的线
+                /*                else if ((src_type == "subnet" && dts_type == "network") || (src_type == "network" && dts_type == "subnet")) {
+                                    if (src_type == "subnet") {
+                                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
+                                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                                    } else {
+                                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
+                                    }
+                                    $(".line_ids").html('<font color="white">网络: ( ' + dst_name + ' )<br/>子网: ( ' + src_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+                                }
+                */
+                //-----显示删除子网和主机间的线
+                else if ((src_type == "subnet" && dts_type == "server") || (src_type == "server" && dts_type == "subnet")) {
+                    $(".showLineModel").show();
+                    if (src_type == "subnet") {
+                        //ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    } else {
+                        // ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        dst_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        src_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    }
+                    $(".line_ids").html('<font color="white">子网: ( ' + src_name + ' )<br/>主机: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
                 }
 
             }, 500);
