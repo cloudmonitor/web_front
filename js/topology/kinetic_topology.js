@@ -1316,10 +1316,10 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
                         ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        dst_name = instance.config.srcDevice.deviceImage.attrs.name;
-                        src_name = instance.config.dstDevice.deviceImage.attrs.name;
+                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                        src_name = instance.config.srcDevicedstDevice.deviceImage.attrs.name;
                     }
-                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>外网: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>网络: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
                 }
                 //-----显示删除网络和子网间的线
                 else if ((src_type == "subnet" && dts_type == "network") || (src_type == "network" && dts_type == "subnet")) {
@@ -1329,10 +1329,10 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
                         ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                        dst_name = instance.config.srcDevice.deviceImage.attrs.name;
-                        src_name = instance.config.dstDevice.deviceImage.attrs.name;
+                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
                     }
-                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>外网: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+                    $(".line_ids").html('<font color="white">网络: ( ' + dst_name + ' )<br/>子网: ( ' + src_name + ' ) <br/>网关: ' + ip_addr + '</font>');
                 }
                 //-----显示删除子网和主机间的线
                 else if ((src_type == "subnet" && dts_type == "server") || (src_type == "server" && dts_type == "subnet")) {
