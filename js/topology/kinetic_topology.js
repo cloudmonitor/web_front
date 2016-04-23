@@ -1163,7 +1163,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         }
     },
     draw: function() {
-        //  alert(1144);
+        // alert(1144);
         /*        console.log("Line_draw________________________");
                 console.log(this);*/
         var srcElement = this.config.srcDevice.getDeviceImage();
@@ -1213,7 +1213,6 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         //    });
         /////////////////////////////////////ctt-codeStart///////////////////////////////////////////////////////////////
         this.lineObject.on("click", function(evt) {
-            createAndHideAlert(1186);
             document.body.style.cursor = "pointer";
             $("#infoDialog").show();
             if (evt.button == 0) {
@@ -1289,8 +1288,36 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
             instance.config.topology.getLayer().draw();
             instance.lineObject.saveImageData();
             instance.config.topology.setCurrentObject(instance);
+            //提示信息
+            timer = setTimeout(function() {
+                $(".showLineModel").show();
+                var src_type = instance.config.srcDevice.config.data.device_name;
+                var dts_type = instance.config.dstDevice.config.data.device_name;
+                console.error(instance.config);
+                //-----显示删除外网和路由间的线
+                if (1) {
+                    var ip_addr, src_name, dst_name;
+                    if (src_type == "router") {
+                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    } else {
+                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        dst_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        src_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    }
+                    $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>外网: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+
+                }
+            }, 500);
+            //-----显示删除路由和网络间的线
+
+            //-----显示删除网络和子网间的线
+
+            //-----显示删除子网和主机间的线
         });
         this.lineObject.on("mouseout", function(evt) {
+            clearTimeout(timer);
             document.body.style.cursor = "default";
             var shape = evt.shape;
             shape.setStrokeWidth(shape.getStrokeWidth() - 2);
@@ -1300,6 +1327,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         });
     }
 });
+
 /**
 类名：工具栏
 描述：工具栏主类
