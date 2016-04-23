@@ -125,6 +125,29 @@ myApp.config(function($routeProvider) {
 // 根控制器
 myApp.controller('myCtrl', myCtrl);
 
+myApp.run(function($rootScope, $location, $templateCache) {
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+        if (localStorage.token == undefined) {
+            localStorage.login_flag = "token";
+            window.location.href = $location.absUrl().split("#")[0] + "login.html";
+            return;
+        }
+        var expires = getTimeStr(JSON.parse(localStorage.token).expires);
+        $.ajax({
+            type: "OPTIONS",
+            url: "/",
+            complete: function(x) {
+                var server_time = getTimeStr(new Object(x.getResponseHeader("Date")).expires);
+                if (new Date(server_time).getTime() > new Date(expires).getTime()) {
+                    localStorage.login_flag = "expires";
+                    window.location.href = $location.absUrl().split("#")[0] + "login.html";
+                }
+            }
+        })
+
+    });
+});
+
 // 计算 -- 实例
 myApp.controller('instanceCtrl', function($scope) {
     $scope.$parent.loadScript('js/lib/moment.min.js');

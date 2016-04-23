@@ -1295,7 +1295,8 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 var dts_type = instance.config.dstDevice.config.data.device_name;
                 console.error(instance.config);
                 console.error(instance);
-                var ip_addr, src_name, dst_name;
+                var ip_addr = "无",
+                    src_name, dst_name;
                 //-----显示删除外网和路由间的线
                 if (src_type == "ext_net" || dts_type == "ext_net") {
                     $(".showLineModel").show();
@@ -1314,11 +1315,13 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 else if ((src_type == "router" && dts_type == "network") || (src_type == "network" && dts_type == "router")) {
                     $(".showLineModel").show();
                     if (src_type == "router") {
-                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
+                            ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
-                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
+                            ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
                     }
