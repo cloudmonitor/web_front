@@ -784,18 +784,32 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         /////////////////////////////////////ctt-codeEnd///////////////////////////////////////////////////////////////
         this.deviceImage.on("mouseover", function(evt) {
             document.body.style.cursor = "pointer";
-
             var shape = evt.shape;
             // shape.style.backgroundColor = "#f40";
             // this.deviceImage.addClass('bbbb');
-            shape.setStroke("gray");
+            /*            var str = "margin-left:" + instance.config.data.x + "," +
+                            "margin-top:" + instance.config.data.y;
+                        console.error(str);*/
+
+            showTip = setTimeout(function() {
+                $(".showtip").css({
+                    "margin-left": instance.config.data.x + 280,
+                    "margin-top": instance.config.data.y - 30
+                });
+                $(".showtip").text("设备名称:" + instance.deviceImage.attrs.name);
+                $(".showtip").show();
+            }, 300);
+
+            //shape.setStroke("gray");
             // this.setFill("blue");
-            shape.setStrokeWidth(0.7);
+            //shape.setStrokeWidth(0.7);
             shape.getLayer().draw();
             instance.config.topology.setCurrentObject(instance);
 
         });
         this.deviceImage.on("mouseout", function(evt) {
+            clearTimeout(showTip);
+            $(".showtip").hide();
             document.body.style.cursor = "default";
             var shape = evt.shape;
             shape.setStroke("white");
@@ -1199,22 +1213,23 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         });
         //console.log(this.lineObject);
         /*        var simpleText = new Kinetic.Text({
-                    text: 'Simple Textpppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp',
-                    fontSize: 110,
-                    fontFamily: 'Calibri'
-                });
-                var rect = new Kinetic.Rect({
-                    width: 100,
-                    height: 100
-                });
-                //创建group对象
-                var group = new Kinetic.Group();
-                //把多个图形对象添加到group里
-                group.add(simpleText);
-                group.add(rect);
-                group.add(this.lineObject);
-                this.config.topology.getLayer().add(group);
-        */
+                            text: 'Simple Textpppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp',
+                            fontSize: 110,
+                            fontFamily: 'Calibri'
+                        });
+                        var rect = new Kinetic.Rect({
+                            width: 100,
+                            height: 100
+                        });
+                        //创建group对象
+                        var group = new Kinetic.Group();
+                        //把多个图形对象添加到group里
+                        group.add(simpleText);
+                        group.add(rect);
+                        group.add(this.lineObject);
+                        this.config.topology.getLayer().add(group);
+                */
+
         this.config.topology.getLayer().add(this.lineObject);
         this.lineObject.moveToBottom();
         this.lineObject.moveUp();
@@ -1375,7 +1390,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
                     }
-                    $(".line_ids").html('<font color="white">子网: ( ' + src_name + ' )<br/>主机: ( ' + dst_name + ' ) <br/>网关: ' + ip_addr + '</font>');
+                    $(".line_ids").html('<font color="white">子网: ( ' + src_name + ' )<br/>主机: ( ' + dst_name + ' ) <br/>IP: ' + ip_addr + '</font>');
                 }
 
             }, 500);
@@ -1655,7 +1670,8 @@ function drop(ev) {
         ev.target.appendChild(document.getElementById(data));
     }
 }
-
+//-------------------------------事件
+//-------------------------------事件
 function createNetAjax(network_json) {
     console.log(JSON.stringify(network_json));
     $.ajax({
