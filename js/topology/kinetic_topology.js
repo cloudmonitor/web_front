@@ -675,6 +675,8 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     }
                     footer_str = '<a class="close_model" href="javascript:void(0)" name="#/net/net-desc?' + instance.deviceImage.attrs.id + '" class="ttttt"  >' + footer_showInfo + '</a>';
                     $(".delete_device").attr("id", instance.id);
+                    if (body_str == '<B>Subnets</B><br/>')
+                        body_str += '暂未分配子网';
                     $(".devicebodyInfo").html(body_str);
                     $(".footer_str").html(footer_str);
                 }
@@ -2214,9 +2216,10 @@ $(document).on("click", ".close_model", function() {
     }, 200);
 
 });
-/*$(document).on("click", ".close_model", function() {
-    $(".close_model_toupu").click();
-});*/
+$(".close_model_toupu").click(function() {
+    //$(".showInfoButton").click();
+    window.scrollTo(0, 0);
+});
 
 function setSubnetInfo(instance, body_str, footer_showInfo) {
     var id = instance.id;
