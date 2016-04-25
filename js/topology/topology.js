@@ -6,7 +6,6 @@ $(function() {
         success: function(data) {
             //console.log(">>>"+data);
             expTopoListChange(data);
-
         },
         error: function(data) {
             createAndHideAlert("获取信息错误！");

@@ -144,7 +144,6 @@ myApp.run(function($rootScope, $location, $templateCache) {
                 }
             }
         })
-
     });
 });
 

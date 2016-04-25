@@ -348,6 +348,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         for (var i = 0; i < this.lines.length; i++) {
             var line = this.lines[i];
             var config = line.getConfig();
+            console.error("line351", line);
             var srcDeviceId = config.srcDevice.getId();
             var dstDeviceId = config.dstDevice.getId();
             var stroke = config.stroke;
@@ -359,6 +360,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 srcip: config.srcip,
                 dstip: config.dstip,
                 stroke: stroke,
+                is_del: config.is_del,
                 strokeWidth: config.strokeWidth
             });
         }
@@ -399,7 +401,6 @@ Kinetic.Topology = Kinetic.Class.extend({
     loadLineAsync: function(instance, jsonObj) {
         // console.log(jsonObj.lines);
         lines = jsonObj.lines;
-
         //console.log(lines);
         var flag = true;
         for (var i = 0; i < instance.devices.length; i++) {
@@ -415,7 +416,7 @@ Kinetic.Topology = Kinetic.Class.extend({
             //console.log(jsonObj.lines);
             for (var i = 0; i < jsonObj.lines.length; i++) {
                 var line = jsonObj.lines[i];
-                console.log(line);
+                console.log("line420", line);
                 var srcDevice = instance.getDeviceById(line.srcDeviceId);
                 var dstDevice = instance.getDeviceById(line.dstDeviceId);
                 if (srcDevice != null && dstDevice != null) {
@@ -424,6 +425,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                         srcDevice: srcDevice,
                         dstDevice: dstDevice,
                         stroke: line.stroke,
+                        is_del: line.is_del,
                         strokeWidth: line.strokeWidth
                     });
                 }
@@ -1055,11 +1057,13 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                 if (flag) {
                     if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
                         if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
+                            console.error("line1061", instance);
                             var line = new Kinetic.Topology.Line({
                                 topology: instance.config.topology,
                                 srcDevice: instance.getDevice(),
                                 dstDevice: dstDevice,
                                 stroke: 'black',
+                                is_del: 'true',
                                 strokeWidth: 1
                             });
                         }
@@ -1180,10 +1184,12 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         else
             x2 = dstElement.getX() + dstElement.getWidth() / 1 - srcElement.getWidth() / 15;
         var y2 = dstElement.getY() + dstElement.getHeight() / 2;
+        console.error("line1188", this.config);
         //console.log(this.config.stroke+": "+this.config.strokeWidth+": "+this.config.srcDevice.getId()+": "+this.config.dstDevice.getId());
         this.lineObject = new Kinetic.Line({
             points: [x1, y1, x2, y2],
             stroke: this.config.stroke,
+            is_del: this.config.is_del,
             strokeWidth: this.config.strokeWidth,
             lineCap: "round",
             lineJoin: "round",
@@ -1192,6 +1198,23 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
             id: this.config.srcDevice.getId() + "_" + this.config.dstDevice.getId()
         });
         //console.log(this.lineObject);
+        /*        var simpleText = new Kinetic.Text({
+                    text: 'Simple Textpppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp',
+                    fontSize: 110,
+                    fontFamily: 'Calibri'
+                });
+                var rect = new Kinetic.Rect({
+                    width: 100,
+                    height: 100
+                });
+                //创建group对象
+                var group = new Kinetic.Group();
+                //把多个图形对象添加到group里
+                group.add(simpleText);
+                group.add(rect);
+                group.add(this.lineObject);
+                this.config.topology.getLayer().add(group);
+        */
         this.config.topology.getLayer().add(this.lineObject);
         this.lineObject.moveToBottom();
         this.lineObject.moveUp();
@@ -1294,7 +1317,6 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 var src_type = instance.config.srcDevice.config.data.device_name;
                 var dts_type = instance.config.dstDevice.config.data.device_name;
                 console.error(instance.config);
-                console.error(instance);
                 var ip_addr = "无",
                     src_name, dst_name;
                 //-----显示删除外网和路由间的线
