@@ -17,7 +17,7 @@
 <div id="content" class="easyui-layout">
     <div region="center" style="overflow: hidden;padding: 0px;">
         <div id="centerTabs" class="easyui-tabs" border="false" style="top:20%;height:750px;padding-left: 10px;">
-            <div title="网络拓扑图" id="container" border="false"></div>
+            <div id="container" border="false"></div>
         </div>
     </div>
 </div>
@@ -94,7 +94,7 @@
             <div class="modal-footer ">
                 <span class="footer_str" style="float:left"></span>
                 <button type="button" class="btn btn-default close_model_toupu" data-dismiss="modal">关闭</button>
-                <button type="button" id="" class="btn btn-primary  delete_device" data-dismiss="modal">删除</button>
+                <button type="button" class="btn btn-primary  delete_device" data-dismiss="modal">删除</button>
             </div>
         </div>
     </div>
@@ -537,7 +537,7 @@
     </div>
 </div>
 <!-- ==================================子网end========================================== -->
-<div class="panel panel-primary showLineModel" style="position:fixed;top:40%;left:40%;width:20%" hidden>
+<div class="panel panel-primary showLineModel" style="position:fixed;top:40%;left:40%;width:20%;z-index:999" hidden>
     <div class="panel-heading">
         <B><span class="panel-title line_ids"></span></B>
     </div>

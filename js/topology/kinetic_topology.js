@@ -121,16 +121,8 @@ Kinetic.Topology = Kinetic.Class.extend({
                         }
                         //--------------数据的提交
                         console.error(JSON.stringify(router_create));
-                        $.ajax({
-                            type: "POST",
-                            data: JSON.stringify(router_create),
-                            contentType: "application/json",
-                            url: config["host"] + "/router/create" + "?token=" + window.localStorage.token,
-                            success: function(data) {
-                                that.topology.addDevice(device);
-                                window.location.reload();
-                            }
-                        });
+                        submit_routerInfo(router_create, that, device);
+
                     });
                     //-------------提交数据end               
                 } else if (drawType == "server") {
@@ -169,6 +161,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         return false;
     },
     deleteCurrentObject: function() {
+        // alert(123);
         var id = this.currentObject.id;
         var type = this.currentObject['config']['data'].device_name;
         var that = this;
@@ -215,7 +208,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     }
                 }
             });
-        } else {
+        } else if (type == "server") {
             var servers = { "servers_ids": [] };
             var server_ids = servers['servers_ids'];
             server_ids[0] = id;
@@ -224,6 +217,25 @@ Kinetic.Topology = Kinetic.Class.extend({
                 data: JSON.stringify(servers),
                 contentType: "application/json",
                 url: config['host'] + "/servers/delete?token=" + window.localStorage.token,
+                success: function(data) {
+                    var id_status = JSON.parse(data);
+                    for (var x in id_status) {
+                        if (id_status[x] == 204) {
+                            that.currentObject.remove();
+                            createAndHideAlert(x + "删除成功！");
+                        } else
+                            createAndHideAlert(x + "删除失败");
+                    }
+                }
+            });
+        } else {
+            var subnets = { "subnet_ids": [] };
+            subnets['subnet_ids'][0] = id;
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(subnets),
+                contentType: "application/json",
+                url: config['host'] + "/subnet/delete?token=" + window.localStorage.token,
                 success: function(data) {
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
@@ -381,13 +393,19 @@ Kinetic.Topology = Kinetic.Class.extend({
     },
     load: function(jsonStr) {
         this.loading = true;
-
+        $(".temp_divs").remove();
         if (jsonStr != null && jsonStr.length > 0) {
             this.clear();
             var jsonObj = JSON.parse(jsonStr);
             var deviceMap = [];
             for (var i = 0; i < jsonObj.devices.length; i++) {
+                var tip_html = '<div id="' + jsonObj.devices[i].id + '_1" class="alert alert-info  temp_divs showtip' + i + '"' +
+                    ' style= "position:absolute;padding:0;margin:0;opacity:0.8;filter:alpha(opacity=80);"></div>';
+                $("#content").parent().append(tip_html);
+            }
+            for (var i = 0; i < jsonObj.devices.length; i++) {
                 var data = jsonObj.devices[i];
+                setTooltip(data, i);
                 var device = new Kinetic.Topology.Device({
                     topology: this,
                     data: data
@@ -539,7 +557,6 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         return this.id;
     },
     remove: function() {
-        // alert(560);
         if (this.deviceImage != null) {
             if (this.lines != null && this.lines.length > 0) {
                 for (var i = 0; i < this.lines.length; i++) {
@@ -587,7 +604,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         this.config.data.height = this.deviceImage.getHeight();
     },
     draw: function() {
-        // alert(608);
+        //alert(608);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -734,6 +751,8 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
 
                 //  }
                 $(".delete_device").click(function() {
+                    //console.error(this.id);
+                    delete_tip(this.id);
                     deleteDevice();
                 });
                 /*                $("a").click(function() {
@@ -791,14 +810,14 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                             "margin-top:" + instance.config.data.y;
                         console.error(str);*/
 
-            showTip = setTimeout(function() {
-                $(".showtip").css({
-                    "margin-left": instance.config.data.x + 280,
-                    "margin-top": instance.config.data.y - 30
-                });
-                $(".showtip").text("设备名称:" + instance.deviceImage.attrs.name);
-                $(".showtip").show();
-            }, 300);
+            /*            showTip = setTimeout(function() {
+                            $(".showtip").css({
+                                "margin-left": instance.config.data.x + 280,
+                                "margin-top": instance.config.data.y - 30
+                            });
+                            $(".showtip").text("设备名称:" + instance.deviceImage.attrs.name);
+                            $(".showtip").show();
+                        }, 300);*/
 
             //shape.setStroke("gray");
             // this.setFill("blue");
@@ -808,7 +827,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
 
         });
         this.deviceImage.on("mouseout", function(evt) {
-            clearTimeout(showTip);
+            /* clearTimeout(showTip);*/
             $(".showtip").hide();
             document.body.style.cursor = "default";
             var shape = evt.shape;
@@ -830,6 +849,8 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         //         });
         //--------拖拽开始时触发
         this.deviceImage.on("dragstart", function(evt) {
+            //  console.error("start", "x:" + config.data.x + "   y:" + config.data.y);
+            hide_tip(config.data.id);
             config.topology.connector.hide();
             var shape = evt.shape;
             shape.setShadow({
@@ -847,6 +868,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         });
         //--------拖拽结束时触发
         this.deviceImage.on("dragend", function(evt) {
+
             var shape = evt.shape;
             shape.setShadow({
                 color: "white",
@@ -862,6 +884,8 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
             }
             instance.syncConfig();
             instance.config.topology.fitSizeAuto();
+            //   console.error("end", "x:" + config.data.x + "   y:" + config.data.y);
+            show_tip(config.data);
         });
         //--------鼠标移动上触发
         this.deviceImage.on("mousemove", function(evt) {
@@ -916,7 +940,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         return this.connectorImage;
     },
     move: function(device) {
-        //alert(910);
+        //  alert(910);
         if (!this.onDrag) {
             this.device = device;
             var shape = device.getDeviceImage();
@@ -952,7 +976,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         this.draw();
     },
     draw: function() {
-        //alert(946);
+        // alert(946);
         var imageObj = new Image();
         var config = this.config;
         var instance = this;
@@ -1198,7 +1222,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
         else
             x2 = dstElement.getX() + dstElement.getWidth() / 1 - srcElement.getWidth() / 15;
         var y2 = dstElement.getY() + dstElement.getHeight() / 2;
-        console.error("line1188", this.config);
+        // console.error("line1188", this.config);
         //console.log(this.config.stroke+": "+this.config.strokeWidth+": "+this.config.srcDevice.getId()+": "+this.config.dstDevice.getId());
         this.lineObject = new Kinetic.Line({
             points: [x1, y1, x2, y2],
@@ -1699,7 +1723,7 @@ function createSubnetAJAX(subnet) {
                 alert("请检查子网配置格式！");
             } else {
                 window.location.reload();
-                window.location.href = "#/net/net";
+                // window.location.href = "#/net/topology";
             }
         }
     });
@@ -2179,6 +2203,10 @@ function setRuleInfo(data, policy_rules, rule_str, body_str, instance, footer_sh
     $(".footer_str").html(footer_str);
 }
 $(document).on("click", ".close_model", function() {
+    $(".nav-sidebar a[href='#/net/topology']").css({
+        "color": "#337ab7",
+        "background-color": "transparent"
+    });
     $(".close_model_toupu").click();
     that = this;
     setTimeout(function() {
@@ -2347,6 +2375,7 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
 sub1_flag = [];
 $(document).on("click", ".rule_control", function() {
     var id = $(this).attr("name");
+    // alert(sub1_flag[id]);
     $("." + id + "Info").slideToggle();
     if (sub1_flag[id]) {
         $(".info_pic" + id).removeClass("fa fa-angle-double-down");
@@ -2371,6 +2400,45 @@ function getExtNetInfo() {
                 str += "<option value='" + ext_nets[i].id + "''>" + ext_nets[i].name + "</option>"
             }
             $(".outNet_selected").append(str);
+        }
+    });
+}
+
+function setTooltip(data, i) {
+    var x = data.x;
+    var y = data.y;
+    $(".showtip" + i).css({
+        "left": x + 250,
+        "top": y + 180
+    }).html("<span>" + data.name + "</span>");
+}
+
+function hide_tip(id) {
+    console.error("id", id);
+    $("#" + id + "_1").hide();
+}
+
+function delete_tip(id) {
+    console.error($("#" + id));
+    $("#" + id + "_1").remove();
+}
+
+function show_tip(data) {
+    $("#" + data.id + "_1").css({
+        "left": data.x + 250,
+        "top": data.y + 180
+    }).show();
+}
+
+function submit_routerInfo(router_create, that, device) {
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(router_create),
+        contentType: "application/json",
+        url: config["host"] + "/router/create" + "?token=" + window.localStorage.token,
+        success: function(data) {
+            that.topology.addDevice(device);
+            window.location.reload();
         }
     });
 }

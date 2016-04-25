@@ -186,7 +186,7 @@ myApp.controller('instanceDescCtrl', function($scope) {
 
 // 网络与安全 -- 拓扑
 myApp.controller('topologyCtrl', function($scope) {
-
+    $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/topology.js', 'text/javascript', 'utf-8');
@@ -213,6 +213,13 @@ myApp.controller('netCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    });
+    var linkEle = $(".nav-sidebar li a");
+    linkEle.click(function() {
+        linkEle.css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
     });
 });
 // 计算 -- 网络详情
