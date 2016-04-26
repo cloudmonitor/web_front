@@ -2410,9 +2410,11 @@ function getExtNetInfo() {
 function setTooltip(data, i) {
     var x = data.x;
     var y = data.y;
+    var name_len = data.name.length;
+    var start = name_len / 2;
     $(".showtip" + i).css({
-        "left": x + 250,
-        "top": y + 180
+        "left": x + 240 - start * 5,
+        "top": y + 90
     }).html("<span>" + data.name + "</span>");
 }
 
@@ -2427,9 +2429,11 @@ function delete_tip(id) {
 }
 
 function show_tip(data) {
+    var name_len = data.name.length;
+    var start = name_len / 2;
     $("#" + data.id + "_1").css({
-        "left": data.x + 250,
-        "top": data.y + 180
+        "left": data.x + 240 - start * 5,
+        "top": data.y + 90
     }).show();
 }
 
