@@ -72,9 +72,11 @@ $(function() {
                                 //------策略
                                 var policyId = fireWall.firewall_policy_id;
                                 var policyStr = "";
+                                var policy_id;
                                 for (var m = 0; m < allPolicys.length; m++) {
                                     var policy = allPolicys[m];
                                     if (policy.id == policyId) {
+                                        policy_id = policy.id;
                                         policyStr += policy.name;
                                         if (policyInfo == "[")
                                             policyInfo += JSON.stringify(policy);
@@ -84,7 +86,7 @@ $(function() {
                                     }
                                 }
 
-                                setFireWallList(fireWall, routerStr, policyStr, fireWalls[i].id);
+                                setFireWallList(fireWall, routerStr, policyStr, fireWalls[i].id, policy_id);
                             }
                             localStorage.policyInfo += policyInfo + "]";
                             localStorage.routerInfo += routerInfo + "]";
@@ -1235,11 +1237,11 @@ $(document).on("click", ".add_fireWallRouter", function() {
 });
 
 //---------列出防火墙
-function setFireWallList(data, routerStr, policyStr, i) {
+function setFireWallList(data, routerStr, policyStr, i, policy_id) {
     var str = '<tr><td><input type="checkbox" class="fireWall_check" id="' + data.id + '" name="' + routerStr + '"></td><td>' +
         '<a href="#/net/firewall-desc?' + i + '">' + data.name + '</a></td>' +
         '<td>' + data.description + '</td>' +
-        '<td><a href="#/net/firewall-strategy-desc?' + i + '">' + policyStr + '</a></td>' +
+        '<td><a href="#/net/firewall-strategy-desc?' + policy_id + '">' + policyStr + '</a></td>' +
         '<td>' + routerStr + '</td>' +
         '<td>' + data.status + '</td>' +
         '<td>' + data.admin_state_up + '</td><td><div class="btn-group">' +
@@ -1252,7 +1254,7 @@ function setFireWallList(data, routerStr, policyStr, i) {
     if (router_FreeNum > 0)
         str += '<li class="add_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><a href="javascript:void(0)">添加路由</a></li>';
     if (routerStr != "")
-        str += '<li class="delete_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><font color="red"><a href="javascript:void(0)">删除路由</a></font></li>';
+        str += '<li class="delete_fireWallRouter" id="' + data.id + '" data-toggle="modal" data-target="#modal_update_router"><a href="javascript:void(0)"><font color="red">删除路由</font></a></li>';
     str += '</ul>' +
         '</div>' +
         '</td>' +

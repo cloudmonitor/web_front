@@ -1,6 +1,7 @@
 $(function() {
     var num = window.location.href.split("?")[1];
     var policy_Info;
+    console.error(num);
     if (num.length > 3) {
         var policies = JSON.parse(localStorage.policyTemp)['firewall_policies'];
         for (var i = 0; i < policies.length; i++) {
@@ -12,8 +13,6 @@ $(function() {
     } else {
         policy_Info = JSON.parse(localStorage.policyInfo)[num];
     }
-    console.log("==========================>");
-    console.log(policy_Info);
     $("#policy_name").html(policy_Info.name);
     if (policy_Info.description == "")
         policy_Info.description = "无";
