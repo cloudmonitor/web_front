@@ -373,6 +373,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 dstip: config.dstip,
                 stroke: stroke,
                 is_del: config.is_del,
+                id: config.id,
                 strokeWidth: config.strokeWidth
             });
         }
@@ -444,6 +445,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                         dstDevice: dstDevice,
                         stroke: line.stroke,
                         is_del: line.is_del,
+                        id: line.id,
                         strokeWidth: line.strokeWidth
                     });
                 }
@@ -1104,7 +1106,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                                 dstDevice: dstDevice,
                                 stroke: 'black',
                                 is_del: 'true',
-                                strokeWidth: 1
+                                strokeWidth: 2
                             });
                         }
                     }
@@ -1230,6 +1232,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
             points: [x1, y1, x2, y2],
             stroke: this.config.stroke,
             is_del: this.config.is_del,
+            id: this.config.id,
             strokeWidth: this.config.strokeWidth,
             lineCap: "round",
             lineJoin: "round",
@@ -1360,14 +1363,21 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 console.error(instance.config);
                 var ip_addr = "无",
                     src_name, dst_name;
+                line_type = 0;
+                is_delete = false;
                 //-----显示删除外网和路由间的线
+                console.error("instance:", instance);
                 if (src_type == "ext_net" || dts_type == "ext_net") {
+                    line_type = 1;
+                    is_delete = instance.config.is_del;
                     $(".showLineModel").show();
                     if (src_type == "router") {
+                        delete_id = instance.config.srcDevice.id;
                         ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
+                        delete_id = instance.config.dstDevice.id;
                         ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
@@ -1376,13 +1386,18 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 }
                 //-----显示删除路由和网络间的线
                 else if ((src_type == "router" && dts_type == "network") || (src_type == "network" && dts_type == "router")) {
+                    line_type = 2;
+                    is_delete = instance.config.is_del;
+                    port_id = instance.config.id;
                     $(".showLineModel").show();
                     if (src_type == "router") {
+                        delete_id = instance.config.srcDevice.id;
                         if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
                             ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
+                        delete_id = instance.config.dstDevice.id;
                         if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
                             ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
@@ -1390,33 +1405,38 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                     }
                     $(".line_ids").html('<font color="white">路由: ( ' + src_name + ' )<br/>网络: ( ' + dst_name + ' ) <br/>接口: ' + ip_addr + '</font>');
                 }
-                //-----显示删除网络和子网间的线
-                /*                else if ((src_type == "subnet" && dts_type == "network") || (src_type == "network" && dts_type == "subnet")) {
-                                    if (src_type == "subnet") {
-                                        ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
-                                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                                    } else {
-                                        ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
-                                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
-                                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
-                                    }
-                                    $(".line_ids").html('<font color="white">网络: ( ' + dst_name + ' )<br/>子网: ( ' + src_name + ' ) <br/>网关: ' + ip_addr + '</font>');
-                                }
-                */
                 //-----显示删除子网和主机间的线
                 else if ((src_type == "subnet" && dts_type == "server") || (src_type == "server" && dts_type == "subnet")) {
+                    line_type = 4;
+                    is_delete = instance.config.is_del;
                     $(".showLineModel").show();
                     if (src_type == "subnet") {
-                        //ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        delete_id = instance.config.dstDevice.id;
+                        console.error(instance.config.srcDevice);
+                        network_id_temp = instance.config.srcDevice.config.data.network_id;
+                        subnet_id_temp = instance.config.srcDevice.config.data.id;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
-                        // ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
+                        delete_id = instance.config.srcDevice.id;
+                        network_id_temp = instance.config.dstDevice.config.data.network_id;
+                        subnet_id_temp = instance.config.dstDevice.config.data.data.id;
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
                     }
-                    $(".line_ids").html('<font color="white">子网: ( ' + src_name + ' )<br/>主机: ( ' + dst_name + ' ) <br/>IP: ' + ip_addr + '</font>');
+                    $(".line_ids").html('<font color="white">子网: ( ' + src_name + ' )<br/>主机: ( ' + dst_name + ' ) <br/>');
+                } else {
+                    line_type = 3;
+                    is_delete = instance.config.is_del;
+                    $(".showLineModel").show();
+                    if (src_type == "network") {
+                        src_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        dst_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    } else {
+                        dst_name = instance.config.srcDevice.deviceImage.attrs.name;
+                        src_name = instance.config.dstDevice.deviceImage.attrs.name;
+                    }
+                    $(".line_ids").html('<font color="white">网络: ( ' + src_name + ' )<br/>子网: ( ' + dst_name + ' ) <br/>');
                 }
 
             }, 500);
@@ -2445,6 +2465,49 @@ function submit_routerInfo(router_create, that, device) {
         url: config["host"] + "/router/create" + "?token=" + window.localStorage.token,
         success: function(data) {
             that.topology.addDevice(device);
+            window.location.reload();
+        }
+    });
+}
+
+$(document).on("click", ".delete_line", function() {
+    $(".showLineModel").hide();
+    if (!is_delete || line_type == 3) {
+        createAndHideAlert("该连线不可删除！");
+        return;
+    }
+    if (line_type == 1) {
+        var router_temp = {
+            "router": {
+                "external_gateway_info": null
+            }
+        };
+        delete_device(router_temp, "/router/update/" + delete_id);
+    } else if (line_type == 2) {
+        var data = { "router_ports": [] };
+        data['router_ports'][0] = port_id;
+        console.error(">>>>>", data);
+        console.error(">>>>>", '/router/' + delete_id + '/remove_router_interface');
+        delete_device(data, '/router/' + delete_id + '/remove_router_interface');
+    } else if (line_type == 4) {
+        var data = { "interface": { "network_id": "", "subnet_id": "" } };
+        data['interface'].network_id = network_id_temp;
+        data['interface'].subnet_id = subnet_id_temp;
+        console.error(">>>>>", data);
+        console.error(">>>>>", '/interfaces/delete/' + delete_id);
+        delete_device(data, '/interfaces/delete/' + delete_id);
+    }
+
+
+});
+
+function delete_device(data, url) {
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        url: config["host"] + url + "?token=" + window.localStorage.token,
+        success: function(data) {
             window.location.reload();
         }
     });

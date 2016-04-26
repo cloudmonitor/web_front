@@ -58,21 +58,5 @@ $(function() {
 
         $(".showLineModel").hide();
     });
-    $(document).on("click", ".delete_line", function() {
-        $(".showLineModel").hide();
-        var router_temp = {
-            "router": {
-                "external_gateway_info": null
-            }
-        };
-        $.ajax({
-            type: "POST",
-            data: JSON.stringify(router_temp),
-            contentType: "application/json",
-            url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
-            success: function(data) {
-                window.location.reload();
-            }
-        });
-    });
+
 });
