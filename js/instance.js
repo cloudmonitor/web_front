@@ -692,7 +692,7 @@ $(document).on("click", ".sg_detract", function() {
         $(".all_securities").empty();
     node.appendChild($(this).parent().get(0));
 });
-$(".sg_keep").click(function() {
+$(".sg_keep").unbind('click').click(function() {
     //-------------
     var name = $(".edit_instance_name").val();
     var sg_info = { "security_groups": [] };
@@ -905,11 +905,12 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
 function createInstanceFun() {
     //--------------------------------------------------创建虚拟机start
     //--------启动云主机--信息准备阶段
-    $(".start_cloudmonitor").click(function() {
+    $(".start_cloudmonitor").unbind('click').click(function() {
         $(".free_netsInfo").empty();
         $(".all_subnet").remove();
         $(".instance_imageSelect").empty();
         $(".instance_typeselect").empty();
+        $(".instance_domanfree").empty();
         $(".instance_imageSelect").append('<option value="test">选择镜像</option>');
         $(".instance_domanfree").append('<option value="test">任何可用域</option>');
         $(".instance_name").val("");
@@ -979,13 +980,13 @@ function createInstanceFun() {
 
                     }
                 });
-                $(".up_num").click(function() {
+                $(".up_num").unbind('click').click(function() {
                     if (num < free_num) {
                         $(".instance_num").val(++num);
                         setphoto(temp_info, num);
                     }
                 });
-                $(".desc_num").click(function() {
+                $(".desc_num").unbind('click').click(function() {
                     if (num > 1) {
                         $(".instance_num").val(--num);
                         setphoto(temp_info, num);
@@ -1066,190 +1067,190 @@ function createInstanceFun() {
             }
         });
     });
-    $(document).on("click", ".tabel", function() {
-        $(this).next().next().slideToggle();
-    });
 
-    //-----------增加移除处理
-    $(document).on("click", ".net_add", function() {
-        var node = document.getElementById("selected_subnet");
-        $(this).removeClass("net_add");
-        $(this).addClass("net_detract");
-        $(this).find("span").removeClass("fa-plus");
-        $(this).parent().addClass("selected_netTag");
-        $(this).find("span").addClass("fa-minus");
-        node.appendChild($(this).parent().get(0));
-    });
-    $(document).on("click", ".net_detract", function() {
-        var node = document.getElementById("free_subnet" + $(this).attr("name"));
-        $(this).removeClass("net_detract");
-        $(this).addClass("net_add");
-        $(this).find("span").removeClass("fa-minus");
-        $(this).parent().removeClass("selected_netTag");
-        $(this).find("span").addClass("fa-plus");
-        node.appendChild($(this).parent().get(0));
-    });
-    //------------设置进度条
-    function setphoto(temp_info, num) {
-        if (num / (new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed)) > 0.8) {
-            $(".flavor_free").addClass("progress-bar-danger");
-            $(".flavor_free").removeClass("progress-bar-warning");
-        } else if (num / (new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed)) > 0.6) {
-            $(".flavor_free").removeClass("progress-bar-danger");
-            $(".flavor_free").addClass("progress-bar-warning");
-        } else {
-            $(".flavor_free").removeClass("progress-bar-warning");
-            $(".flavor_free").removeClass("progress-bar-danger");
+    //--------------------------------------------------创建虚拟机end
+}
+$(document).on("click", ".tabel", function() {
+    $(this).next().next().slideToggle();
+});
+//-----------增加移除处理
+$(document).on("click", ".net_add", function() {
+    var node = document.getElementById("selected_subnet");
+    $(this).removeClass("net_add");
+    $(this).addClass("net_detract");
+    $(this).find("span").removeClass("fa-plus");
+    $(this).parent().addClass("selected_netTag");
+    $(this).find("span").addClass("fa-minus");
+    node.appendChild($(this).parent().get(0));
+});
+$(document).on("click", ".net_detract", function() {
+    var node = document.getElementById("free_subnet" + $(this).attr("name"));
+    $(this).removeClass("net_detract");
+    $(this).addClass("net_add");
+    $(this).find("span").removeClass("fa-minus");
+    $(this).parent().removeClass("selected_netTag");
+    $(this).find("span").addClass("fa-plus");
+    node.appendChild($(this).parent().get(0));
+});
+//------------设置进度条
+function setphoto(temp_info, num) {
+    if (num / (new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed)) > 0.8) {
+        $(".flavor_free").addClass("progress-bar-danger");
+        $(".flavor_free").removeClass("progress-bar-warning");
+    } else if (num / (new Number(temp_info.maxTotalInstances) - new Number(temp_info.totalInstancesUsed)) > 0.6) {
+        $(".flavor_free").removeClass("progress-bar-danger");
+        $(".flavor_free").addClass("progress-bar-warning");
+    } else {
+        $(".flavor_free").removeClass("progress-bar-warning");
+        $(".flavor_free").removeClass("progress-bar-danger");
+    }
+    //---------主机的设置
+    $(".flavor_num").text(temp_info.maxTotalInstances + "中的" + temp_info.totalInstancesUsed + "已使用");
+    $(".flavor_usednum").css("width", (new Number(temp_info.totalInstancesUsed) / new Number(temp_info.maxTotalInstances) * 100 + "%"));
+    $(".flavor_free").css("width", (num / new Number(temp_info.maxTotalInstances) * 100 + "%"));
+    //---------虚拟CPU数量
+    $(".virtual_cpunum").text(temp_info.maxTotalCores + "中的" + temp_info.totalCoresUsed + "已使用");
+    $(".virtual_usednum").css("width", (new Number(temp_info.totalCoresUsed) / new Number(temp_info.maxTotalCores) * 100 + "%"));
+    $(".virtual_free").css("width", (num / new Number(temp_info.maxTotalCores) * 100 + "%"));
+    //---------内存总计
+    $(".ram_num").text(temp_info.maxTotalRAMSize + "中的" + temp_info.totalRAMUsed + "已使用");
+    $(".ram_usednum").css("width", (new Number(temp_info.totalRAMUsed) / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
+    $(".ram_free").css("width", (num / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
+}
+//---------------设置云主机相应的设置
+function setflavorInfo(flavor) {
+    $(".flavor_name").text(flavor.name);
+    $(".flavor_core").text(flavor.vcpus);
+    $(".flavor_rootdisk").text(flavor.disk + "GB");
+    $(".flavor_tempdisk").text(flavor['OS-FLV-EXT-DATA:ephemeral'] + "GB");
+    $(".flavor_disktotal").text(new Number(flavor.disk) + new Number(flavor['OS-FLV-EXT-DATA:ephemeral']) + "GB");
+    $(".flavor_ram").text(flavor.ram + "MB");
+}
+//----------启动云主机----提交信息
+$(".instance_run").unbind('click').click(function() {
+    var instance = {
+        "server": {
+            "security_groups": [],
+            "availability-zone": "",
+            "name": "",
+            "imageRef": "",
+            "flavorRef": "",
+            "max_count": 1,
+            "network_info": [],
+            "networks": [],
+            "key_name": ""
         }
-        //---------主机的设置
-        $(".flavor_num").text(temp_info.maxTotalInstances + "中的" + temp_info.totalInstancesUsed + "已使用");
-        $(".flavor_usednum").css("width", (new Number(temp_info.totalInstancesUsed) / new Number(temp_info.maxTotalInstances) * 100 + "%"));
-        $(".flavor_free").css("width", (num / new Number(temp_info.maxTotalInstances) * 100 + "%"));
-        //---------虚拟CPU数量
-        $(".virtual_cpunum").text(temp_info.maxTotalCores + "中的" + temp_info.totalCoresUsed + "已使用");
-        $(".virtual_usednum").css("width", (new Number(temp_info.totalCoresUsed) / new Number(temp_info.maxTotalCores) * 100 + "%"));
-        $(".virtual_free").css("width", (num / new Number(temp_info.maxTotalCores) * 100 + "%"));
-        //---------内存总计
-        $(".ram_num").text(temp_info.maxTotalRAMSize + "中的" + temp_info.totalRAMUsed + "已使用");
-        $(".ram_usednum").css("width", (new Number(temp_info.totalRAMUsed) / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
-        $(".ram_free").css("width", (num / new Number(temp_info.maxTotalRAMSize) * 100 + "%"));
+    };
+    var server = instance['server'];
+    //---------可用域
+    var free_domain = $(".instance_domanfree").val();
+    if (free_domain != "test")
+        server['availability-zone'] = free_domain;
+    //--------云主机名称
+    var instanceName = $(".instance_name").val();
+    if (instanceName != "")
+        server.name = instanceName;
+    if (instanceName == "") {
+        alert("云主机名称必填！");
+        return;
     }
-    //---------------设置云主机相应的设置
-    function setflavorInfo(flavor) {
-        $(".flavor_name").text(flavor.name);
-        $(".flavor_core").text(flavor.vcpus);
-        $(".flavor_rootdisk").text(flavor.disk + "GB");
-        $(".flavor_tempdisk").text(flavor['OS-FLV-EXT-DATA:ephemeral'] + "GB");
-        $(".flavor_disktotal").text(new Number(flavor.disk) + new Number(flavor['OS-FLV-EXT-DATA:ephemeral']) + "GB");
-        $(".flavor_ram").text(flavor.ram + "MB");
+    //---------云主机类型
+    var instancetypeselect = $(".instance_typeselect").val();
+    if (instancetypeselect != "test")
+        server.flavorRef = instancetypeselect;
+    //---------云主机数量
+    var instance_num = $(".instance_num").val();
+    server.max_count = instance_num;
+    //----------云主机启动源
+    var selected_name = $(".instance_startOriginSelect").val();
+    if (selected_name == "image") {
+        if ($(".instance_imageSelect").val() != "test") {
+            server.imageRef = $(".instance_imageSelect").val();
+        } else {
+            alert("请选择镜像！");
+            return;
+        }
+    } else if (selected_name == "snap") {
+        if ($(".instance_snapSelect").val() != "test") {
+            //-------不做该功能 
+        }
+    } else {
+        alert("请选择启动源！");
+        return;
     }
-    //----------启动云主机----提交信息
-    $(".instance_run").click(function() {
-        var instance = {
-            "server": {
-                "security_groups": [],
-                "availability-zone": "",
-                "name": "",
-                "imageRef": "",
-                "flavorRef": "",
-                "max_count": 1,
-                "network_info": [],
-                "networks": [],
-                "key_name": ""
-            }
+    //----------键值对
+    var keyValue = $(".key_select").val();
+    if (keyValue != "test")
+        server.key_name = keyValue;
+    else
+        delete server.key_name;
+    //----------安全组
+    var security_i = 0;
+    $(".securities_li").each(function() {
+        if ($(this).prop('checked')) {
+            var obj = { "name": "" };
+            obj.name = $(this).attr("name");
+            server.security_groups[security_i++] = obj;
+        }
+    });
+    //----------网络
+    var temp0 = 0,
+        temp1 = 0;
+    if ($(".selected_netTag") == 'undefined' || $(".selected_netTag") == null) {
+        alert("请选择子网！");
+        return;
+    }
+    if ($(".selected_netTag").length < 1) {
+        alert("请选择子网！");
+        return;
+    }
+    $(".selected_netTag").each(function() {
+        var obj = {
+            "network_id": "",
+            "subnet_id": "",
         };
-        var server = instance['server'];
-        //---------可用域
-        var free_domain = $(".instance_domanfree").val();
-        if (free_domain != "test")
-            server['availability-zone'] = free_domain;
-        //--------云主机名称
-        var instanceName = $(".instance_name").val();
-        if (instanceName != "")
-            server.name = instanceName;
-        if (instanceName == "") {
-            alert("云主机名称必填！");
-            return;
-        }
-        //---------云主机类型
-        var instancetypeselect = $(".instance_typeselect").val();
-        if (instancetypeselect != "test")
-            server.flavorRef = instancetypeselect;
-        //---------云主机数量
-        var instance_num = $(".instance_num").val();
-        server.max_count = instance_num;
-        //----------云主机启动源
-        var selected_name = $(".instance_startOriginSelect").val();
-        if (selected_name == "image") {
-            if ($(".instance_imageSelect").val() != "test") {
-                server.imageRef = $(".instance_imageSelect").val();
-            } else {
-                alert("请选择镜像！");
-                return;
-            }
-        } else if (selected_name == "snap") {
-            if ($(".instance_snapSelect").val() != "test") {
-                //-------不做该功能 
-            }
-        } else {
-            alert("请选择启动源！");
-            return;
-        }
-        //----------键值对
-        var keyValue = $(".key_select").val();
-        if (keyValue != "test")
-            server.key_name = keyValue;
-        else
-            delete server.key_name;
-        //----------安全组
-        var security_i = 0;
-        $(".securities_li").each(function() {
-            if ($(this).prop('checked')) {
-                var obj = { "name": "" };
-                obj.name = $(this).attr("name");
-                server.security_groups[security_i++] = obj;
-            }
-        });
-        //----------网络
-        var temp0 = 0,
-            temp1 = 0;
-        if ($(".selected_netTag") == 'undefined' || $(".selected_netTag") == null) {
-            alert("请选择子网！");
-            return;
-        }
-        if ($(".selected_netTag").length < 1) {
-            alert("请选择子网！");
-            return;
-        }
-        $(".selected_netTag").each(function() {
-            var obj = {
-                "network_id": "",
-                "subnet_id": "",
-            };
-            var obj1 = {
-                "uuid": "",
-            };
-            obj.network_id = $(this).attr("id");
-            obj.subnet_id = $(this).attr("name");
-            obj1.uuid = $(this).attr("id");
-            //alert(typeof($(this).attr("id")));
-            if ($(this).attr("id") != "" && $(this).attr("id") != 'undefined') {
-                server.network_info[temp0++] = obj;
-                if (temp1 == 0)
-                    server.networks[temp1++] = obj1;
-                else {
-                    var len = server.networks.length;
-                    for (var j = 0; j < len; j++) {
-                        if ($(this).attr("id") != server.networks[j] && j == (len - 1)) {
-                            server.networks[temp1++] = obj1;
-                        }
+        var obj1 = {
+            "uuid": "",
+        };
+        obj.network_id = $(this).attr("id");
+        obj.subnet_id = $(this).attr("name");
+        obj1.uuid = $(this).attr("id");
+        //alert(typeof($(this).attr("id")));
+        if ($(this).attr("id") != "" && $(this).attr("id") != 'undefined') {
+            server.network_info[temp0++] = obj;
+            if (temp1 == 0)
+                server.networks[temp1++] = obj1;
+            else {
+                var len = server.networks.length;
+                for (var j = 0; j < len; j++) {
+                    if ($(this).attr("id") != server.networks[j] && j == (len - 1)) {
+                        server.networks[temp1++] = obj1;
                     }
                 }
             }
-        });
-        //console.error(JSON.stringify(instance));
-        $("#loading_monitor").prepend("<span>正在创建,请稍后...</span>");
-        $("#loading_monitor,#background_monitor").show();
-        //-------------------提交数据
-        instance_info(instance);
+        }
     });
+    //console.error(JSON.stringify(instance));
+    $("#loading_monitor").prepend("<span>正在创建,请稍后...</span>");
+    $("#loading_monitor,#background_monitor").show();
+    //-------------------提交数据
+    instance_info(instance);
+});
 
-    function instance_info(json_array) {
-        console.error(JSON.stringify(json_array));
-        $.ajax({
-            type: "POST",
-            data: JSON.stringify(json_array),
-            contentType: "application/json",
-            url: config["host"] + "/servers/create?token=" + window.localStorage.token,
-            success: function(data) {
-                console.error(data);
-                $("#loading_monitor").empty("span");
-                setTimeout(function() {
-                    window.location.reload();
-                }, 4000);
+function instance_info(json_array) {
+    console.error(JSON.stringify(json_array));
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(json_array),
+        contentType: "application/json",
+        url: config["host"] + "/servers/create?token=" + window.localStorage.token,
+        success: function(data) {
+            console.error(data);
+            $("#loading_monitor").empty("span");
+            setTimeout(function() {
+                window.location.reload();
+            }, 4000);
 
-            }
-        });
-    }
-    //--------------------------------------------------创建虚拟机end
+        }
+    });
 }

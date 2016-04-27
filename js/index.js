@@ -30,7 +30,7 @@ $(function() {
             $("#deviceslist").append(str);
             //-----得到当前租户的信息
             getDevice_info(tenantname);
-            $(".devices_list").click(function() {
+            $(".devices_list").unbind('click').click(function() {
                 var select_deveiceName = $(this).html();
                 var curr_deviceName = $(".curr_deviceName").html();
                 if (select_deveiceName != curr_deviceName) {
@@ -80,9 +80,9 @@ function getDevice_info(tenantname) {
                 success: function(data) {
                     // var data = JSON.parse(data);
                     // console.log(data);
-                    localStorage.limits=data;
+                    localStorage.limits = data;
                     // createAndHideAlert(localStorage.limits);
-                    console.warn("data",data);
+                    console.warn("data", data);
                     draw_charts(data);
                 },
                 error: function(data) {

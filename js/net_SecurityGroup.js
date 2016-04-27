@@ -23,7 +23,7 @@ $(function() {
     });
 
     //--------------创建安全组
-    $(".createSgInfo").click(function() {
+    $(".createSgInfo").unbind('click').click(function() {
         $("#update_info").attr("data-toggle", "");
         $("#update_info").attr("data-target", "");
         var name = "";
@@ -112,7 +112,7 @@ $(function() {
         }
     });
     //--------------删除安全组  tenant_id
-    $(".sg_del").click(function() {
+    $(".sg_del").unbind('click').click(function() {
         var count = 0;
         var json_array = '{"sg_ids":[';
         $(".secGoup_id:checked").each(function() {
@@ -155,13 +155,13 @@ $(function() {
         }
     });
 
-    $(".close_temp").click(function() {
+    $(".close_temp").unbind('click').click(function() {
         $("#update_info").attr("data-toggle", "");
         $("#update_info").attr("data-target", "");
     });
     var createOrupdate = 0;
     //----------------修改安全组
-    $("#update_info").click(function() {
+    $("#update_info").unbind('click').click(function() {
         createOrupdate = 0;
         if ($(".secGoup_id:checked").length != 1) {
             createAndHideAlert("请选择一条信息进行修改 ^.^");

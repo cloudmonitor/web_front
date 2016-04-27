@@ -69,7 +69,7 @@ $(function() {
 
     //-----------------设置网关start
     var router_id;
-    $(".setExtNet").click(function() {
+    $(".setExtNet").unbind('click').click(function() {
         $(".router_id").val("");
         $(".router_name").val("");
         $(".setoutNetdesc_selected").empty();

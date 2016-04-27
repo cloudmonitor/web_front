@@ -75,7 +75,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 });
                 var drawType = img.attr("title");
                 if (drawType == "ROUTER") {
-                    $(".createRouter_cancel").click(function() {
+                    $(".createRouter_cancel").unbind('click').click(function() {
                         //  topology.deleteCurrentObject();
                     });
                     //-----------------------------------------------------创建路由start
@@ -87,7 +87,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     getExtNetInfo();
                     //-------------模态end
                     //-------------提交数据start
-                    $(".createRouter_OK").click(function() {
+                    $(".createRouter_OK").unbind('click').click(function() {
                         //--------------提交前对数据的处理
                         var name = $(".create_router_name").val();
                         var status = $(".create_router_status").val();
@@ -438,7 +438,17 @@ Kinetic.Topology = Kinetic.Class.extend({
                 console.log("line420", line);
                 var srcDevice = instance.getDeviceById(line.srcDeviceId);
                 var dstDevice = instance.getDeviceById(line.dstDeviceId);
-                if (srcDevice != null && dstDevice != null) {
+                if (srcDevice != null && dstDevice != null && line.device_owner) {
+                    new Kinetic.Topology.Line({
+                        topology: instance,
+                        srcDevice: srcDevice,
+                        dstDevice: dstDevice,
+                        stroke: line.stroke,
+                        is_del: line.is_del,
+                        id: line.id,
+                        strokeWidth: line.strokeWidth
+                    });
+                } else if (srcDevice != null && dstDevice != null) {
                     new Kinetic.Topology.Line({
                         topology: instance,
                         srcDevice: srcDevice,
@@ -754,7 +764,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 // if (instance.config.data.device_name != "ext_net") {
 
                 //  }
-                $(".delete_device").click(function() {
+                $(".delete_device").unbind('click').click(function() {
                     //console.error(this.id);
                     delete_tip(this.id);
                     deleteDevice();
@@ -2486,16 +2496,16 @@ $(document).on("click", ".delete_line", function() {
     } else if (line_type == 2) {
         var data = { "router_ports": [] };
         data['router_ports'][0] = port_id;
-        console.error(">>>>>", data);
+        console.error(">>>>>", JSON.stringify(data));
         console.error(">>>>>", '/router/' + delete_id + '/remove_router_interface');
-        delete_device(data, '/router/' + delete_id + '/remove_router_interface');
+        //  delete_device(data, '/router/' + delete_id + '/remove_router_interface');
     } else if (line_type == 4) {
         var data = { "interface": { "network_id": "", "subnet_id": "" } };
         data['interface'].network_id = network_id_temp;
         data['interface'].subnet_id = subnet_id_temp;
-        console.error(">>>>>", data);
+        console.error(">>>>>", JSON.stringify(data));
         console.error(">>>>>", '/interfaces/delete/' + delete_id);
-        delete_device(data, '/interfaces/delete/' + delete_id);
+        // delete_device(data, '/interfaces/delete/' + delete_id);
     }
 
 

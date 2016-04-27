@@ -657,7 +657,7 @@ $(document).on("click", ".insert_policy", function() {
             $(".back_select").get(0).selectedIndex = -1;
 
             //------------------提交事件！！！！！
-            $(".addrule_insert").click(function() {
+            $(".addrule_insert").unbind('click').click(function() {
                 var insert_info = {
                     "firewall_rule_id": "",
                     "insert_after": "",
@@ -758,7 +758,7 @@ $(document).on("click", ".delete_policy_rule", function() {
         var options = "<option >" + rules_array[j] + "</option>";
         $(".delete_select").append(options);
     }
-    $(".deleteRule_insert").click(function() {
+    $(".deleteRule_insert").unbind('click').click(function() {
         var data = localStorage.temp_rules;
         var insert_name = $(".delete_select option:selected").text();
         var temp_rules = JSON.parse(data)['firewall_rules'];
@@ -1104,7 +1104,7 @@ $(document).on("click", ".delete_fireWallRouter", function() {
             $(".routers_updatecheckBox").append(str);
 
             //----------更新路由提交
-            $(".updateFireWallRouter_OK").click(function() {
+            $(".updateFireWallRouter_OK").unbind('click').click(function() {
                 var fire_create = {
                     "firewall": {
                         "admin_state_up": true,
@@ -1197,7 +1197,7 @@ $(document).on("click", ".add_fireWallRouter", function() {
             }
             $(".routers_updatecheckBox").append(str);
             //----------更新路由提交
-            $(".updateFireWallRouter_OK").click(function() {
+            $(".updateFireWallRouter_OK").unbind('click').click(function() {
                 var fire_create = {
                     "firewall": {
                         "admin_state_up": true,
