@@ -1,15 +1,15 @@
 $(function() {
-    $("#loading_monitor,#background_monitor").hide();
     $.ajax({
         type: "GET",
         url: config["host"] + "/tuopu?token=" + window.localStorage.token,
         success: function(data) {
             //console.log(">>>"+data);
             expTopoListChange(data);
+
         },
         error: function(data) {
             createAndHideAlert("获取信息错误！");
-        }
+        } /**/
     });
     $(".next_page").click(function() {
         $(".footer1_page").hide();
@@ -50,12 +50,11 @@ $(function() {
         $(this).addClass("btn-primary");
     });
     $(document).on("click", ".create_instanceOK", function() {
-        $("#loading_monitor").prepend("<span>正在创建,请稍后...</span>");
+        $(".text_show").html("正在创建,请稍后...");
         $("#loading_monitor,#background_monitor").show();
         submit_instanceInfo();
     });
     $(document).on("click", ".cancel_lineButton", function() {
-
         $(".showLineModel").hide();
     });
 

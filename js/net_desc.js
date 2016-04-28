@@ -260,18 +260,19 @@ function setNetInfo(netInfo, manager_status) {
 }
 //-------创建子网
 create_subnetFun();
-//function setNetselect() {
-//    $(".private_selected").empty();
-//    $(".private_selected").append('<option value="test">选择私有网络</option>');
-//    var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
-//    var server;
-//    var str = "";
-//    for (var i = 0; i < servers.length; i++) {
-//        server = servers[i];
-//        str += '<option value="' + server.id + '">' + server.name + '</option>';
-//    }
-//    $(".private_selected").append(str);
-//}
+function setNetselect() {
+   $(".private_selected").empty();
+   $(".private_selected").append('<option value="test">选择私有网络</option>');
+   var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
+   var server;
+   var str = "";
+   for (var i = 0; i < servers.length; i++) {
+       server = servers[i];
+       str += '<option value="' + server.id + '">' + server.name + '</option>';
+   }
+   $(".private_selected").append(str);
+}
+
 
 function createSubnetAJAX(subnet) {
     console.log(JSON.stringify(subnet));

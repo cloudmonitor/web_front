@@ -113,8 +113,9 @@ function flvors_info() {
 }
 //------创建网络
 function create_networkFun() {
+    $(".subNet_infos").show();
     //------------创建网络面板的控制--start
-    $(".create_networkCancel").unbind('click').click(function() {
+    $(".create_networkCancel").off('click').click(function() {
         if (!flag) {
             $(".info_pic").removeClass("fa fa-angle-double-up");
             $(".info_pic").addClass("fa fa-angle-double-down");
@@ -128,7 +129,7 @@ function create_networkFun() {
     });
     //--------是否显示子网详细
     var flag = true;
-    $(".choose_subnet").unbind('click').click(function() {
+    $(".choose_subnet").off('click').click(function() {
         $(".subnet_multi").slideToggle();
         if (flag) {
             $(".info_pic").removeClass("fa fa-angle-double-down");
@@ -141,7 +142,7 @@ function create_networkFun() {
         }
     });
     //-------是否显示子网
-    $(".subnet_check").change(function() {
+    $(".subnet_check").off('change').change(function() {
         if ($(".subnet_check").is(":checked")) {
             $(".subNet_infos").fadeToggle();
         } else {
@@ -151,7 +152,7 @@ function create_networkFun() {
 
     //------------创建网络面板的控制--end
     //-------------创建网络
-    $(".create_networkOk").unbind('click').click(function() {
+    $(".create_networkOk").off('click').click(function() {
         var network_json;
         var net_managerStatus;
         var net_name = $(".createnetwork_name").val();
@@ -215,7 +216,7 @@ function create_networkFun() {
 function create_subnetFun() {
     //---------------创建子网面板配置
     var sub1_flag = true;
-    $(".createchoose_subnet").unbind('click').click(function() {
+    $(".createchoose_subnet").off('click').click(function() {
         $(".createsubnet_multi").slideToggle();
         if (sub1_flag) {
             $(".info_pic2").removeClass("fa fa-angle-double-down");
@@ -228,7 +229,7 @@ function create_subnetFun() {
         }
     });
     var sub2_flag = true;
-    $(".showmoresubnetInfo").unbind('click').click(function() {
+    $(".showmoresubnetInfo").off('click').click(function() {
         $(".showMoreInfo").slideToggle();
         if (sub2_flag) {
             $(".info_pic3").removeClass("fa fa-angle-double-down");
@@ -240,26 +241,32 @@ function create_subnetFun() {
             sub2_flag = true;
         }
     });
-    $(".subnet_opengateway").change(function() {
+    $(".subnet_opengateway").off('change').change(function() {
         if (!$(".subnet_opengateway").is(":checked"))
             $(".creategateway_adrr").attr("disabled", true);
         else
             $(".creategateway_adrr").attr("disabled", false);
     });
-    $(document).unbind('click').on("click", ".add_subnetInfo", function() {
+    $(".add_subnetInfo").off('click').on("click", function() {
         $(".private_selected").empty();
         $(".private_selected").append('<option value="test">选择私有网络</option>');
-        var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
-        var server;
-        var str = "";
-        for (var i = 0; i < servers.length; i++) {
-            server = servers[i];
-            str += '<option value="' + server.id + '">' + server.name + '</option>';
-        }
-        $(".private_selected").append(str);
+        $.ajax({
+            type: "GET",
+            url: config["host"] + "/networks?token=" + window.localStorage.token,
+            success: function(data) {
+                var servers = JSON.parse(data)['networks'];
+                var server;
+                var str = "";
+                for (var i = 0; i < servers.length; i++) {
+                    server = servers[i];
+                    str += '<option value="' + server.id + '">' + server.name + '</option>';
+                }
+                $(".private_selected").append(str);
+            }
+        });
     });
     //---------创建子网
-    $(".create_subnetworkOk").unbind('click').click(function() {
+    $(".create_subnetworkOk").off('click').click(function() {
         update_flag = false;
         //------子网名称
         var sub_name = $(".createsubnet_name").val();

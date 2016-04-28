@@ -12,7 +12,7 @@ $(function() {
         width: $("#centerTabs").width() - 10,
         height: 740,
         backgroundImage: "", //./icon/background.png",
-        connectorImage: "./icon/connector.png",
+        connectorImage: "./icon/2.png",
         toolbar: {
             container: 'toolbar',
             data: [

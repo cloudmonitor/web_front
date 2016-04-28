@@ -75,7 +75,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 });
                 var drawType = img.attr("title");
                 if (drawType == "ROUTER") {
-                    $(".createRouter_cancel").unbind('click').click(function() {
+                    $(".createRouter_cancel").click(function() {
                         //  topology.deleteCurrentObject();
                     });
                     //-----------------------------------------------------创建路由start
@@ -87,7 +87,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     getExtNetInfo();
                     //-------------模态end
                     //-------------提交数据start
-                    $(".createRouter_OK").unbind('click').click(function() {
+                    $(".createRouter_OK").click(function() {
                         //--------------提交前对数据的处理
                         var name = $(".create_router_name").val();
                         var status = $(".create_router_status").val();
@@ -373,6 +373,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 dstip: config.dstip,
                 stroke: stroke,
                 is_del: config.is_del,
+                fixed_ips: config.fixed_ips,
                 id: config.id,
                 strokeWidth: config.strokeWidth
             });
@@ -438,7 +439,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 console.log("line420", line);
                 var srcDevice = instance.getDeviceById(line.srcDeviceId);
                 var dstDevice = instance.getDeviceById(line.dstDeviceId);
-                if (srcDevice != null && dstDevice != null && line.device_owner) {
+                if (srcDevice != null && dstDevice != null) {
                     new Kinetic.Topology.Line({
                         topology: instance,
                         srcDevice: srcDevice,
@@ -446,20 +447,12 @@ Kinetic.Topology = Kinetic.Class.extend({
                         stroke: line.stroke,
                         is_del: line.is_del,
                         id: line.id,
-                        strokeWidth: line.strokeWidth
-                    });
-                } else if (srcDevice != null && dstDevice != null) {
-                    new Kinetic.Topology.Line({
-                        topology: instance,
-                        srcDevice: srcDevice,
-                        dstDevice: dstDevice,
-                        stroke: line.stroke,
-                        is_del: line.is_del,
-                        id: line.id,
-                        strokeWidth: line.strokeWidth
+                        strokeWidth: line.strokeWidth,
+                        fixed_ips: line.device_owner == "network:router_interface" ? line.fixed_ips : ""
                     });
                 }
             }
+            $("#loading_monitor,#background_monitor").hide();
 
         } else {
             setTimeout(function() { instance.loadLineAsync(instance, jsonObj); }, 300);
@@ -764,7 +757,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 // if (instance.config.data.device_name != "ext_net") {
 
                 //  }
-                $(".delete_device").unbind('click').click(function() {
+                $(".delete_device").click(function() {
                     //console.error(this.id);
                     delete_tip(this.id);
                     deleteDevice();
@@ -958,7 +951,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
         if (!this.onDrag) {
             this.device = device;
             var shape = device.getDeviceImage();
-            var x = shape.getX() + shape.getWidth() / 2 - 5;
+            var x = shape.getX() + shape.getWidth() / 2 - 13;
             var y = shape.getY() + shape.getHeight() / 2 - 5;
             this.connectorImage.setX(x);
             this.connectorImage.setY(y);
@@ -1242,6 +1235,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
             points: [x1, y1, x2, y2],
             stroke: this.config.stroke,
             is_del: this.config.is_del,
+            fixed_ips: this.config.fixed_ips,
             id: this.config.id,
             strokeWidth: this.config.strokeWidth,
             lineCap: "round",
@@ -1400,16 +1394,17 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                     is_delete = instance.config.is_del;
                     port_id = instance.config.id;
                     $(".showLineModel").show();
+                    ip_addr = "";
+                    for (var i = 0; i < instance.config.fixed_ips.length; i++) {
+                        console.error("ip_addr", instance.config.fixed_ips[i]);
+                        ip_addr += instance.config.fixed_ips[i]['ip_address'] + "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                    }
                     if (src_type == "router") {
                         delete_id = instance.config.srcDevice.id;
-                        if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
-                            ip_addr = instance.config.srcDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
                         dst_name = instance.config.dstDevice.deviceImage.attrs.name;
                     } else {
                         delete_id = instance.config.dstDevice.id;
-                        if (instance.config.dstDevice.config.data['external_gateway_info'] != null)
-                            ip_addr = instance.config.dstDevice.config.data['external_gateway_info']['external_fixed_ips'][0].ip_address;
                         dst_name = instance.config.srcDevice.deviceImage.attrs.name;
                         src_name = instance.config.dstDevice.deviceImage.attrs.name;
                     }
@@ -2022,9 +2017,10 @@ function submit_instanceInfo() {
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
             $("#loading_monitor").empty("span");
-            setTimeout(function() {
-                window.location.reload();
-            }, 1000);
+            /*            setTimeout(function() {
+             */
+            window.location.reload();
+            /*            }, 500);*/
         }
     });
 
