@@ -41,9 +41,9 @@ $(function() {
                                     fireWall.status = "非激活";
                                 //-----管理员状态的转换
                                 if (fireWall.admin_state_up == true || fireWall.admin_state_up == 'true')
-                                    fireWall.admin_state_up = "上";
+                                    fireWall.admin_state_up = "激活";
                                 else
-                                    fireWall.admin_state_up = "下";
+                                    fireWall.admin_state_up = "未激活";
                                 //-----描述的判断
                                 if (fireWall.description == "" || fireWall.description == null) {
                                     fireWall.description = "无";
@@ -1010,7 +1010,7 @@ $(document).on('click', ".edit_fireWall", function() {
     var desc = $(this).parent().parent().siblings(":eq(2)").text();
     $(".update_fireWall_desc").val(desc);
     var status = $(this).parent().parent().siblings(":eq(6)").text();
-    if (status == "上")
+    if (status == "激活")
         $(".update_manager_status option[value=true]").attr("selected", true);
     else
         $(".update_manager_status option[value=false]").attr("selected", true);

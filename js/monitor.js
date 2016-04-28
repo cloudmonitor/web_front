@@ -5,6 +5,7 @@ ajaxbg.show();
 setTimeout("ajaxbg.hide()", 3000);
 $(function() {
     $('#option1').click();
+    var monitor_id = window.location.href.split('?')[1];
     var curr_type = "minute";
     var cur_id;
     //主机的获取
@@ -19,7 +20,11 @@ $(function() {
                 for (var i = 0; i < servers.length; i++)
                     $(".monitors_wj").append('<option value="' + servers[i].id + '">' + servers[i].name + '</option>');
                 cur_id = servers[0].id;
-                preSetAjax(servers[0].id, curr_type, arr);
+                if (monitor_id != 'undefined' && monitor_id != undefined) {
+                    cur_id = monitor_id;
+                    $(".monitors_wj option[value='" + cur_id + "']").attr("selected", true);
+                }
+                preSetAjax(cur_id, curr_type, arr);
             } else {
                 $('.monitors_wj').css("display", "none");
                 var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
@@ -85,7 +90,7 @@ function setAjax(id, curr_type, meter_name, arr) {
         type: "GET",
         url: config["host"] + "/monitor/" + id + "/" + meter_name + "/" + curr_type + "?token=" + window.localStorage.token,
         success: function(data) {
-            console.log(data);
+            // console.log(data);
             var cpu_utils = JSON.parse(data)[meter_name];
             if (cpu_utils[0] != null && cpu_utils[0] != "") {
                 for (var i = 0; i < cpu_utils.length; i++) {

@@ -202,6 +202,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
                             that.currentObject.remove();
+                            location.reload();
                             createAndHideAlert(x + "删除成功！");
                         } else
                             createAndHideAlert(x + "删除失败");
@@ -2382,11 +2383,13 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
                             //------是否有安全组
                             if (temp > 0) {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 $(".footer_str").html(footer_str);
                             } else {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 rule_str = "<font color='#C4C4C4'><B>暂未分配安全组</B></font>";
@@ -2438,6 +2441,9 @@ function setTooltip(data, i) {
     var y = data.y;
     var name_len = data.name.length;
     var start = name_len / 2;
+    if (data.device_name == 'subnet') {
+        data.name = data.cidr;
+    }
     $(".showtip" + i).css({
         "left": x + 240 - start * 5,
         "top": y + 90

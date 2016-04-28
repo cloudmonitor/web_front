@@ -18,9 +18,9 @@ $(function() {
                     for (var i = servers['networks'].length - 1; i >= 0; i--) {
                         var server = servers['networks'][i];
                         if (server.admin_state_up == true)
-                            server.admin_state_up = "上";
+                            server.admin_state_up = "激活";
                         else
-                            server.admin_state_up = "下";
+                            server.admin_state_up = "未激活";
                         //----子网
                         var sub_str = "";
                         var subnets = server['subnets'];
@@ -144,7 +144,7 @@ $(".edite_networkCancel").click(function() {
 $(document).on("click", ".edite_net_class", function() {
     $(".editenetwork_name").val($(this).attr("name"));
     $(".editenetwork_id").val($(this).attr("id"));
-    $(".editenetwork_managerStatus option[value='" + ($(this).attr("status") == "上" ? "up" : "down") + "']").attr('selected', true);
+    $(".editenetwork_managerStatus option[value='" + ($(this).attr("status") == "激活" ? "up" : "down") + "']").attr('selected', true);
 });
 $(".edite_networkOk").click(function() {
     var name = $(".editenetwork_name").val();

@@ -239,7 +239,7 @@ $(document).on('click', ".edit_router", function() {
     $(".edit_router_id").val($(this).attr("id"));
     var infos = $(this).attr("name").split(":");
     $(".edit_router_name").val(infos[0]);
-    if (infos[1] == "上")
+    if (infos[1] == "激活")
         $(".managerStatus_selected option[value='up']").attr("selected", true);
     else
         $(".managerStatus_selected option[value='down']").attr("selected", true);
@@ -313,9 +313,9 @@ function dealRouterInfo(rounter, networks) {
         rounter.name = "(" + rounter.id.substr(0, 13) + ")";
     //---管理员状态
     if (rounter.admin_state_up == true)
-        rounter.admin_state_up = "上";
+        rounter.admin_state_up = "激活";
     else
-        rounter.admin_state_up = "下";
+        rounter.admin_state_up = "未激活";
     //---外部网络
     console.error("rounter:", rounter);
     if (rounter.external_gateway_info != null && rounter.external_gateway_info != "") {

@@ -63,7 +63,7 @@ $(function() {
                         }
                         //-----管理员的状态变换
                         if (port_info.admin_state_up == true) {
-                            port_info.admin_state_up = "上";
+                            port_info.admin_state_up = "激活";
                         } else {
                             port_info.admin_state_up = "状态待补充";
                         }
@@ -91,9 +91,9 @@ $(function() {
                 for (var i = servers['networks'].length - 1; i >= 0; i--) {
                     if (servers['networks'][i].id == id) {
                         if (servers['networks'][i].admin_state_up == true)
-                            servers['networks'][i].admin_state_up = "上";
+                            servers['networks'][i].admin_state_up = "激活";
                         else
-                            servers['networks'][i].admin_state_up = "下";
+                            servers['networks'][i].admin_state_up = "未激活";
                         setNetInfo(servers['networks'][i], servers['networks'][i].admin_state_up);
                         curr_net = i;
                         break;
@@ -158,7 +158,7 @@ $(function() {
                                         }
                                         //-----管理员的状态变换
                                         if (port_info.admin_state_up == true) {
-                                            port_info.admin_state_up = "上";
+                                            port_info.admin_state_up = "激活";
                                         } else {
                                             port_info.admin_state_up = "状态待补充";
                                         }

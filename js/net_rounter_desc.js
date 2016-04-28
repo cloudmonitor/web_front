@@ -21,7 +21,7 @@ $(function() {
             $(".routerDesc_id").text(cur_router.id);
             $(".routerDesc_proId").text(cur_router.tenant_id);
             $(".routerDesc_status").text(cur_router.status ? "运行中" : "未运行");
-            $(".routerDesc_managerStatus").text(cur_router.admin_state_up ? "上" : "下");
+            $(".routerDesc_managerStatus").text(cur_router.admin_state_up ? "激活" : "未激活");
             var extgatewall_info = cur_router.external_gateway_info;
             if (cur_router.external_gateway_info == null) {
                 $(".extnet_table").hide();
@@ -124,7 +124,7 @@ $(function() {
         $(".edit_routerdesc_id").val(router_id);
         $(".edit_routerdesc_name").val($(".routerDesc_name").text());
         // createAndHideAlert($(".routerDesc_managerStatus").text());
-        if ($(".routerDesc_managerStatus").text() == "上") {
+        if ($(".routerDesc_managerStatus").text() == "激活") {
             $(".managerStatusdesc_selected option[value='up']").attr("selected", true);
         } else {
             $(".managerStatusdesc_selected option[value='down']").attr("selected", true);
@@ -288,7 +288,7 @@ function sertPortList(data) {
         '<td>' + data.fixed_ips[0].ip_address + '</td>' +
         '<td>' + (data.status == "ACTIVE" ? "运行中" : "未运行") + '</td>' +
         '<td>' + (data['binding:vnic_type'] == 'normal' ? "内部接口" : "外部接口") + '</td>' +
-        '<td>' + (data.admin_state_up ? "上" : "下") + '</td>' +
+        '<td>' + (data.admin_state_up ? "激活" : "未激活") + '</td>' +
         '<td>' +
         '<div class="btn-group">' +
         '<button type="button" class="btn btn-default btn-sm btn-danger deletePortSimple" id="' + data['fixed_ips'][0]['subnet_id'] + '">删除接口</button>' +

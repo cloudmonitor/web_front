@@ -21,7 +21,7 @@ $(function() {
         fireWall.status = "状态待补充";
     //-----管理员状态的转换
     if (fireWall.admin_state_up == true || fireWall.admin_state_up == 'true')
-        fireWall.admin_state_up = "上";
+        fireWall.admin_state_up = "激活";
     else
         fireWall.admin_state_up = "状态待补充";
     //-----描述的判断
