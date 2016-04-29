@@ -758,7 +758,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 // if (instance.config.data.device_name != "ext_net") {
 
                 //  }
-                $(".delete_device").click(function() {
+                $(".delete_device").off('click').click(function() {
                     //console.error(this.id);
                     delete_tip(this.id);
                     deleteDevice();
@@ -1860,7 +1860,10 @@ function setInstanceReadyInfo() {
                 var keypair = keypairs[i]['keypair'];
                 keypair_str += '<option  name="' + keypair.name + '"> ' + keypair.name + ' </option>';
             }
-            $(".key_select").append(keypair_str);
+            if (keypair_str != "")
+                $(".key_select").append(keypair_str);
+            else
+                $(".key_select").append('<option  name="info_show"> 暂无密钥 </option>');
         }
     });
 }
@@ -1997,7 +2000,11 @@ function submit_instanceInfo() {
     server.imageRef = selected_name;
     //----------键值对
     var keyValue = $(".key_select").val();
-    server.key_name = keyValue;
+    var len = $("#password_login[class*='active']").length;
+    if (keyValue != "暂无密钥" && len == 0)
+        server.key_name = keyValue;
+    else
+        delete server.key_name;
     //----------安全组
     //----------网络
     var server_id = $(".subnetInfo_select option:selected").attr("id");
@@ -2009,7 +2016,7 @@ function submit_instanceInfo() {
         "network_id": server_id,
         "subnet_id": subnet_id,
     };
-    console.error(JSON.stringify(instance));
+    // console.error(JSON.stringify(instance));
     //-------------------提交数据
     $.ajax({
         type: "POST",
@@ -2017,6 +2024,7 @@ function submit_instanceInfo() {
         contentType: "application/json",
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
+            // console.error(data);
             $("#loading_monitor").empty("span");
             /*            setTimeout(function() {
              */
