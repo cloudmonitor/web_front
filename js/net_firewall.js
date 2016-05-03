@@ -1248,7 +1248,7 @@ $(document).on("click", ".add_fireWallRouter", function() {
 //---------列出防火墙
 function setFireWallList(data, routerStr, policyStr, i, policy_id) {
     var str = '<tr><td><input type="checkbox" class="fireWall_check" id="' + data.id + '" name="' + routerStr + '"></td><td>' +
-        '<a href="#/net/firewall-desc?' + i + '">' + (data.name == "" ? "(" + data.id.substr(0, 13) : data.name) + ")" + '</a></td>' +
+        '<a href="#/net/firewall-desc?' + i + '">' + (data.name == "" ? "(" + data.id.substr(0, 13) + ")" : data.name) + '</a></td>' +
         '<td>' + data.description + '</td>' +
         '<td><a href="#/net/firewall-strategy-desc?' + policy_id + '">' + policyStr + '</a></td>' +
         '<td>' + routerStr + '</td>' +
