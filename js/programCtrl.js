@@ -4,6 +4,8 @@ programApp.controller('programCtrl', programCtrl);
 
 // 项目控制器函数
 function programCtrl($scope, $http) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $("head title").text("项目");
     $(".nav-sidebar a[href='#/info/program']").css({
         "color": "#fff",

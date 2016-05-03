@@ -3,8 +3,8 @@ $(function() {
         "color": "#fff",
         "background-color": "#428bca"
     });
-    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     var chart_data;
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $.ajax({
         type: "GET",
         url: config["host"] + "/tenants?token=" + window.localStorage.token,
@@ -60,7 +60,7 @@ $(function() {
     $("#lagout").click(function() {
         $('#myModal').modal('toggle')
         window.localStorage.clear();
-        location.href = "login.html";
+        location.href = "#/";
     });
 
 });

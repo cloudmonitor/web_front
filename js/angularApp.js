@@ -149,6 +149,8 @@ myApp.run(function($rootScope, $location, $templateCache) {
 
 // 计算 -- 实例
 myApp.controller('instanceCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance.js');
@@ -167,6 +169,8 @@ myApp.controller('instanceCtrl', function($scope) {
 });
 // 计算 -- 实例详情
 myApp.controller('instanceDescCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance_desc.js');
@@ -186,6 +190,8 @@ myApp.controller('instanceDescCtrl', function($scope) {
 
 // 网络与安全 -- 拓扑
 myApp.controller('topologyCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
@@ -206,6 +212,8 @@ myApp.controller('topologyCtrl', function($scope) {
 
 // 网络与安全 -- 网络
 myApp.controller('netCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/net_netInfo.js');
@@ -224,6 +232,8 @@ myApp.controller('netCtrl', function($scope) {
 });
 // 计算 -- 网络详情
 myApp.controller('netDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_desc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -241,6 +251,8 @@ myApp.controller('netDesc', function($scope) {
 
 // 网络与安全 -- 子网详情
 myApp.controller('subnetDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_desc_subNetDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -257,6 +269,8 @@ myApp.controller('subnetDesc', function($scope) {
 });
 // 网络与安全 -- 端口详情
 myApp.controller('portnetDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_desc_portDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -274,6 +288,8 @@ myApp.controller('portnetDesc', function($scope) {
 
 // 网络与安全 -- 安全组
 myApp.controller('secGroupCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/net_SecurityGroup.js');
     $("head title").text("安全组");
@@ -291,6 +307,8 @@ myApp.controller('secGroupCtrl', function($scope) {
 });
 // 网络与安全 -- 安全组详情
 myApp.controller('secGroupDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_SecurityGroup_desc.js');
     $("head title").text("安全组");
     $(".nav-sidebar a[href='#/net/secGroup']").css({
@@ -308,6 +326,8 @@ myApp.controller('secGroupDesc', function($scope) {
 
 // 网络与安全 -- 防火墙
 myApp.controller('firewallCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_firewall.js');
     $scope.$parent.loadScript('js/popover-firewall.js');
     $("head title").text("防火墙");
@@ -325,6 +345,8 @@ myApp.controller('firewallCtrl', function($scope) {
 });
 // 网络与安全 -- 防火墙详情
 myApp.controller('firewallDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_firewall_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -341,6 +363,8 @@ myApp.controller('firewallDesc', function($scope) {
 });
 // 网络与安全 -- 防火墙策略详情
 myApp.controller('firewallstrategyDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_firewall_policy_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -357,6 +381,8 @@ myApp.controller('firewallstrategyDesc', function($scope) {
 });
 // 网络与安全 -- 防火墙规则详情
 myApp.controller('firewallruleDesc', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_firewall_rule_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -375,6 +401,8 @@ myApp.controller('firewallruleDesc', function($scope) {
 
 // 网络与安全 -- 路由器
 myApp.controller('routerCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_rounter.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
@@ -391,6 +419,8 @@ myApp.controller('routerCtrl', function($scope) {
 });
 // 网络与安全 -- 路由器详情
 myApp.controller('routerdescCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/net_rounter_desc.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
@@ -408,6 +438,8 @@ myApp.controller('routerdescCtrl', function($scope) {
 
 // 网络与安全 -- 主机监控
 myApp.controller('monitorCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
@@ -428,6 +460,8 @@ myApp.controller('monitorCtrl', function($scope) {
 
 // 信息 -- 基本信息
 myApp.controller('base-infoCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $scope.$parent.loadScript('js/user_base_info.js');
     $("head title").text("基本信息");
     $(".nav-sidebar a[href='#/info/base-info']").css({
@@ -444,6 +478,8 @@ myApp.controller('base-infoCtrl', function($scope) {
 });
 // 信息 -- 账户信息
 myApp.controller('account-infoCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $("head title").text("账户信息");
     $(".nav-sidebar a[href='#/info/account-info']").css({
         "color": "#fff",

@@ -1,6 +1,8 @@
 var modifyPasswdApp = angular.module('modifyPasswdApp', []);
 
 modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($scope, $http) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $("head title").text("修改密码");
     $(".nav-sidebar a[href='#/info/modify-passwd']").css({
         "color": "#fff",
@@ -14,7 +16,7 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
         });
     });
 
-    $scope.showPasswd = function(){
+    $scope.showPasswd = function() {
         var isShow = $scope.checkPasswd;
         console.info("显示密码:", isShow);
         if (isShow) {

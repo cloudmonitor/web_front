@@ -4,6 +4,8 @@ floatingIPApp.controller('floatingIPCtrl', floatingIPCtrl);
 
 // 浮动IP控制器
 function floatingIPCtrl($scope, $http) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
     $("head title").text("浮动IP");
     $(".nav-sidebar a[href='#/net/floatingIP']").css({
         "color": "#fff",

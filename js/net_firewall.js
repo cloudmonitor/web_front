@@ -821,6 +821,7 @@ $(".create_fireWallButton").click(function() {
         url: config["host"] + "/firewalls?token=" + window.localStorage.token,
         success: function(data) {
             var router_router_ids = JSON.parse(data)['firewalls'];
+            // console.error("router_router_ids", data);
             $.ajax({
                 type: "GET",
                 url: config["host"] + "/firewall_policies?token=" + window.localStorage.token,
@@ -835,38 +836,46 @@ $(".create_fireWallButton").click(function() {
                     $(".fireWall_policys_selected").append(str);
                     //-------------设置路由
                     var allRounters = JSON.parse(localStorage.router_temp)['routers'];
+                    console.error("allRounters", allRounters);
                     str = "";
                     var flag = 0;
                     for (var i = 0; i < allRounters.length; i++) {
                         flag = 0;
-                        for (var k = 0; k < router_router_ids.length; k++) {
-                            router_ids = router_router_ids[k]['router_ids'];
-                            console.log("----->" + k);
-                            if (router_ids.length != 0) {
-                                for (var j = 0; j < router_ids.length; j++) {
-                                    if (flag == 0 && router_ids[j] != allRounters[i].id) {
-                                        if (k == (router_router_ids.length - 1) && j == (router_ids.length - 1)) {
-                                            str += '<label class="control-lable">' +
-                                                '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
-                                                '</input></label><br/>';
+                        if (router_router_ids.length == 0) {
+                            str += '<label class="control-lable">' +
+                                '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                '</input></label><br/>';
+                        } else {
+                            for (var k = 0; k < router_router_ids.length; k++) {
+                                router_ids = router_router_ids[k]['router_ids'];
+                                console.log("----->" + k);
+                                if (router_ids.length != 0) {
+                                    for (var j = 0; j < router_ids.length; j++) {
+                                        if (flag == 0 && router_ids[j] != allRounters[i].id) {
+                                            if (k == (router_router_ids.length - 1) && j == (router_ids.length - 1)) {
+                                                str += '<label class="control-lable">' +
+                                                    '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                                    '</input></label><br/>';
+                                            }
+                                        } else {
+                                            flag = 1;
+                                            break;
                                         }
-                                    } else {
-                                        flag = 1;
-                                        break;
                                     }
-                                }
-                            } else {
-                                if (flag == 1) {
-                                    break;
-                                } else if (k != (router_router_ids.length - 1)) {
-                                    continue;
-                                } else if (k == (router_router_ids.length - 1)) {
-                                    str += '<label class="control-lable">' +
-                                        '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
-                                        '</input></label><br/>';
+                                } else {
+                                    if (flag == 1) {
+                                        break;
+                                    } else if (k != (router_router_ids.length - 1)) {
+                                        continue;
+                                    } else if (k == (router_router_ids.length - 1)) {
+                                        str += '<label class="control-lable">' +
+                                            '<input type="checkbox" class="fireWall_routers" value=' + allRounters[i].id + '>' + allRounters[i].name +
+                                            '</input></label><br/>';
+                                    }
                                 }
                             }
                         }
+
                     }
                     $(".routers_checkBox").append(str);
                 }
@@ -911,7 +920,7 @@ $(".addFireWall_OK").click(function() {
             window.location.reload();
         },
         error: function(data) {
-            createAndHideAlert("我在浪费时间，我在挥霍时光，我在模糊现在，我在恐惧未来。");
+            createAndHideAlert("信息获取失败");
         }
     });
 
@@ -1239,7 +1248,7 @@ $(document).on("click", ".add_fireWallRouter", function() {
 //---------列出防火墙
 function setFireWallList(data, routerStr, policyStr, i, policy_id) {
     var str = '<tr><td><input type="checkbox" class="fireWall_check" id="' + data.id + '" name="' + routerStr + '"></td><td>' +
-        '<a href="#/net/firewall-desc?' + i + '">' + data.name + '</a></td>' +
+        '<a href="#/net/firewall-desc?' + i + '">' + (data.name == "" ? "(" + data.id.substr(0, 13) : data.name) + ")" + '</a></td>' +
         '<td>' + data.description + '</td>' +
         '<td><a href="#/net/firewall-strategy-desc?' + policy_id + '">' + policyStr + '</a></td>' +
         '<td>' + routerStr + '</td>' +

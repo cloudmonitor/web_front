@@ -65,8 +65,5 @@ abstractApp.controller('abstractCtrl', function($scope, $http) {
                 $scope.resList = [];
             }
         );
-
-
-
     }();
 });
