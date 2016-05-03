@@ -77,6 +77,7 @@ function getDevice_info(tenantname) {
             var data = JSON.parse(data);
             // console.log(data);
             window.localStorage.token = JSON.stringify(data.access.token);
+            //console.error("得到的localStorage  ::", window.localStorage.token);
             window.localStorage.user = JSON.stringify(data.access.user);
             $.ajax({
                 type: "GET",
