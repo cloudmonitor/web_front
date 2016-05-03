@@ -67,7 +67,7 @@ abstractApp.controller('abstractCtrl', function($scope, $http) {
         );
     };
     if (index_flag == 0) {
-        setTimeout(getResList, 800);
+        setTimeout(getResList, 1200);
         index_flag++;
     } else
         getResList();

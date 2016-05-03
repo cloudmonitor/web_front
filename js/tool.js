@@ -1,3 +1,19 @@
+$(function() {
+    var time_limit = setTimeout(function() {
+        localStorage.login_flag = "timeout";
+        window.location.href = window.location.href.split("#")[0] + "login.html";
+        return;
+    }, 10 * 60 * 1000);
+    $(document).mousemove(function() {
+        clearTimeout(time_limit);
+        time_limit = setTimeout(function() {
+            localStorage.login_flag = "timeout";
+            window.location.href = window.location.href.split("#")[0] + "login.html";
+            return;
+        }, 10 * 60 * 1000);
+    });
+});
+
 function pretty_adrr(addrs_temp) {
     var str = "";
     var num = 0;
