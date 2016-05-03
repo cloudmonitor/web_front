@@ -1,3 +1,13 @@
+$(function() {
+    $("#lagout").unbind('click').click(function() {
+        alert(123);
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+});
+
 function pretty_adrr(addrs_temp) {
     var str = "";
     var num = 0;

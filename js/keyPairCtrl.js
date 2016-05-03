@@ -6,6 +6,13 @@ function keyPairCtrl($scope, $http) {
     console.info("localStorage.user:", window.localStorage.user);
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        //alert(123);
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
     // 初始化值
     $("head title").text("密钥");
     $(".nav-sidebar a[href='#/compute/key-pair']").css({

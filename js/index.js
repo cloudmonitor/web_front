@@ -16,13 +16,14 @@ $(function() {
             //---------设置租户list
             var device_temp = data["tenants"];
             $("#deviceslist").children('a').remove();
-            if (localStorage.curr_tenant == null || localStorage.curr_tenant == "") {
+            //alert(localStorage.curr_tenant);
+            if (localStorage.curr_tenant == 'undefined' || localStorage.curr_tenant == undefined) {
                 localStorage.curr_tenant = device_temp[0].name;
                 tenantname = data["tenants"][0]["name"];
             } else {
                 tenantname = localStorage.curr_tenant;
-                $(".curr_deviceName").html(localStorage.curr_tenant);
             }
+            $(".curr_deviceName").html(localStorage.curr_tenant);
             var str = '<a class="devices_list" role="menuitem" tabindex="-1"  href="javascript:void(0);">' + device_temp[0].name + '</a>';
             for (var i = 1; i < device_temp.length; i++) {
                 str += '<a class="devices_list" role="menuitem" tabindex=' + (i - 1) + ' href="javascript:void(0);">' + device_temp[i].name + '</a>';
@@ -58,10 +59,13 @@ $(function() {
     });
 
     $("#lagout").click(function() {
+        //alert(123);
         $('#myModal').modal('toggle')
         window.localStorage.clear();
         location.href = "#/";
+        location.reload();
     });
+
 
 });
 

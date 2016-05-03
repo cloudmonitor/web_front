@@ -3,6 +3,13 @@ var modifyPasswdApp = angular.module('modifyPasswdApp', []);
 modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($scope, $http) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+       // alert(123);
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
     $("head title").text("修改密码");
     $(".nav-sidebar a[href='#/info/modify-passwd']").css({
         "color": "#fff",

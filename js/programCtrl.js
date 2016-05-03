@@ -6,6 +6,13 @@ programApp.controller('programCtrl', programCtrl);
 function programCtrl($scope, $http) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        //alert(123);
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
     $("head title").text("项目");
     $(".nav-sidebar a[href='#/info/program']").css({
         "color": "#fff",
