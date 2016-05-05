@@ -58,8 +58,8 @@ $(function() {
                         //-----状态的变换
                         if (port_info.status == "ACTIVE") {
                             port_info.status = "运行中";
-                        } else {
-                            port_info.status = "状态待补充";
+                        } else if (port_info.status == "DOWN") {
+                            port_info.status = "停止";
                         }
                         //-----管理员的状态变换
                         if (port_info.admin_state_up == true) {
@@ -260,17 +260,18 @@ function setNetInfo(netInfo, manager_status) {
 }
 //-------创建子网
 create_subnetFun();
+
 function setNetselect() {
-   $(".private_selected").empty();
-   $(".private_selected").append('<option value="test">选择私有网络</option>');
-   var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
-   var server;
-   var str = "";
-   for (var i = 0; i < servers.length; i++) {
-       server = servers[i];
-       str += '<option value="' + server.id + '">' + server.name + '</option>';
-   }
-   $(".private_selected").append(str);
+    $(".private_selected").empty();
+    $(".private_selected").append('<option value="test">选择私有网络</option>');
+    var servers = JSON.parse(localStorage.net_tempInfo)['networks'];
+    var server;
+    var str = "";
+    for (var i = 0; i < servers.length; i++) {
+        server = servers[i];
+        str += '<option value="' + server.id + '">' + server.name + '</option>';
+    }
+    $(".private_selected").append(str);
 }
 
 
@@ -401,7 +402,7 @@ function set_subNet(data, i) {
 function setPortInfo(data, fixed_ips_str, i) {
     var str = '<tbody><tr><td><a href="#/net/port-desc?' + i + '">' + data.name +
         '</a></td><td>' + fixed_ips_str + '</td>' +
-        '<td>' + data.device_owner + '</td>' +
+        '<td>' + (data.device_owner == '' ? '断开' : data.device_owner) + '</td>' +
         '<td>' + data.status + '</td>' +
         '<td>' + data.admin_state_up + '</td>' +
         /*        '<td>' +

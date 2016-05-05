@@ -321,8 +321,8 @@ function createSubnetAJAX(subnet) {
 }
 
 function setList(data, i, status) {
-    var str = "<tbody><tr><td><input type='checkbox' class='net_check' id='" + data.id + "'></td><td><a href='#/net/net-desc?" + i + "&" + status + "id_start" + data.id + "'>" + data.name + "</a></td><td>" + data.subnets + "</td><td>" + data.shared + "</td>" +
-        "<td>" + data.status + "</td><td>" + data.admin_state_up +
+    var str = "<tbody><tr><td><input type='checkbox' class='net_check' id='" + data.id + "'></td><td><a href='#/net/net-desc?" + i + "&" + status + "id_start" + data.id + "'>" + data.name + "</a></td><td>" + data.subnets + "</td><td>" + (data.shared == false ? '否' : '是') + "</td>" +
+        "<td>" + (data.status == 'ACTIVE' ? '运行中' : '未运行') + "</td><td>" + data.admin_state_up +
         "</td><td><div class='btn-group'>" +
         "<button type='button'id='" + data.id + "' name='" + data.name + "' status='" + data.admin_state_up + "' class='btn btn-default btn-sm edite_net_class' data-toggle='modal' data-target='#edite-net'>" + "编辑网络" + "</button>" +
         "<button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><span class='caret'></span><span class='sr-only'>" + "切换下拉菜单" + "</span></button>" +
