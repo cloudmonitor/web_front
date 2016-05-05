@@ -1054,51 +1054,29 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
             shape.getLayer().remove(instance.joinLine);
             shape.getLayer().draw();
             instance.joinLine = null;
-            if (dstDevice == null) {
-                /*
-                                var originalDevice = instance.getDevice(); //源结点
-                                var config = originalDevice.getConfig().data;
-                                var dstDeviceId = config.id.substring(0, config.id.lastIndexOf("_")) + "_" + sequence.nextVal();
-                                dstDevice = new Kinetic.Topology.Device({
-                                    topology: instance.config.topology,
-                                    data: {
-                                        id: dstDeviceId,
-                                        name: config.name,
-                                        src: config.src,
-                                        x: connector_x,
-                                        y: connector_y,
-                                        width: 'auto',
-                                        height: 'auto'
-                                    },
-                                    callbackObj: {
-                                        instance: instance,
-                                        callback: function(dstDevice) {
-                                            new Kinetic.Topology.Line({
-                                                topology: this.instance.config.topology,
-                                                srcDevice: this.instance.getDevice(),
-                                                dstDevice: dstDevice,
-                                                stroke: 'black',
-                                                strokeWidth: 1
-                                            });
-                                        }
-                                    }
-                                });
-                                instance.config.topology.addDevice(dstDevice);*/
-            } else {
+            if (dstDevice == null) {} else {
                 var origin_dev = instance.getDevice();
                 var ori_dev = origin_dev['config']['data'].device_name;
                 var des_dev = dstDevice['config']['data'].device_name;
                 console.error(ori_dev + " : " + des_dev);
-                var flag = false;
-                if (ori_dev == 'ext_net' && des_dev == "router")
+                flag = false;
+                if ((ori_dev == 'ext_net' && des_dev == "router") || (ori_dev == 'router' && des_dev == "ext_net")) {
                     flag = true;
-                if (ori_dev == 'router' && (des_dev == "ext_net" || des_dev == "network"))
+                    var ext_id, router_id;
+                    if (ori_dev == 'ext_net') {
+                        ext_id = origin_dev['config']['data'].id;
+                        router_id = dstDevice['config']['data'].id;
+                    } else {
+                        router_id = origin_dev['config']['data'].id;
+                        ext_id = dstDevice['config']['data'].id;
+                    }
+                    setLine(ext_id, router_id);
+                }
+                if ((ori_dev == 'router' && des_dev == "network") || (ori_dev == 'network' && des_dev == "router"))
                     flag = true;
-                if (ori_dev == 'network' && (des_dev == "router" || des_dev == "subnet"))
+                if ((ori_dev == 'network' && des_dev == "subnet") || (ori_dev == 'subnet' && des_dev == "network"))
                     flag = true;
-                if (ori_dev == 'subnet' && (des_dev == "network" || des_dev == "server"))
-                    flag = true;
-                if (ori_dev == "server" && des_dev == "subnet")
+                if ((ori_dev == 'subnet' && des_dev == "server") || (ori_dev == "server" && des_dev == "subnet"))
                     flag = true;
                 if (flag) {
                     if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
@@ -1115,7 +1093,6 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                         }
                     }
                 } else {
-                    // console.error("该设备间不可连接！");
                     if (ori_dev == des_dev)
                         createAndHideAlert("该设备间不可连接！");
                 }
@@ -2531,4 +2508,29 @@ function delete_device(data, url) {
             window.location.reload();
         }
     });
+}
+
+function setLine(ext_id, router_id) {
+    var router_temp = {
+        "router": {
+            "external_gateway_info": {
+                "network_id": null
+            }
+        }
+    };
+    var router = router_temp['router'];
+    router['external_gateway_info']['network_id'] = ext_id;
+    if (confirm('确认连线？')) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(router_temp),
+            contentType: "application/json",
+            url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
+            success: function(data) {
+                window.location.reload();
+            }
+        });
+    } else {
+        flag = false;
+    }
 }

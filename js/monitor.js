@@ -92,9 +92,11 @@ function setAjax(id, curr_type, meter_name, arr) {
         success: function(data) {
             // console.log(data);
             var cpu_utils = JSON.parse(data)[meter_name];
+            console.error(cpu_utils);
             if (cpu_utils[0] != null && cpu_utils[0] != "") {
                 for (var i = 0; i < cpu_utils.length; i++) {
                     var cpu_util = cpu_utils[i];
+                    console.error(getTimeStr(cpu_util.timestamp).split(" ")[1].substr(0, 5));
                     //时间的转换
                     if (curr_type == "minute") {
                         var time_str = getTimeStr(cpu_util.timestamp);
@@ -132,7 +134,6 @@ function setAjax(id, curr_type, meter_name, arr) {
                 // createAndHideAlert(arr[0] + arr[1] + arr[2] + arr[3] + arr[4]);
                 if ((arr[0] + arr[1] + arr[2] + arr[3] + arr[4]) != 0)
                     ajaxbg.hide();
-
             } else {
                 var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:180px;top:150px;z-index:9999">暂时没有数据!</div>';
                 if (meter_name == "cpu_util") {
