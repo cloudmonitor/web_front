@@ -94,23 +94,29 @@ function setAjax(id, curr_type, meter_name, arr) {
             var cpu_utils = JSON.parse(data)[meter_name];
             console.error(cpu_utils);
             if (cpu_utils[0] != null && cpu_utils[0] != "") {
+                var temp_time = 0;
                 for (var i = 0; i < cpu_utils.length; i++) {
                     var cpu_util = cpu_utils[i];
-                    console.error(getTimeStr(cpu_util.timestamp).split(" ")[1].substr(0, 5));
+                    // console.error("data", data);
+                    /*            if (cpu_util.timestamp == undefined) {
+                                    temp_time.
+                                } else {*/
                     //时间的转换
-                    if (curr_type == "minute") {
-                        var time_str = getTimeStr(cpu_util.timestamp);
-                        var time_temp = time_str.split(" ")[1].substr(0, 5);
-                        cpu_util.timestamp = time_temp;
-                    } else if (curr_type == "hour") {
-                        var time_str = getTimeStr(cpu_util.timestamp);
-                        var time_temp = time_str.split(" ")[1].substr(0, 5);
-                        cpu_util.timestamp = time_temp;
-                    } else {
-                        var time_str = getTimeStr(cpu_util.timestamp);
-                        var time_temp = time_str.substr(5, 5);
-                        cpu_util.timestamp = time_temp;
-                    }
+                    var time_str = getTimeStr(cpu_util.timestamp);
+                    var time_temp = time_str.split(" ")[1].substr(0, 5);
+                    temp_time = time_temp;
+                    /* }*/
+                    cpu_util.timestamp = time_temp;
+                    /*    if (curr_type == "minute") {*/
+                    /*                    } else if (curr_type == "hour") {
+                                            var time_str = getTimeStr(cpu_util.timestamp);
+                                            var time_temp = time_str.split(" ")[1].substr(0, 5);
+                                            cpu_util.timestamp = time_temp;
+                                        } else {
+                                            var time_str = getTimeStr(cpu_util.timestamp);
+                                            var time_temp = time_str.substr(5, 5);
+                                            cpu_util.timestamp = time_temp;
+                                        }*/
                     //百分比转换
                     cpu_util.counter_volume = new Number(cpu_util.counter_volume).toFixed(2);
                 }
