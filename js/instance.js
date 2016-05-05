@@ -819,6 +819,28 @@ $(document).on("click", ".create_start", function() {
     $(".create_start").removeClass("create_start");
     $(".create_start").html("创建快照");
 });
+
+//-------------------启动实例
+$(document).on("click", ".show_cmd", function() {
+    servers_id = this.id;
+    var info = {
+        "os-getVNCConsole": {
+            "type": "novnc"
+        }
+    };
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(info),
+        contentType: "application/json",
+        url: config['host'] + '/servers_console/' + servers_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            //console.error(data);
+            var url = JSON.parse(data).console.url;
+            window.open(url);
+        }
+    });
+
+});
 //-----------------------------------------------------------提交数据
 $(".add_IP").click(function() {
     if (flag_type == "floatIP") {
@@ -860,7 +882,7 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         "<td><a href='#/compute/instance_desc?" + i + "&" + num + "&" + data["OS-EXT-AZ:availability_zone"] + "'>" + data.name + "</a></td><td>" + addrs + "</td>" +
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
-        "<td>" + status1 + "</td>" +
+        "<td class='" + data.id + "'>" + status1 + "</td>" +
         //"<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
         //"<td>" + "无" + "</td>" +
         //"<td class='" + data.id + "'>" + status + "</td>" +
@@ -900,6 +922,7 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         str += "<li  name='" + data.name + "' id='" + data.id + "' class='unlock_instance'><a href='javascript:void(0)' >" + "解锁实例" + "</a></li>";*/
 
     str += "<li id='" + data.id + "' class='delete_instanceSimple'><a href='javascript:void(0)'><font color='red'>" + "终止云主机" + "</font></a></li>";
+    str += "<li id='" + data.id + "' class='show_cmd'><a href='javascript:void(0)'><font color='red'>" + "控制台" + "</font></a></li>";
     str += "</ul></div></td></tr></tbody>";
     $(".instance_info").append(str);
 }

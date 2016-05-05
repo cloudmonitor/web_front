@@ -37,8 +37,8 @@ $(function() {
                                 //-----状态的转换
                                 if (fireWall.status == "ACTIVE")
                                     fireWall.status = "运行中";
-                                else
-                                    fireWall.status = "非激活";
+                                else if (fireWall.status == "DOWN")
+                                    fireWall.status = "断开";
                                 //-----管理员状态的转换
                                 if (fireWall.admin_state_up == true || fireWall.admin_state_up == 'true')
                                     fireWall.admin_state_up = "激活";
@@ -602,13 +602,13 @@ function setFirewallRules(data, rules, id_temp) {
         '<td><a href="#/net/firewall-ruleDesc?' + data.id + '">' + data.name + '</a></td>' +
         '<td>' + data.description + '</td>' +
         '<td>' + data.protocol + '</td>' +
-        '<td>' + data.source_ip_address + '</td>' +
-        '<td>' + data.source_port + '</td>' +
-        '<td>' + data.destination_ip_address + '</td>' +
+        '<td>' + (data.source_ip_address == null ? '任意IP' : data.source_ip_address) + '</td>' +
+        '<td>' + (data.source_port == null ? '所有端口' : data.source_port) + '</td>' +
+        '<td>' + (data.destination_ip_address == null ? '任意IP' : data.destination_ip_address) + '</td>' +
         '<td>' + data.destination_port + '</td>' +
-        '<td>' + data.action + '</td>' +
-        '<td>' + data.shared + '</td>' +
-        '<td>' + data.enabled + '</td>';
+        '<td>' + (data.action == 'allow' ? '允许' : '拒绝') + '</td>' +
+        '<td>' + (data.shared == false ? '否' : '是') + '</td>' +
+        '<td>' + (data.enabled == false ? '否' : '是') + '</td>';
     if (id_temp == -1)
         str += '<td><a>' + rules + '</a></td>';
     else
@@ -800,8 +800,8 @@ function setPolicies(data, rule_text) {
         '<td><a href="#/net/firewall-strategy-desc?' + data.id + '">' + data.name + '</a></td>' +
         '<td>' + data.description + '</td>' +
         '<td id="1">' + rule_text + '</td>' +
-        '<td>' + data.shared + '</td>' +
-        '<td>' + data.audited + '</td>' +
+        '<td>' + (data.shared == false ? '否' : '是') + '</td>' +
+        '<td>' + (data.audited == false ? '否' : '是') + '</td>' +
         '<td>' +
         '<div class="btn-group"><button type="button" class="btn btn-default btn-sm updatePolicy_simple" data-toggle="modal" data-target="#modal_create_strategy">编辑策略</button><button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>' +
         '<span class="sr-only">切换下拉菜单</span></button><ul class="dropdown-menu" role="menu">' +

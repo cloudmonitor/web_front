@@ -272,7 +272,7 @@ $(".editRouter_ok").click(function() {
 function setList(data, out_net) {
     var str = "<tr><td><input type='checkbox' class='router_check' id='" + data.id + "'></td>" +
         "<td><a href='#/net/routerDesc?" + data.id + "&" + out_net + "'>" + data.name + "</a></td>" +
-        "<td>" + (data.status == 'ACTIVE' ? '激活' : '未激活') + "</td>" +
+        "<td>" + (data.status == 'ACTIVE' ? '运行中' : data.status) + "</td>" +
         "<td id='" + data.id + "'>" + out_net + "</td>" +
         "<td>" + data.admin_state_up +
         "</td><td><div class='btn-group'>";
