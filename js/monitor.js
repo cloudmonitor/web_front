@@ -94,18 +94,42 @@ function setAjax(id, curr_type, meter_name, arr) {
             var cpu_utils = JSON.parse(data)[meter_name];
             console.error(cpu_utils);
             if (cpu_utils[0] != null && cpu_utils[0] != "") {
-                var temp_time = 0;
+                var temp_flag = 0;
                 for (var i = 0; i < cpu_utils.length; i++) {
                     var cpu_util = cpu_utils[i];
-                    // console.error("data", data);
-                    /*            if (cpu_util.timestamp == undefined) {
-                                    temp_time.
-                                } else {*/
-                    //时间的转换
-                    var time_str = getTimeStr(cpu_util.timestamp);
-                    var time_temp = time_str.split(" ")[1].substr(0, 5);
-                    temp_time = time_temp;
-                    /* }*/
+                    if (cpu_util.timestamp == undefined) {
+                        if (curr_type == 'minute') {
+                            var time_1 = parseInt(temp_flag.split(':')[0]);
+                            var time_2 = parseInt(temp_flag.split(':')[1]);
+                            if (time_2 <= 2) {
+                                time_1 -= 1;
+                            }
+                            var time_temp = time_1 + ":" + (time_2 - 3) % 60;
+                            temp_flag = time_temp;
+                        } else if (curr_type == 'hour') {
+                            var time_1 = parseInt(temp_flag.split(':')[0]);
+                            var time_2 = parseInt(temp_flag.split(':')[1]);
+                            var time_temp = (parseInt(time_1 - 1) + 24) % 24 + ":" + time_2;
+                            temp_flag = time_temp;
+                        } else {
+                            temp_flag = moment(temp_flag).subtract(1, 'day');
+                            var time_str = getTimeStr(temp_flag);
+                            var time_temp = time_str.substr(5, 5);
+                            temp_flag = time_str.substr(0, 10);
+                        }
+                    } else {
+                        var time_str = getTimeStr(cpu_util.timestamp);
+                        if (curr_type != 'day')
+                        //时间的转换
+                        {
+                            var time_temp = time_str.split(" ")[1].substr(0, 5);
+                            temp_flag = time_temp;
+                        } else {
+                            var time_temp = time_str.substr(5, 5);
+                            temp_flag = time_str.substr(0, 10);
+                        }
+
+                    }
                     cpu_util.timestamp = time_temp;
                     /*    if (curr_type == "minute") {*/
                     /*                    } else if (curr_type == "hour") {
