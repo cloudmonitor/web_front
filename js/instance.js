@@ -858,8 +858,8 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
         "<td>" + status1 + "</td>" +
-        "<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
-        "<td>" + "无" + "</td>" +
+        //"<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
+        //"<td>" + "无" + "</td>" +
         "<td class='" + data.id + "'>" + status + "</td>" +
         "<td>" + UTC8_time + "</td>" +
         "<td><div class='btn-group'>";
@@ -1251,6 +1251,12 @@ function instance_info(json_array) {
                 window.location.reload();
             }, 4000);
 
-        }
+        }/*,
+        beforeSend: function(data) {
+
+        },
+        complete: function(data) {
+
+        }*/
     });
 }

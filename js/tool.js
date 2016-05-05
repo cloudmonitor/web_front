@@ -90,6 +90,7 @@ function getTimeLen(date_temp) {
     var weekend = parseInt(time / (60 * 60 * 24 * 7));
     var zday = parseInt(time / (60 * 60 * 24)) - weekend * 7;
     var zhour = parseInt(time / (60 * 60)) - zday * 24 - weekend * 7 * 24;
+    var minuter = parseInt(time / 60) - zday * 24 * 60 - weekend * 7 * 24 * 60;
     // createAndHideAlert(weekend+"/"+zday+"/"+zhour);
     var time_str = "";
     if (weekend != 0) {
@@ -100,6 +101,9 @@ function getTimeLen(date_temp) {
     }
     if (zhour != 0) {
         time_str += zhour + "时";
+    }
+    if (weekend == 0 && zday == 0 && zhour == 0) {
+        time_str += minuter + "分钟";
     }
     return time_str;
 }
