@@ -514,7 +514,10 @@ function deleteInstance_AJAX(servers) {
         contentType: "application/json",
         url: config['host'] + "/servers/delete?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            setTimeout(function() {
+                window.location.reload();
+            }, 800);
+
         }
     });
 }
@@ -860,7 +863,7 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         "<td>" + status1 + "</td>" +
         //"<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
         //"<td>" + "无" + "</td>" +
-        "<td class='" + data.id + "'>" + status + "</td>" +
+        //"<td class='" + data.id + "'>" + status + "</td>" +
         "<td>" + UTC8_time + "</td>" +
         "<td><div class='btn-group'>";
     if (status1 != "关机")
@@ -1231,8 +1234,6 @@ $(".instance_run").unbind('click').click(function() {
         }
     });
     //console.error(JSON.stringify(instance));
-    $("#loading_monitor").prepend("<span>正在创建,请稍后...</span>");
-    $("#loading_monitor,#background_monitor").show();
     //-------------------提交数据
     instance_info(instance);
 });
@@ -1245,18 +1246,19 @@ function instance_info(json_array) {
         contentType: "application/json",
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
-            console.error(data);
-            $("#loading_monitor").empty("span");
+            // console.error(data);
             setTimeout(function() {
+                $(".info_tip").remove();
+                $("#loading_monitor,#background_monitor").hide();
                 window.location.reload();
             }, 4000);
 
-        }/*,
-        beforeSend: function(data) {
-
         },
-        complete: function(data) {
+        beforeSend: function(data) {
+            $("#background_monitor").after("<span class='info_tip'><font size='5px' color='red'><B>正在创建,请稍后...</B></font></span>");
+            $("#loading_monitor,#background_monitor").show();
 
-        }*/
+            //
+        }
     });
 }

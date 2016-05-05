@@ -570,6 +570,18 @@ tfoot .tfoot-dsp {
     z-index: 2000;
 }
 
+.info_tip {
+    position: absolute;
+    width: 300px;
+    top: 170px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    z-index: 9000;
+}
+
 #background_monitor1 {
     display: block;
     width: 100%;
