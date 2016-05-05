@@ -45,7 +45,7 @@ function formValidCtrl($scope, $http) {
                     window.localStorage.password = password;
                     console.info("当前用户:", window.localStorage.user);
                     console.info("当前密码:", window.localStorage.password);
-                    window.location.href = window.location.href.replace("login.html", "");
+                    window.location.href = "/"; //window.location.href.replace("login.html", "");
 
                 },
                 function(response) {

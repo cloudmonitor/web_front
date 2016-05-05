@@ -23,7 +23,7 @@ abstractApp.controller('abstractCtrl', function($scope, $http) {
         // 资源名称
         var nameHybid = {
             "nameUS": ["subnet", "network", "floatingip", "ram", "security_group_rule", "instances", "cores", "security_group", "router", "port"],
-            "nameZH": ["子网", "网络", "浮动IP", "内存", "安全组规则", "实例数", "虚拟内核", "安全组", "路由", "端口"]
+            "nameZH": ["子网", "网络", "浮动IP", "内存", "安全组规则", "云主机数", "虚拟内核", "安全组", "路由", "端口"]
         };
         console.info("名字对象", nameHybid);
         var userID = JSON.parse(localStorage.token).tenant.id;

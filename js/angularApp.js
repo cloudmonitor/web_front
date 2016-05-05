@@ -160,7 +160,7 @@ myApp.controller('instanceCtrl', function($scope) {
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance.js');
-    $("head title").text("实例");
+    $("head title").text("云主机");
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
         "background-color": "#428bca"
@@ -186,7 +186,7 @@ myApp.controller('instanceDescCtrl', function($scope) {
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance_desc.js');
-    $("head title").text("实例");
+    $("head title").text("云主机");
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
         "background-color": "#428bca"

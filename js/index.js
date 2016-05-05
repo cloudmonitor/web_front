@@ -118,7 +118,7 @@ function draw_charts(chart_data) {
     //---------饼图一
     var option1 = {
         title: {
-            text: '实例',
+            text: '云主机',
             subtext: '使用率',
             x: 'center'
         },
@@ -129,7 +129,7 @@ function draw_charts(chart_data) {
         // legend: {     //     orient: 'vertical',     //     x: 'left',
         //     data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']     // },
         series: [{
-            name: '实例',
+            name: '云主机',
             type: 'pie',
             radius: '40%',
             center: ['50%', '50%'],
