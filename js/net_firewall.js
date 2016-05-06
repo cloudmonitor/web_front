@@ -605,7 +605,7 @@ function setFirewallRules(data, rules, id_temp) {
         '<td>' + (data.source_ip_address == null ? '任意IP' : data.source_ip_address) + '</td>' +
         '<td>' + (data.source_port == null ? '所有端口' : data.source_port) + '</td>' +
         '<td>' + (data.destination_ip_address == null ? '任意IP' : data.destination_ip_address) + '</td>' +
-        '<td>' + data.destination_port + '</td>' +
+        '<td>' + (data.destination_port == null ? '所有端口' : data.destination_port) + '</td>' +
         '<td>' + (data.action == 'allow' ? '允许' : '拒绝') + '</td>' +
         '<td>' + (data.shared == false ? '否' : '是') + '</td>' +
         '<td>' + (data.enabled == false ? '否' : '是') + '</td>';

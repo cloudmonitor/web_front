@@ -2147,6 +2147,33 @@ $(document).on("click", ".close_model", function() {
     }, 200);
 
 });
+var time_num = 0;
+$(document).on("click", ".open_console", function() {
+    time_num++;
+    if (time_num == 1) {
+        servers_id = this.id;
+        var info = {
+            "os-getVNCConsole": {
+                "type": "novnc"
+            }
+        };
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(info),
+            contentType: "application/json",
+            url: config['host'] + '/servers_console/' + servers_id + "?token=" + window.localStorage.token,
+            success: function(data) {
+                //console.error(data);
+                var url = JSON.parse(data).console.url;
+                window.open(url);
+                time_num = 0;
+            }
+        });
+    }
+});
+
+
+
 $(".close_model_toupu").click(function() {
     //$(".showInfoButton").click();
     window.scrollTo(0, 0);
@@ -2288,12 +2315,14 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
                             if (temp > 0) {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
                                 footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="open_console" href="javascript:void(0)" id="' + instance.deviceImage.attrs.id + '" >控制台</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 $(".footer_str").html(footer_str);
                             } else {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
                                 footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="open_console" href="javascript:void(0)" id="' + instance.deviceImage.attrs.id + '">控制台</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 rule_str = "<font color='#C4C4C4'><B>暂未分配安全组</B></font>";
@@ -2323,6 +2352,7 @@ $(document).on("click", ".rule_control", function() {
         sub1_flag[id] = true;
     }
 });
+
 
 
 function getExtNetInfo() {
