@@ -112,6 +112,37 @@ function getTimeStr(date_temp) {
     var UTC8_time = moment.utc(date_temp).zone(-8).format('YYYY-MM-DD HH:mm:ss');
     return UTC8_time;
 }
+//---------移动的实现
+function dragDIV(oDrag) {
+    console.error("oDrag", oDrag);
+    var disX = dixY = 0;
+    $(oDrag).unbind('mousedown').on("mousedown", function(event) {
+        var event = event || window.event;
+        disX = event.clientX - this.offsetLeft;
+        disY = event.clientY - this.offsetTop;
+        var oTemp = this; //.cloneNode(true);
+        //document.body.appendChild(oTemp);
+        document.onmousemove = function(event) {
+            var event = event || window.event;
+            var iL = event.clientX - disX;
+            var iT = event.clientY - disY;
+            var maxL = document.documentElement.clientWidth - oDrag.offsetWidth;
+            var maxT = document.documentElement.clientHeight - oDrag.offsetHeight;
+            iL <= 0 && (iL = 0);
+            iT <= 0 && (iT = 0);
+            iL >= maxL && (iL = maxL);
+            iT >= maxT && (iT = maxT);
+            oTemp.style.left = iL + "px";
+            oTemp.style.top = iT + "px";
+            return false;
+        };
+        document.onmouseup = function() {
+            document.onmousemove = null;
+            document.onmouseup = null;
+        };
+        return false
+    });
+}
 //-----云主机类型
 function flvors_info() {
     $.ajax({

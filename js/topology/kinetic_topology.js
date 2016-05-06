@@ -4,6 +4,7 @@ $('#frame11').onload = function() {
     };
 };
 
+
 //var device2Url = '{"result":"success","router_32D798BF-BE45-4EA3-8692-E0C443459838":"ROUTER033","printServer_AAA2BC72-D3C0-485C-AEE6-73606D676401":"ApplicationServer039"}';
 var device2Url = '';
 var debugMode = true;
@@ -81,11 +82,13 @@ Kinetic.Topology = Kinetic.Class.extend({
                     //-----------------------------------------------------创建路由start
                     //-----------------模态start
                     $(".button_modelShow").click();
+                    //dragDIV($('.move_routerdiv').get(0));
                     $(".create_router_name").val("");
                     $(".outNet_selected").empty();
                     $(".outNet_selected").append('<option value="test" selected>选择网络</option>');
                     getExtNetInfo();
                     //-------------模态end
+                    //  dragDIV($('.move_divRouter').get(0));
                     //-------------提交数据start
                     $(".createRouter_OK").click(function() {
                         //--------------提交前对数据的处理
@@ -434,10 +437,10 @@ Kinetic.Topology = Kinetic.Class.extend({
         if (flag) { //设备都已绘制完毕，可以绘线了
             this.loading = false;
             this.fitSizeAuto();
-            //console.log(jsonObj.lines);
+            // console.log(">>>>>>>>>>>>", jsonObj.lines.length);
             for (var i = 0; i < jsonObj.lines.length; i++) {
                 var line = jsonObj.lines[i];
-                console.log("line420", line);
+                // console.log("line420", line);
                 var srcDevice = instance.getDeviceById(line.srcDeviceId);
                 var dstDevice = instance.getDeviceById(line.dstDeviceId);
                 if (srcDevice != null && dstDevice != null) {
@@ -1530,90 +1533,6 @@ Kinetic.Topology.Toolbar.Toolkit = Kinetic.Class.extend({
         });
     }
 });
-/**
-    constructor:
-{
-    topology:topology
-    popmenu:{
-        container:'mm',
-        data:[
-            {id:'menu_1',name:'删除',onclick:function(evt,instance){...},filter:"line"}
-        ]
-    }
-}
-*/
-// Kinetic.Topology.PopMenu = Kinetic.Class.extend({
-//  config:null,
-//  init: function(config) {
-//      this.config=config;
-//      //$("#"+this.config.popmenu.container).html(this.getHtml());
-//      $("#"+this.config.popmenu.container).menu({  
-//      }); 
-//      this.bindEvent();
-//      $(document).bind('contextmenu',function(e){
-//              return false;
-//          });
-//     },
-//     getConfig:function(){
-//      return this.config;
-//     },
-//     redraw:function(filter){
-//      for(var i=0;i<this.config.popmenu.data.length;i++)
-//      {//删除已有
-//          var itemEl = $("#"+this.config.popmenu.data[i].id).get(0);
-//          if(itemEl)
-//          {
-//              $('#mm').menu('removeItem', itemEl);
-//          }
-//      }
-//      //重新添加
-//      for(var i=0;i<this.config.popmenu.data.length;i++)
-//      {
-//          if(this.config.popmenu.data[i].filter=="all"||this.config.popmenu.data[i].filter==filter)
-//          {
-//              $('#mm').menu('appendItem', {
-//                  id:this.config.popmenu.data[i].id,
-//                  text: this.config.popmenu.data[i].name,
-//                  iconCls: this.config.popmenu.data[i].iconCls,
-//                  onclick: this.config.popmenu.data[i].onclick
-//              });
-//          }
-//      }
-//     },
-//     getHtml:function(){
-//      var html="";
-//      for(var i=0;i<this.config.popmenu.data.length;i++)
-//      {
-//          html+="<div id='"+this.config.popmenu.data[i].id+"'>"+this.config.popmenu.data[i].name+"</div>";
-//      }
-//      return html;
-//     },
-//     bindEvent:function(){
-//      for(var i=0;i<this.config.popmenu.data.length;i++)
-//      {
-//          if(this.config.popmenu.data[i].onclick)
-//          {
-//              var topology=this.config.topology;
-//              $("#"+this.config.popmenu.data[i].id).click(this.config.popmenu.data[i].onclick); 
-//          }
-//      }
-//     },
-//     show:function(filter,e){
-//      var id=this.config.popmenu.container;
-//      var mousePos = this.config.topology.getStage().getMousePosition();
-//         var x = mousePos.x;
-//         var y = mousePos.y;
-//         this.redraw(filter);
-//      $('#'+id).menu('show', {
-//                  left:  e.pageX,
-//                  top:  e.pageY
-//              });
-//     },
-//     hide:function(){
-//      var id=this.config.popmenu.container;
-//      $('#'+id).menu('hide');
-//     }
-// });
 
 /**
 类名：菜单
