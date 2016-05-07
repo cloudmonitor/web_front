@@ -34,22 +34,42 @@ function floatingIPCtrl($scope, $http) {
     };
 
     // 获取资源池 (立即执行)
-    $scope.getExtNet = function() {
+    var getExtNet = function() {
         var url = config.host + "/extnet?token=" + window.localStorage.token;
-        $http.get(url).then(function(response) {
-            $scope.resLists = response.data.ext_net;
-            console.info("资源池数据: ", response.data);
-            $scope.floating_network_id = $scope.resLists[0].id;
-        }, function(response) {
-            console.error("资源池获取失败", response.statusText);
-            createAndHideAlert({
-                "message": "资源池获取失败",
-                "className": "alert-danger"
-            });
-            $scope.resLists = [{ "name": "-" }];
+        $.ajax({
+            type: 'GET',
+            url: url,
+            async : false,
+            success: function(data) {
+                data = JSON.parse(data);
+                $scope.resLists = data.ext_net;
+                // console.info("资源池数据: ", data);
+                $scope.floating_network_id = data.ext_net[0].id;
+            },
+            error: function(data) {
+                console.error("资源池获取失败", data);
+                createAndHideAlert({
+                    "message": "资源池获取失败",
+                    "className": "alert-danger"
+                });
+                $scope.resLists = [{ "name": "-" }];
+            }
         });
+        // $http.get(url).then(function(response) {
+        //     $scope.resLists = response.data.ext_net;
+        //     console.info("资源池数据: ", response.data);
+        //     $scope.floating_network_id = $scope.resLists[0].id;
+        // }, function(response) {
+        //     console.error("资源池获取失败", response.statusText);
+        //     createAndHideAlert({
+        //         "message": "资源池获取失败",
+        //         "className": "alert-danger"
+        //     });
+        //     $scope.resLists = [{ "name": "-" }];
+        // });
 
     }();
+
 
     // 获得ip项目列表
     $scope.getIPlists = function() {
@@ -266,6 +286,8 @@ function floatingIPCtrl($scope, $http) {
                 if (indexOfExt != (-1)) {
                     // IP分配成功
                     item.name = $scope.resLists[indexOfExt].name;
+                    console.info("item信息:", $scope.items);
+                    if ($scope.items === undefined) $scope.items = [];
                     $scope.items.push(item);
                     $("#newIP").modal('hide');
                     createAndHideAlert({

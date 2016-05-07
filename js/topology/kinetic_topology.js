@@ -2608,7 +2608,7 @@ function setRouter_subnetLine(router_id, id) {
             if (data.subnet_id != undefined)
                 location.reload();
             else
-                createAndHideAlert("该路由已经分配了该网段的子网");
+                createAndHideAlert("该路由已经分配了该网段的子网!");
         }
     });
 }
