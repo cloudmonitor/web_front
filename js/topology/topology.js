@@ -57,10 +57,10 @@ $(function() {
     $(document).on("click", ".cancel_lineButton", function() {
         $(".showLineModel").hide();
     });
-    $("#myModal_toupu").draggable({
+/*    $("#myModal_toupu").draggable({
         handle: ".modal-header",
         cursor: 'move',
         refreshPositions: false
-    });
+    });*/
     //dragDIV($('.test111').get(0));
 });

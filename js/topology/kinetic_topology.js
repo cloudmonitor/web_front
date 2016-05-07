@@ -181,6 +181,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
+                            delete_tip(this.id);
                             that.currentObject.remove();
                             createAndHideAlert(x + "删除成功！");
                         } else
@@ -204,6 +205,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
+                            delete_tip(this.id);
                             that.currentObject.remove();
                             location.reload();
                             createAndHideAlert(x + "删除成功！");
@@ -225,6 +227,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
+                            delete_tip(this.id);
                             that.currentObject.remove();
                             createAndHideAlert(x + "删除成功！");
                         } else
@@ -241,9 +244,11 @@ Kinetic.Topology = Kinetic.Class.extend({
                 contentType: "application/json",
                 url: config['host'] + "/subnet/delete?token=" + window.localStorage.token,
                 success: function(data) {
+                    console.error(data);
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
+                            delete_tip(this.id);
                             that.currentObject.remove();
                             createAndHideAlert(x + "删除成功！");
                         } else
@@ -398,6 +403,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         this.lines = [];
     },
     load: function(jsonStr) {
+        lines_temp = JSON.parse(jsonStr).lines;
         this.loading = true;
         $(".temp_divs").remove();
         if (jsonStr != null && jsonStr.length > 0) {
@@ -440,9 +446,9 @@ Kinetic.Topology = Kinetic.Class.extend({
             // console.log(">>>>>>>>>>>>", jsonObj.lines.length);
             for (var i = 0; i < jsonObj.lines.length; i++) {
                 var line = jsonObj.lines[i];
-                // console.log("line420", line);
                 var srcDevice = instance.getDeviceById(line.srcDeviceId);
                 var dstDevice = instance.getDeviceById(line.dstDeviceId);
+
                 if (srcDevice != null && dstDevice != null) {
                     new Kinetic.Topology.Line({
                         topology: instance,
@@ -454,6 +460,16 @@ Kinetic.Topology = Kinetic.Class.extend({
                         strokeWidth: line.strokeWidth,
                         fixed_ips: line.device_owner == "network:router_interface" ? line.fixed_ips : ""
                     });
+                    //------线上信息
+                    if (line.device_owner == "network:router_interface") {
+                        for (var j = 0; j < line.fixed_ips.length; j++) {
+                            var fixed_ip = line.fixed_ips[j];
+                            // console.error("line", line);
+                            //----fixed_ip.ip_address
+                            showRouterInfo(srcDevice, dstDevice, fixed_ip.ip_address, line.id);
+                            //console.log("line420", srcDevice.config.data.x);
+                        }
+                    }
                 }
             }
             $("#loading_monitor,#background_monitor").hide();
@@ -566,6 +582,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         return this.id;
     },
     remove: function() {
+        window.location.reload();
         if (this.deviceImage != null) {
             if (this.lines != null && this.lines.length > 0) {
                 for (var i = 0; i < this.lines.length; i++) {
@@ -763,7 +780,6 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 //  }
                 $(".delete_device").off('click').click(function() {
                     //console.error(this.id);
-                    delete_tip(this.id);
                     deleteDevice();
                 });
                 /*                $("a").click(function() {
@@ -861,7 +877,19 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         //--------拖拽开始时触发
         this.deviceImage.on("dragstart", function(evt) {
             //  console.error("start", "x:" + config.data.x + "   y:" + config.data.y);
+            console.error(">>>", instance.getLines());
             hide_tip(config.data.id);
+            var lines = instance.getLines();
+            for (var i = 0; i < lines.length; i++) {
+                var fixed_ips = lines[i].lineObject.attrs.fixed_ips;
+                if (fixed_ips != "") {
+                    for (var x = 0; x < fixed_ips.length; x++) {
+                        console.error("id:", lines[i]);
+                        hide_RouterInfo(lines[i].config.id);
+                    }
+                }
+
+            }
             config.topology.connector.hide();
             var shape = evt.shape;
             shape.setShadow({
@@ -888,7 +916,19 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                 alpha: 1
             });
             shape.getLayer().draw();
-            //与其相关的线重绘后显示
+            //线上信息与其相关的线重绘后显示
+            console.error("重绘：", instance.getLines());
+            for (var i = 0; i < instance.getLines().length; i++) {
+                var fixed_ips = instance.getLines()[i].lineObject.attrs.fixed_ips;
+                if (fixed_ips.length > 0) {
+                    for (var j = 0; j < fixed_ips.length; j++) {
+                        var srcElement = instance.getLines()[i].config.srcDevice.getDeviceImage();
+                        var dstElement = instance.getLines()[i].config.dstDevice.getDeviceImage();
+                        console.error(">>>id", instance.getLines()[i]);
+                        show_RouterInfo(srcElement, dstElement, instance.getLines()[i].config.id);
+                    }
+                }
+            }
             for (var i = 0; i < instance.getLines().length; i++) {
                 instance.getLines()[i].redraw();
                 instance.getLines()[i].show();
@@ -897,6 +937,7 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
             instance.config.topology.fitSizeAuto();
             //   console.error("end", "x:" + config.data.x + "   y:" + config.data.y);
             show_tip(config.data);
+
         });
         //--------鼠标移动上触发
         this.deviceImage.on("mousemove", function(evt) {
@@ -1061,7 +1102,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                 var origin_dev = instance.getDevice();
                 var ori_dev = origin_dev['config']['data'].device_name;
                 var des_dev = dstDevice['config']['data'].device_name;
-                console.error(ori_dev + " : " + des_dev);
+                console.error(origin_dev + " : " + dstDevice);
                 flag = false;
                 if ((ori_dev == 'ext_net' && des_dev == "router") || (ori_dev == 'router' && des_dev == "ext_net")) {
                     flag = true;
@@ -1081,6 +1122,31 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                     flag = true;
                 if ((ori_dev == 'subnet' && des_dev == "server") || (ori_dev == "server" && des_dev == "subnet"))
                     flag = true;
+                if ((ori_dev == 'router' && des_dev == "subnet") || (ori_dev == 'subnet' && des_dev == "router")) {
+                    var subnet, router;
+                    if (ori_dev == 'subnet') {
+                        subnet = origin_dev;
+                        router = dstDevice;
+                    } else {
+                        subnet = dstDevice;
+                        router = origin_dev;
+                    }
+                    //console.error("router", router);
+                    var lines = lines_temp;
+                    for (var j = 0; j < lines.length; j++) {
+                        var line = lines[j];
+                        if (line.fixed_ips != undefined) {
+                            //console.error(">>>>>>", origin_dev, dstDevice);
+                            for (var x = 0; x < line.fixed_ips.length; x++) {
+                                if (subnet.id == line.fixed_ips[x].subnet_id) {
+                                    createAndHideAlert("该子网已经配置！");
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    setRouter_subnetLine(router.id, subnet.id);
+                }
                 if (flag) {
                     if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
                         if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
@@ -1673,6 +1739,24 @@ function setShowHeader(instance) {
 }
 
 function setInstanceReadyInfo() {
+    $('.instance_name').val("");
+    $(".img_list").empty();
+    $(".instanceImg_pane").removeClass("active");
+    $(".imgs_pane").removeClass("active");
+    $("#key_login").removeClass("in active");
+    $(".imgs_pane").addClass("active");
+    $("#key_login").addClass("in active");
+    $("#page1").removeClass("in active");
+    $("#page2").removeClass("in active");
+    $("#page1").addClass("in active");
+    $(".imgs_pane").removeClass("active");
+    $(".instanceImg_pane").removeClass("active");
+    $(".imgs_pane").addClass("active");
+    $("#home").removeClass("in active");
+    $("#ios").removeClass("in active");
+    $("#home").addClass("in active");
+    $(".footer1_page").show();
+    $(".footer2_page").hide();
     $(".img_list").empty();
     //-------镜像
     $.ajax({
@@ -2351,6 +2435,7 @@ function setTooltip(data, i) {
     $(".showtip" + i).css({
         "left": x + 240 - start * 5,
         "top": y + 90
+
     }).html("<span>" + data.name + "</span>");
 }
 
@@ -2402,15 +2487,15 @@ $(document).on("click", ".delete_line", function() {
     } else if (line_type == 2) {
         var data = { "router_ports": [] };
         data['router_ports'][0] = port_id;
-        console.error(">>>>>", JSON.stringify(data));
-        console.error(">>>>>", '/router/' + delete_id + '/remove_router_interface');
+        // console.error(">>>>>", JSON.stringify(data));
+        //console.error(">>>>>", '/router/' + delete_id + '/remove_router_interface');
         //  delete_device(data, '/router/' + delete_id + '/remove_router_interface');
     } else if (line_type == 4) {
         var data = { "interface": { "network_id": "", "subnet_id": "" } };
         data['interface'].network_id = network_id_temp;
         data['interface'].subnet_id = subnet_id_temp;
-        console.error(">>>>>", JSON.stringify(data));
-        console.error(">>>>>", '/interfaces/delete/' + delete_id);
+        //  console.error(">>>>>", JSON.stringify(data));
+        //  console.error(">>>>>", '/interfaces/delete/' + delete_id);
         // delete_device(data, '/interfaces/delete/' + delete_id);
     }
 
@@ -2452,4 +2537,78 @@ function setLine(ext_id, router_id) {
     } else {
         flag = false;
     }
+}
+
+function showRouterInfo(srcDevice, dstDevice, fixed_ip, id) {
+    var src_x = srcDevice.config.data.x;
+    var src_y = srcDevice.config.data.y;
+    var dst_x = dstDevice.config.data.x;
+    var dst_y = dstDevice.config.data.y;
+    if (src_x < dst_x) {
+        var x = src_x + 40;
+    } else {
+        var x = dst_x + 50;
+    }
+    var y = (src_y + dst_y) / 2;
+    var tip_htmls = '<div id="' + id + '" class=""' +
+        ' style="position:absolute;padding:0;margin:0;"></div>';
+    if ($("#" + id).length == 0) {
+        $("#content").parent().append(tip_htmls);
+        $("#" + id).css({
+            "left": x + 240,
+            "top": y + 90 + 35
+        }).html("<span>" + fixed_ip + "</span>");
+    } else {
+        var len = $("#" + id).find('span').length;
+        //alert(len);
+        $("#" + id).css({
+            "left": x + 240,
+            "top": y + 90 + 35 - len * 5
+        });
+        $("#" + id).append("<br/><span>" + fixed_ip + "</span>");
+    }
+}
+
+function hide_RouterInfo(id) {
+    $('#' + id).hide();
+}
+
+function show_RouterInfo(srcDevice, dstDevice, id) {
+    var src_x = srcDevice.getX();
+    var src_y = srcDevice.getY();
+    var dst_x = dstDevice.getX();
+    var dst_y = dstDevice.getY();
+    if (src_x < dst_x) {
+        var x = src_x + 40;
+    } else {
+        var x = dst_x + 50;
+    }
+    var y = (src_y + dst_y) / 2;
+    $("#" + id).css({
+        "left": x + 240,
+        "top": y + 90 + 35
+    }).show();
+
+}
+
+
+function setRouter_subnetLine(router_id, id) {
+    var port_create = {
+        "subnet_id": ""
+    }
+    console.error(id, router_id);
+    port_create.subnet_id = id;
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(port_create),
+        contentType: "application/json",
+        url: config["host"] + "/router/" + router_id + "/add_router_interface?token=" + window.localStorage.token,
+        success: function(data) {
+            var data = JSON.parse(data);
+            if (data.subnet_id != undefined)
+                location.reload();
+            else
+                createAndHideAlert("该路由已经分配了该网段的子网");
+        }
+    });
 }
