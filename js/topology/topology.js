@@ -57,8 +57,8 @@ $(function() {
     $(document).on("click", ".cancel_lineButton", function() {
         $(".showLineModel").hide();
     });
-    $("#myModalLabel").draggable({
-        handle: ".modal-header",
+    $("#myModal_toupu").draggable({
+        handle: "#myModalLabel",
         cursor: 'move',
         refreshPositions: false
     });
