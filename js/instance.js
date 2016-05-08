@@ -502,6 +502,8 @@ $(document).on("click", ".show_cmd", function() {
             }
         });
     }
+
+
 });
 //-----------------------------------------------------------提交数据
 $(".add_IP").click(function() {
@@ -758,8 +760,15 @@ function createInstanceFun() {
 
     //--------------------------------------------------创建虚拟机end
 }
+var first_slog = 0;
 $(document).on("click", ".tabel", function() {
-    $(this).next().next().slideToggle();
+    first_slog++;
+    if (first_slog == 1) {
+        $(this).next().next().slideToggle();
+        setTimeout(function() {
+            first_slog = 0;
+        }, 2000);
+    }
 });
 //-----------增加移除处理
 $(document).on("click", ".net_add", function() {

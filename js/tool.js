@@ -265,6 +265,7 @@ function create_networkFun() {
 }
 //-----创建子网
 function create_subnetFun() {
+    $(".netDiv_title").html("创建子网");
     //---------------创建子网面板配置
     var sub1_flag = true;
     $(".createchoose_subnet").off('click').click(function() {

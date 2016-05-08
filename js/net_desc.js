@@ -308,6 +308,7 @@ function createSubnetAJAX(subnet) {
 var update_flag = false;
 var subnet_tempid;
 $(document).on("click", ".eidt_subnetInfo", function() {
+    $(".netDiv_title").html("编辑子网");
     update_flag = true;
     var curr_id = this.id;
     subnet_tempid = this.id;
