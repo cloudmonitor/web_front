@@ -26,6 +26,14 @@ function keyPairCtrl($scope, $http) {
             "background-color": "transparent"
         });
     });
+
+    // 实现模态框可拖动
+    $('.modal.draggable>.modal-dialog').draggable({
+        cursor: 'move',
+        handle: '.modal-header'
+    });
+    $('.modal.draggable>.modal-dialog>.modal-content>.modal-header').css('cursor', 'move');
+
     // 默认禁用删除按钮
     $scope.delBtnDis = true;
 

@@ -18,6 +18,14 @@ function floatingIPCtrl($scope, $http) {
             "background-color": "transparent"
         });
     });
+
+    // 模态框可拖动
+    $('.modal.draggable>.modal-dialog').draggable({
+        cursor: 'move',
+        handle: '.modal-header'
+    });
+    $('.modal.draggable>.modal-dialog>.modal-content>.modal-header').css('cursor', 'move');
+
     // ip 数目
     $scope.item_count = 0;
     // 分配IP按钮默认启用
@@ -39,7 +47,7 @@ function floatingIPCtrl($scope, $http) {
         $.ajax({
             type: 'GET',
             url: url,
-            async : false,
+            async: false,
             success: function(data) {
                 data = JSON.parse(data);
                 $scope.resLists = data.ext_net;
