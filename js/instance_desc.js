@@ -2,11 +2,11 @@ $(function() {
     if (window.location.href.split('&')[1] != undefined && window.location.href.split('&')[1] != "undefined") {
         var serverInfo = JSON.parse(localStorage.server_tempInfo);
 
-        var id_num = window.location.href.split('?')[1];
-        var id = id_num.split('&')[0];
-        var num = id_num.split('&')[1];
-        var zone = id_num.split('&')[2];
-
+        var id_num_zone = window.location.href.split('?')[1];
+        var id_num_temp = id_num_zone.split('&')[0];
+        var id = (id_num_temp + "").split('_')[0];
+        var num = (id_num_temp + "").split('_')[1];
+        var zone = id_num_temp.split('&')[1];
         var addrs_temp = serverInfo['servers'][id].addresses;
         var addrs = pretty_adrr1(addrs_temp);
 
@@ -40,7 +40,7 @@ $(function() {
                                 var server = servers['servers'][i];
                                 //格式化IP地址
                                 var addrs_temp = server.addresses;
-                                 addrs = pretty_adrr(addrs_temp);
+                                addrs = pretty_adrr(addrs_temp);
                                 //状态转换
                                 var status_temp = server["OS-EXT-STS:vm_state"];
                                 var status;
@@ -49,21 +49,21 @@ $(function() {
                                 else if (status_temp == "noactive")
                                     status = "未运行";
                                 //时间的转换
-                                 time_str = getTimeLen(server["created"]);
+                                time_str = getTimeLen(server["created"]);
                                 //配置
                                 var flavor_id = server.flavor.id;
                                 var curr_flavor;
                                 var num;
-               /*                 console.error("当前实例",server);
-                                console.error("所有的云主机",flavor);*/
+                                /*                 console.error("当前实例",server);
+                                                 console.error("所有的云主机",flavor);*/
                                 for (var j = 0; j < flavor.length; j++) {
                                     if (flavor[j].id == flavor_id) {
                                         curr_flavor = flavor[j];
                                     }
                                 }
-                                 $("#server_Timesincecreated").html(time_str);
+                                $("#server_Timesincecreated").html(time_str);
                                 $("#server_AvailabilityZone").html(servers['servers'][curr_number]["OS-EXT-AZ:availability_zone"]); //
-                               
+
                                 $("#server_IPAddresses").html(addrs);
                                 setInfo(servers, curr_number, curr_flavor);
                                 break;
@@ -90,17 +90,17 @@ $(function() {
 function setInfo(serverInfo, id, curr_flavor) {
     $("#server_Name").html(serverInfo['servers'][id].name);
     $("#server_ID").html(serverInfo['servers'][id].id);
-    $("#server_Status").html(serverInfo['servers'][id].status=="ACTIVE"?"运行中":"未运行");
+    $("#server_Status").html(serverInfo['servers'][id].status == "ACTIVE" ? "运行中" : "未运行");
 
     $("#server_Created").html(serverInfo['servers'][id].created);
 
     $("#server_Specs").html(curr_flavor.name); //
     $("#server_FlavorID").html(serverInfo['servers'][id].flavor.id);
-    $("#server_RAM").html(curr_flavor.ram+"M"); //
-    $("#server_VCPUs").html(curr_flavor.vcpus+" 虚拟内核"); //
-    $("#server_Disk").html(curr_flavor.disk+"GB"); //
+    $("#server_RAM").html(curr_flavor.ram + "M"); //
+    $("#server_VCPUs").html(curr_flavor.vcpus + " 虚拟内核"); //
+    $("#server_Disk").html(curr_flavor.disk + "GB"); //
 
 
 
-    $("#server_default").html(serverInfo['servers'][id].name);
+    $("#server_default").html(serverInfo['servers'][id]['image'].image_name);
 }

@@ -403,6 +403,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         this.lines = [];
     },
     load: function(jsonStr) {
+        console.error(jsonStr);
         lines_temp = JSON.parse(jsonStr).lines;
         this.loading = true;
         $(".temp_divs").remove();
@@ -773,7 +774,6 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
                     footer_showInfo = "» 查看子网详情 ";
                     body_str = '';
                     setSubnetInfo(instance, body_str, footer_showInfo);
-
                 }
                 // if (instance.config.data.device_name != "ext_net") {
 
@@ -1720,6 +1720,7 @@ function createSubnetAJAX(subnet) {
 }
 
 function setShowHeader(instance) {
+    console.error(instance);
     var status_str = '<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">STATUS</font>   ' + instance.config.data.status;
     var model_type;
     if (instance.config.data.device_name == "ext_net")
@@ -1800,13 +1801,15 @@ function setInstanceReadyInfo() {
     $(".subnetInfo_select").empty();
     $.ajax({
         type: "GET",
-        url: config["host"] + "/new_subnets?token=" + window.localStorage.token,
+        url: config["host"] + "/subnets?token=" + window.localStorage.token,
         success: function(data) {
             var subnet_infos = JSON.parse(data)['subnets'];
+            // console.error("所有子网", data);
             $.ajax({
                 type: "GET",
                 url: config["host"] + "/networks?token=" + window.localStorage.token,
                 success: function(data) {
+                    //console.error("子网", data);
                     flag++;
                     var servers = JSON.parse(data)['networks'];
                     var option_str = "";
@@ -2550,7 +2553,7 @@ function showRouterInfo(srcDevice, dstDevice, fixed_ip, id) {
         var x = dst_x + 50;
     }
     var y = (src_y + dst_y) / 2;
-    var tip_htmls = '<div id="' + id + '" class=""' +
+    var tip_htmls = '<div id="' + id + '" class="alert alert-info"' +
         ' style="position:absolute;padding:0;margin:0;"></div>';
     if ($("#" + id).length == 0) {
         $("#content").parent().append(tip_htmls);

@@ -32,8 +32,38 @@
     <ul id="myTab" class="nav nav-tabs">
         <li class="active"><a data-target="#abstract" data-toggle="tab">概况</a></li>
         <li><a data-target="#interface" data-toggle="tab">接口</a></li>
+        <li><a data-target="#static_routerTable" data-toggle="tab">静态路由表</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
+        <!-- 静态路由表 -->
+        <div class="tab-pane fade" id="static_routerTable">
+            <form class="form-inline form-btn" role="form">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary addRouterTable" data-toggle="modal" data-target="#modal_create_routerTable"><i class="fa fa-plus-square"></i>添加路由表</button>
+                    <button type="button" class="btn btn-danger deleteRouteTables" disabled>删除静态路由表</button>
+                </div>
+            </form>
+            <br>
+            <br>
+            <div>
+                <table class="table table-striped static_routerTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" class="routerTables_check">
+                            </th>
+                            <th>目的CIDR</th>
+                            <th>下一跳</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="static_routerTable_body">
+                    </tbody>
+                    <tfoot class="static_routerTable_footer">
+                    </tfoot>
+                </table>
+            </div>
+        </div>
         <!-- 概况 -->
         <div class="tab-pane fade in active" id="abstract">
             <table>
@@ -90,7 +120,6 @@
         </div>
         <!-- 接口 -->
         <div class="tab-pane fade" id="interface">
-
             <form class="form-inline form-btn" role="form">
                 <div class="form-group">
                     <button type="button" class="btn btn-primary addport" data-toggle="modal" data-target="#modal_create_interface"><i class="fa fa-plus-square"></i>增加接口</button>
@@ -99,7 +128,6 @@
             </form>
             <br>
             <br>
-
             <div>
                 <table class="table table-striped instance_info">
                     <thead>
@@ -116,37 +144,13 @@
                         </tr>
                     </thead>
                     <tbody class="port_descbody">
-                        <!--                         <tr>
-    <td>
-        <input type="checkbox">
-    </td>
-    <td><a href="network_firewall_strategy_desc.html">test-policy03</a></td>
-    <td></td>
-    <td>ALLOW_HTTP</td>
-    <td>False</td>
-    <td>False</td>
-    <td>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm">编辑接口</button>
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-                <span class="sr-only">切换下拉菜单</span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="#">删除策略</a></li>
-                <li><a data-toggle="modal" data-target="#modal_set_strategy">修改策略</a></li>
-            </ul>
-        </div>
-    </td>
-</tr> -->
                     </tbody>
                     <tfoot class="port_footer">
-
                     </tfoot>
                 </table>
             </div>
             <!-- 模态框 -->
-            <!-- 模态框 新建防火墙 -->
+            <!-- 模态框 新建接口 -->
             <div id="modal_create_interface" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content modal-size">
@@ -181,7 +185,7 @@
                                         <label class="control-lable">路由id
                                             <span class="span-stand"> *</span>
                                         </label>
-                                        <input type="text" class="form-control inteface_id"  disabled>
+                                        <input type="text" class="form-control inteface_id" disabled>
                                     </div>
                                 </form>
                                 <div class="col-md-5">
@@ -303,4 +307,48 @@
         </div>
         <!-- /.modal -->
     </div>
+</div>
+<!-- 模态框 新建路由表 -->
+<div id="modal_create_routerTable" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-size">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">添加路由表</h4>
+            </div>
+            <div class="modal-body modal-input">
+                <div class="row">
+                    <form role="form" class="col-md-7">
+                        <div class="form-group">
+                            <label class="control-lable">目的CIDR
+                                <span class="span-stand"> *</span>
+                            </label>
+                            <input type="text" class="form-control dst_CIDR">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-lable">下一跳
+                                <span class="span-stand"> *</span>
+                            </label>
+                            <input type="text" class="form-control next_dst">
+                        </div>
+                    </form>
+                    <div class="col-md-5">
+                        <h4>说明:</h4>
+                        <p>
+                            为路由器添加静态路由表. 下一跳的IP必须是路由器接口已连接的子网的一个IP
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default createRouteTable_cancel" data-dismiss="modal">取消
+                </button>
+                <button type="button" class="btn btn-primary createRouteTable_OK" data-dismiss="modal">创建路由器</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
 </div>
