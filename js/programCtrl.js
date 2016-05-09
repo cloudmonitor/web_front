@@ -17,8 +17,13 @@ function programCtrl($scope, $http) {
     $(".nav-sidebar a[href='#/info/program']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/info/program']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/info/program']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",

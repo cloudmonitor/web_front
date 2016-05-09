@@ -164,10 +164,15 @@ myApp.controller('instanceCtrl', function($scope) {
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/compute/instance']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/compute/instance']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -190,8 +195,13 @@ myApp.controller('instanceDescCtrl', function($scope) {
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/compute/instance']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/compute/instance']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -218,8 +228,13 @@ myApp.controller('topologyCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/topology']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/topology']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/topology']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -245,8 +260,13 @@ myApp.controller('netCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/net']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -269,8 +289,13 @@ myApp.controller('netDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/net']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -294,8 +319,13 @@ myApp.controller('subnetDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/net']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -318,8 +348,13 @@ myApp.controller('portnetDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/net']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -344,8 +379,13 @@ myApp.controller('secGroupCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/secGroup']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/secGroup']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/secGroup']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -368,8 +408,13 @@ myApp.controller('secGroupDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/secGroup']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/secGroup']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/secGroup']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -394,8 +439,13 @@ myApp.controller('firewallCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/firewall']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -418,8 +468,13 @@ myApp.controller('firewallDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/firewall']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -442,8 +497,13 @@ myApp.controller('firewallstrategyDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/firewall']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -466,8 +526,13 @@ myApp.controller('firewallruleDesc', function($scope) {
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/firewall']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -492,8 +557,13 @@ myApp.controller('routerCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/router']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/router']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/router']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -516,8 +586,13 @@ myApp.controller('routerdescCtrl', function($scope) {
     $(".nav-sidebar a[href='#/net/router']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/router']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/net/router']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -544,8 +619,13 @@ myApp.controller('monitorCtrl', function($scope) {
     $(".nav-sidebar a[href='#/monitor']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/monitor']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -569,8 +649,13 @@ myApp.controller('base-infoCtrl', function($scope) {
     $(".nav-sidebar a[href='#/info/base-info']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/info/base-info']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/info/base-info']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
@@ -592,8 +677,13 @@ myApp.controller('account-infoCtrl', function($scope) {
     $(".nav-sidebar a[href='#/info/account-info']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/info/account-info']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/info/account-info']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",

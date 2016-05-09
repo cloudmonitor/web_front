@@ -9,8 +9,13 @@ abstractApp.controller('abstractCtrl', function($scope, $http) {
     $(".nav-sidebar a[href='#/compute/abstract']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/compute/abstract']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/compute/abstract']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",

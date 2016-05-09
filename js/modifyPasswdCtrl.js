@@ -14,15 +14,20 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
     $(".nav-sidebar a[href='#/info/modify-passwd']").css({
         "color": "#fff",
         "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/info/modify-passwd']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
     });
-    var linkEle = $(".nav-sidebar li a");
+    var linkEle = $(".nav-sidebar li a[href!='#/info/modify-passwd']");
     linkEle.click(function() {
         linkEle.css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
     });
-    
+
     $scope.showPasswd = function() {
         var isShow = $scope.checkPasswd;
         console.info("显示密码:", isShow);
