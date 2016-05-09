@@ -4,7 +4,7 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
-       // alert(123);
+        // alert(123);
         $('#myModal').modal('toggle')
         window.localStorage.clear();
         location.href = "#/";
@@ -22,7 +22,7 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
             "background-color": "transparent"
         });
     });
-
+    
     $scope.showPasswd = function() {
         var isShow = $scope.checkPasswd;
         console.info("显示密码:", isShow);
