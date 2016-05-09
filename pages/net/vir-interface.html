@@ -1,0 +1,132 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">虚拟网卡</div>
+    <form class="form-inline" id="btn-group-right" role="form">
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" name="refresh"><i class="fa fa-refresh"></i></button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-virInterface-modal"><i class="fa fa-plus-square"></i>创建虚拟网卡</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#binding-host-modal"><i class="fa fa-pencil-square-o "></i>绑定云主机</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default sg_del"><i class="fa fa-trash"></i>从云主机卸载</button>
+        </div>
+    </form>
+    <br>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th>名称</th>
+                <th>IP地址</th>
+                <th>子网</th>
+                <th>公网IP</th>
+                <th>关联云主机</th>
+                <th>状态</th>
+                <th>安全限制</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td>name-desc</td>
+                <td>192.168.0.0</td>
+                <td>subnet-name</td>
+                <td>wan-IP</td>
+                <td>关联云主机</td>
+                <td>status(enable, disable)</td>
+                <td>enable(disable)</td>
+            </tr>
+        </tbody>
+        <tfoot></tfoot>
+    </table>
+</div>
+<!-- 创建虚拟网卡模态框 -->
+<div class="modal fade" id="create-virInterface-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">创建虚拟网卡</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="interface-name" class="col-sm-3 control-label">网卡名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="interface-name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subnet-set" class="col-sm-3 control-label">选择子网</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="subnet-set" value="1">
+                                <option value="1">subnet</option>
+                                <option value="1-1">subnet-name-1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ip-address" class="col-sm-3 control-label">IP地址</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="ip-address" placeholder="如不填系统会自动分配">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sec-group" class="col-sm-3 control-label">安全组</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="sec-group" value="1">
+                                <option value="1">default</option>
+                                <option value="2">sec-group-name</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 绑定云主机模态框 -->
+<div class="modal fade" id="binding-host-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">绑定云主机</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">虚拟网卡</label>
+                        <div class="col-sm-9 vertical-align-bottom">
+                            <span>virtual-interface-name(IP--address)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">云主机</label>
+                        <div class="col-sm-9 vertical-align-bottom">
+                            <span><small>没有可用的云主机</small></span>
+                        </div>
+                    </div>
+                    <div id="myAlert" class="alert alert-warning">
+                        <strong>注: </strong><small>一台云主机最多只允许加入3个网络或者子网。加入多个网络可能会引发云主机路由问题而导致连不上外网，请谨慎操作。阅读这里了解详情。</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

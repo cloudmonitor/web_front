@@ -372,6 +372,15 @@ i {
 /* 网络与安全 */
 
 
+/* 网络与安全 -- 虚拟网卡 */
+
+.vertical-align-bottom {
+    position: relative;
+    bottom: -5px;
+    padding: 0;
+}
+
+
 /* :网络 :网络详情页面 子网*/
 
 .col-btn {
@@ -748,7 +757,9 @@ tfoot .tfoot-dsp {
     margin-left: -25px;
 }
 
+
 /*模态框可拖动, 隐藏右侧滚动条*/
+
 .modal {
-  overflow: hidden;
+    overflow: hidden;
 }
