@@ -38,6 +38,11 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/net.html',
             controller: 'netCtrl'
         })
+        // 网络 -- 虚拟网卡
+        .when('/net/virInterface', {
+            templateUrl: 'pages/net/vir-interface.html',
+            controller: 'virInterfaceCtrl'
+        })
         // 网络 -- 安全组
         .when('/net/secGroup', {
             templateUrl: 'pages/net/secGroup.html',
