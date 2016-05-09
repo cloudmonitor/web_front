@@ -26,7 +26,7 @@ function keyPairCtrl($scope, $http) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/compute/key-pair']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });

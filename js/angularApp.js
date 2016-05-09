@@ -208,7 +208,7 @@ myApp.controller('instanceDescCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/compute/instance']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -241,7 +241,7 @@ myApp.controller('topologyCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/topology']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -273,7 +273,7 @@ myApp.controller('netCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -302,7 +302,7 @@ myApp.controller('netDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -332,7 +332,7 @@ myApp.controller('subnetDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -361,7 +361,7 @@ myApp.controller('portnetDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/net']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -392,7 +392,7 @@ myApp.controller('secGroupCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/secGroup']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -421,7 +421,7 @@ myApp.controller('secGroupDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/secGroup']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -452,7 +452,7 @@ myApp.controller('firewallCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -481,7 +481,7 @@ myApp.controller('firewallDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -510,7 +510,7 @@ myApp.controller('firewallstrategyDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -539,7 +539,7 @@ myApp.controller('firewallruleDesc', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/firewall']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -570,7 +570,7 @@ myApp.controller('routerCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/router']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -599,7 +599,7 @@ myApp.controller('routerdescCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/net/router']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -632,7 +632,7 @@ myApp.controller('monitorCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/monitor']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -662,7 +662,7 @@ myApp.controller('base-infoCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/info/base-info']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });
@@ -690,7 +690,7 @@ myApp.controller('account-infoCtrl', function($scope) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/info/account-info']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });

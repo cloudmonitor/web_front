@@ -22,7 +22,7 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
     });
     var linkEle = $(".nav-sidebar li a[href!='#/info/modify-passwd']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });

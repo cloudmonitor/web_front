@@ -17,7 +17,7 @@ abstractApp.controller('abstractCtrl', function($scope, $http) {
     });
     var linkEle = $(".nav-sidebar li a[href!='#/compute/abstract']");
     linkEle.click(function() {
-        linkEle.css({
+        $(".nav-sidebar li a").css({
             "color": "#337ab7",
             "background-color": "transparent"
         });

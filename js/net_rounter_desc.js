@@ -397,12 +397,12 @@ $(document).on("change", ".routerTable_check", function() {
         $(".routerTables_check").prop("checked", false);
     }
 });
-$('.addRouterTable').click(function() {
+$('.addRouterTable').unbind('click').click(function() {
     $('.dst_CIDR').val("");
     $('.next_dst').val("");
 
 });
-$(".createRouteTable_OK").click(function() {
+$(".createRouteTable_OK").unbind('click').click(function() {
     router_id = $(".routerDesc_id").text();
     var val1 = $('.dst_CIDR').val();
     var val2 = $('.next_dst').val();
@@ -430,8 +430,9 @@ $(".createRouteTable_OK").click(function() {
         contentType: "application/json",
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
-            if (data.NeutronError != undefined) {
-                createAndHideAlert("无效的路由格式！");
+            console.error(data);
+            if (JSON.parse(data)['router'] == undefined) {
+                createAndHideAlert(JSON.parse(data).NeutronError.message);
                 return false;
             } else {
                 localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
@@ -453,7 +454,7 @@ $(".createRouteTable_OK").click(function() {
         }
     });
 });
-$(".deleteRouteTables").click(function() {
+$(".deleteRouteTables").unbind('click').click(function() {
     var routerTables = JSON.parse(localStorage.routerTable);
     var ids = [];
     var index = 0;
@@ -484,20 +485,20 @@ $(".deleteRouteTables").click(function() {
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
             console.error(data);
-            if (data.NeutronError != undefined) {
-                createAndHideAlert("无效的路由格式！");
+            if (JSON.parse(data)['router'] == undefined) {
+                createAndHideAlert(JSON.parse(data).NeutronError.message);
                 return false;
             } else {
                 localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
                 $(".static_routerTable_body").empty();
                 var data = JSON.parse(data)['router']['routes'];
+                routerTable_len -= ids.length;
                 if (routerTable_len == 0) {
-                    $('.deleteRouteTables').show();
-                    $('.routerTables_check').show();
+                    $('.deleteRouteTables').hide();
+                    $('.routerTables_check').hide();
                 }
                 for (var i = 0; i < data.length; i++)
                     sertrouterTableList(data[i]);
-                routerTable_len -= ids.length;
                 var footerStr = '<tr class="active tfoot-dsp">' +
                     '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
                 $(".static_routerTable_footer").empty();
@@ -531,20 +532,20 @@ $(document).on("click", ".delete_simpleRouter", function() {
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
             console.error(data);
-            if (data.NeutronError != undefined) {
-                createAndHideAlert("无效的路由格式！");
+            if (JSON.parse(data)['router'] == undefined) {
+                createAndHideAlert(JSON.parse(data).NeutronError.message);
                 return false;
             } else {
                 localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
                 $(".static_routerTable_body").empty();
                 var data = JSON.parse(data)['router']['routes'];
+                routerTable_len--;
                 if (routerTable_len == 0) {
-                    $('.deleteRouteTables').show();
-                    $('.routerTables_check').show();
+                    $('.deleteRouteTables').hide();
+                    $('.routerTables_check').hide();
                 }
                 for (var i = 0; i < data.length; i++)
                     sertrouterTableList(data[i]);
-                routerTable_len--;
                 var footerStr = '<tr class="active tfoot-dsp">' +
                     '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
                 $(".static_routerTable_footer").empty();
