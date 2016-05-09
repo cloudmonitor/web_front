@@ -1,9 +1,4 @@
 $(function() {
-    /*    if (localStorage.net_tempInfo != null && localStorage.net_tempInfo != "undefined") {
-            var networks = JSON.parse(localStorage.net_tempInfo)['networks'];
-            localStorage.net = JSON.stringify(networks);
-            rount_netInfo(networks);
-        } else {*/
     $.ajax({
         type: "GET",
         url: config["host"] + "/all_networks?token=" + window.localStorage.token,

@@ -1,4 +1,5 @@
 var portList_len = 0;
+var routerTable_len = 0;
 $(function() {
     //------------------概况start
     var id_extNet = window.location.href.split("?")[1];
@@ -9,11 +10,12 @@ $(function() {
         type: "GET",
         url: config["host"] + "/routers?token=" + window.localStorage.token,
         success: function(data) {
-            // console.log(data);
+            // console.log("", data);
             var rounters = JSON.parse(data)['routers'];
             for (var i = 0; i < rounters.length; i++) {
                 if (rounters[i].id == id) {
                     cur_router = rounters[i];
+                    break;
                 }
             }
             //console.log(JSON.stringify(cur_router));
@@ -63,6 +65,22 @@ $(function() {
                 }
             });
             //------------------接口end
+            //------------------静态路由表start
+            localStorage.routerTable = JSON.stringify(cur_router.routes);
+            var routes = cur_router.routes;
+            if (routes.length == 0) {
+                $('.deleteRouteTables').hide();
+                $('.routerTables_check').hide();
+            }
+            for (var i = 0; i < routes.length; i++) {
+                var route = routes[i];
+                sertrouterTableList(route);
+            }
+            routerTable_len = routes.length;
+            var footerStr = '<tr class="active tfoot-dsp">' +
+                '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
+            $(".static_routerTable_footer").append(footerStr);
+            //------------------静态路由表end
         }
     });
     //------------------概况end
@@ -341,3 +359,197 @@ function deleteAjax_routerInfo(json_array) {
         }
     });
 }
+
+//---------------静态路由表
+function sertrouterTableList(data) {
+    var str = '<tr>' +
+        '<td><input type="checkbox" class="routerTable_check" id="' + data.nexthop + '"></td>' +
+        '<td>' + data.destination + '</td>' +
+        '<td>' + data.nexthop + '</td>' +
+        '<td>' +
+        '<button type="button" class="btn btn-danger delete_simpleRouter" id="' + data.nexthop + '" >' +
+        '删除静态路由表</button>' +
+        '</td>' +
+        '</tr>';
+
+    $(".static_routerTable_body").append(str);
+}
+//----------------全选的控制
+$(document).on("change", ".routerTables_check", function() {
+    var isChecked = $(this).prop("checked");
+    $(".routerTable_check").prop("checked", isChecked);
+    if (isChecked) {
+        $(".deleteRouteTables").attr("disabled", false);
+    } else {
+        $(".deleteRouteTables").attr("disabled", true);
+    }
+});
+//---------删除接口
+$(document).on("change", ".routerTable_check", function() {
+    if ($(".routerTable_check:checked").length == $(".routerTable_check").length) {
+        $(".deleteRouteTables").attr("disabled", false);
+        $(".routerTables_check").prop("checked", true);
+    } else if ($(".routerTable_check:checked").length > 0) {
+        $(".deleteRouteTables").attr("disabled", false);
+        $(".routerTables_check").prop("checked", false);
+    } else {
+        $(".deleteRouteTables").attr("disabled", true);
+        $(".routerTables_check").prop("checked", false);
+    }
+});
+$('.addRouterTable').click(function() {
+    $('.dst_CIDR').val("");
+    $('.next_dst').val("");
+
+});
+$(".createRouteTable_OK").click(function() {
+    router_id = $(".routerDesc_id").text();
+    var val1 = $('.dst_CIDR').val();
+    var val2 = $('.next_dst').val();
+    var routerTables = JSON.parse(localStorage.routerTable);
+    if (val1 == '' || val2 == "") {
+        createAndHideAlert("目的CIDR和下一跳都是必填项!");
+        return false;
+    }
+    var router_new = { "destination": val1, "nexthop": val2 };
+    var router_temp = {
+        "router": {
+            "routes": []
+        }
+    };
+    var len = routerTables.length;
+    if (len != 0) {
+        router_temp.router.routes = routerTables;
+        router_temp.router.routes[len] = router_new;
+    } else {
+        router_temp.router.routes[0] = router_new;
+    }
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(router_temp),
+        contentType: "application/json",
+        url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            if (data.NeutronError != undefined) {
+                createAndHideAlert("无效的路由格式！");
+                return false;
+            } else {
+                localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
+                $(".static_routerTable_body").empty();
+                var data = JSON.parse(data)['router']['routes'];
+                if (routerTable_len == 0) {
+                    $('.deleteRouteTables').show();
+                    $('.routerTables_check').show();
+                }
+                for (var i = 0; i < data.length; i++)
+                    sertrouterTableList(data[i]);
+                routerTable_len++;
+                var footerStr = '<tr class="active tfoot-dsp">' +
+                    '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
+                $(".static_routerTable_footer").empty();
+                $(".static_routerTable_footer").append(footerStr);
+            }
+
+        }
+    });
+});
+$(".deleteRouteTables").click(function() {
+    var routerTables = JSON.parse(localStorage.routerTable);
+    var ids = [];
+    var index = 0;
+    $(".routerTable_check:checked").each(function() {
+        ids[index++] = $(this).attr('id');
+    });
+    var router_temp = {
+        "router": {
+            "routes": []
+        }
+    };
+    var new_len = 0;
+    router_id = $(".routerDesc_id").text();
+    for (var i = 0; i < routerTables.length; i++) {
+        var table = routerTables[i];
+        for (var j = 0; j < ids.length; j++) {
+            if (table.nexthop == ids[j]) {
+                continue;
+            }
+            router_temp['router']['routes'][new_len++] = routerTables[i];
+        }
+    }
+    console.error("删除后", JSON.stringify(router_temp));
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(router_temp),
+        contentType: "application/json",
+        url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            console.error(data);
+            if (data.NeutronError != undefined) {
+                createAndHideAlert("无效的路由格式！");
+                return false;
+            } else {
+                localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
+                $(".static_routerTable_body").empty();
+                var data = JSON.parse(data)['router']['routes'];
+                if (routerTable_len == 0) {
+                    $('.deleteRouteTables').show();
+                    $('.routerTables_check').show();
+                }
+                for (var i = 0; i < data.length; i++)
+                    sertrouterTableList(data[i]);
+                routerTable_len -= ids.length;
+                var footerStr = '<tr class="active tfoot-dsp">' +
+                    '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
+                $(".static_routerTable_footer").empty();
+                $(".static_routerTable_footer").append(footerStr);
+            }
+        }
+    });
+});
+$(document).on("click", ".delete_simpleRouter", function() {
+    var routerTables = JSON.parse(localStorage.routerTable);
+    var id = $(this).attr('id');
+    var router_temp = {
+        "router": {
+            "routes": []
+        }
+    };
+    var new_len = 0;
+    router_id = $(".routerDesc_id").text();
+    for (var i = 0; i < routerTables.length; i++) {
+        var table = routerTables[i];
+        if (table.nexthop == id) {
+            continue;
+        }
+        router_temp['router']['routes'][new_len++] = routerTables[i];
+    }
+    console.error("删除后", JSON.stringify(router_temp));
+    $.ajax({
+        type: "POST",
+        data: JSON.stringify(router_temp),
+        contentType: "application/json",
+        url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
+        success: function(data) {
+            console.error(data);
+            if (data.NeutronError != undefined) {
+                createAndHideAlert("无效的路由格式！");
+                return false;
+            } else {
+                localStorage.routerTable = JSON.stringify(JSON.parse(data)['router']['routes']);
+                $(".static_routerTable_body").empty();
+                var data = JSON.parse(data)['router']['routes'];
+                if (routerTable_len == 0) {
+                    $('.deleteRouteTables').show();
+                    $('.routerTables_check').show();
+                }
+                for (var i = 0; i < data.length; i++)
+                    sertrouterTableList(data[i]);
+                routerTable_len--;
+                var footerStr = '<tr class="active tfoot-dsp">' +
+                    '<td colspan="8">Displaying <span id="item_count">' + routerTable_len + '</span> items</td></tr>';
+                $(".static_routerTable_footer").empty();
+                $(".static_routerTable_footer").append(footerStr);
+            }
+        }
+    });
+});
