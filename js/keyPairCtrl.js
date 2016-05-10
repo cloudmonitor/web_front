@@ -2,7 +2,7 @@
 var keyPairApp = angular.module('keyPairApp', ['ngMessages']);
 keyPairApp.controller('keyPairCtrl', keyPairCtrl);
 // 密钥对控制器
-function keyPairCtrl($scope, $http) {
+function keyPairCtrl($scope, $http, $route) {
     console.info("localStorage.user:", window.localStorage.user);
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -13,7 +13,10 @@ function keyPairCtrl($scope, $http) {
         location.href = "#/";
         location.reload();
     });
-    // 初始化值
+    $scope.refresh = function() {
+            $route.reload();
+        }
+        // 初始化值
     $("head title").text("密钥");
     $(".nav-sidebar a[href='#/compute/key-pair']").css({
         "color": "#fff",

@@ -158,7 +158,7 @@ myApp.run(function($rootScope, $location, $templateCache) {
 });
 
 // 计算 -- 实例
-myApp.controller('instanceCtrl', function($scope) {
+myApp.controller('instanceCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -167,6 +167,9 @@ myApp.controller('instanceCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance.js');
@@ -189,7 +192,7 @@ myApp.controller('instanceCtrl', function($scope) {
     });
 });
 // 计算 -- 实例详情
-myApp.controller('instanceDescCtrl', function($scope) {
+myApp.controller('instanceDescCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -198,6 +201,9 @@ myApp.controller('instanceDescCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/instance_desc.js');
@@ -220,7 +226,7 @@ myApp.controller('instanceDescCtrl', function($scope) {
     });
 });
 //镜像
-myApp.controller('imageCtrl', function($scope) {
+myApp.controller('imageCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -229,6 +235,9 @@ myApp.controller('imageCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/image.js');
@@ -252,7 +261,7 @@ myApp.controller('imageCtrl', function($scope) {
 });
 
 // 网络与安全 -- 拓扑
-myApp.controller('topologyCtrl', function($scope) {
+myApp.controller('topologyCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -261,6 +270,9 @@ myApp.controller('topologyCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
@@ -285,7 +297,7 @@ myApp.controller('topologyCtrl', function($scope) {
 });
 
 // 网络与安全 -- 网络
-myApp.controller('netCtrl', function($scope) {
+myApp.controller('netCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -294,6 +306,9 @@ myApp.controller('netCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
     $scope.$parent.loadScript('js/net_netInfo.js');
@@ -316,7 +331,7 @@ myApp.controller('netCtrl', function($scope) {
     });
 });
 // 计算 -- 网络详情
-myApp.controller('netDesc', function($scope) {
+myApp.controller('netDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -325,6 +340,9 @@ myApp.controller('netDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_desc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -346,7 +364,7 @@ myApp.controller('netDesc', function($scope) {
 });
 
 // 网络与安全 -- 子网详情
-myApp.controller('subnetDesc', function($scope) {
+myApp.controller('subnetDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -355,6 +373,9 @@ myApp.controller('subnetDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_desc_subNetDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -375,7 +396,7 @@ myApp.controller('subnetDesc', function($scope) {
     });
 });
 // 网络与安全 -- 端口详情
-myApp.controller('portnetDesc', function($scope) {
+myApp.controller('portnetDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -384,6 +405,9 @@ myApp.controller('portnetDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_desc_portDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
@@ -404,8 +428,8 @@ myApp.controller('portnetDesc', function($scope) {
     });
 });
 
-//虚拟网卡
-myApp.controller('virInterfaceCtrl', function($scope) {
+//网络与安全 --虚拟网卡
+myApp.controller('virInterfaceCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -414,8 +438,11 @@ myApp.controller('virInterfaceCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/config.js');
-    $scope.$parent.loadScript('js/vir_net.js');
+    /*  $scope.$parent.loadScript('js/vir_net.js');*/
     $("head title").text("虚拟网卡");
     $(".nav-sidebar a[href='#/net/virInterface']").css({
         "color": "#fff",
@@ -436,7 +463,7 @@ myApp.controller('virInterfaceCtrl', function($scope) {
 });
 
 // 网络与安全 -- 安全组
-myApp.controller('secGroupCtrl', function($scope) {
+myApp.controller('secGroupCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -445,6 +472,9 @@ myApp.controller('secGroupCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/net_SecurityGroup.js');
     $("head title").text("安全组");
@@ -466,7 +496,7 @@ myApp.controller('secGroupCtrl', function($scope) {
     });
 });
 // 网络与安全 -- 安全组详情
-myApp.controller('secGroupDesc', function($scope) {
+myApp.controller('secGroupDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -475,6 +505,9 @@ myApp.controller('secGroupDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_SecurityGroup_desc.js');
     $("head title").text("安全组");
     $(".nav-sidebar a[href='#/net/secGroup']").css({
@@ -496,7 +529,7 @@ myApp.controller('secGroupDesc', function($scope) {
 });
 
 // 网络与安全 -- 防火墙
-myApp.controller('firewallCtrl', function($scope) {
+myApp.controller('firewallCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -505,6 +538,12 @@ myApp.controller('firewallCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        localStorage.fireWall_tab_flag = 'true';
+        var name = $(".tabselected[class*='active']").attr("name");
+        localStorage.fireWall_tab = name;
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_firewall.js');
     $scope.$parent.loadScript('js/popover-firewall.js');
     $("head title").text("防火墙");
@@ -526,7 +565,7 @@ myApp.controller('firewallCtrl', function($scope) {
     });
 });
 // 网络与安全 -- 防火墙详情
-myApp.controller('firewallDesc', function($scope) {
+myApp.controller('firewallDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -535,6 +574,9 @@ myApp.controller('firewallDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_firewall_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -555,7 +597,7 @@ myApp.controller('firewallDesc', function($scope) {
     });
 });
 // 网络与安全 -- 防火墙策略详情
-myApp.controller('firewallstrategyDesc', function($scope) {
+myApp.controller('firewallstrategyDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -564,6 +606,9 @@ myApp.controller('firewallstrategyDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_firewall_policy_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -584,7 +629,7 @@ myApp.controller('firewallstrategyDesc', function($scope) {
     });
 });
 // 网络与安全 -- 防火墙规则详情
-myApp.controller('firewallruleDesc', function($scope) {
+myApp.controller('firewallruleDesc', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -593,6 +638,9 @@ myApp.controller('firewallruleDesc', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_firewall_rule_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
@@ -612,10 +660,8 @@ myApp.controller('firewallruleDesc', function($scope) {
         });
     });
 });
-
-
 // 网络与安全 -- 路由器
-myApp.controller('routerCtrl', function($scope) {
+myApp.controller('routerCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -624,6 +670,9 @@ myApp.controller('routerCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_rounter.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
@@ -644,7 +693,7 @@ myApp.controller('routerCtrl', function($scope) {
     });
 });
 // 网络与安全 -- 路由器详情
-myApp.controller('routerdescCtrl', function($scope) {
+myApp.controller('routerdescCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -653,6 +702,11 @@ myApp.controller('routerdescCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function(event) {
+        var name = $(".tabselected[class*='active']").attr("name");
+        localStorage.router_tab = name;
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/net_rounter_desc.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
@@ -672,9 +726,8 @@ myApp.controller('routerdescCtrl', function($scope) {
         });
     });
 });
-
 // 网络与安全 -- 主机监控
-myApp.controller('monitorCtrl', function($scope) {
+myApp.controller('monitorCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -683,6 +736,9 @@ myApp.controller('monitorCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
@@ -705,9 +761,8 @@ myApp.controller('monitorCtrl', function($scope) {
         });
     });
 });
-
 // 信息 -- 基本信息
-myApp.controller('base-infoCtrl', function($scope) {
+myApp.controller('base-infoCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -716,6 +771,9 @@ myApp.controller('base-infoCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $scope.$parent.loadScript('js/user_base_info.js');
     $("head title").text("基本信息");
     $(".nav-sidebar a[href='#/info/base-info']").css({
@@ -736,7 +794,7 @@ myApp.controller('base-infoCtrl', function($scope) {
     });
 });
 // 信息 -- 账户信息
-myApp.controller('account-infoCtrl', function($scope) {
+myApp.controller('account-infoCtrl', function($scope, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -745,6 +803,9 @@ myApp.controller('account-infoCtrl', function($scope) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $("head title").text("账户信息");
     $(".nav-sidebar a[href='#/info/account-info']").css({
         "color": "#fff",

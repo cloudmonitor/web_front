@@ -1,6 +1,14 @@
 var portList_len = 0;
 var routerTable_len = 0;
 $(function() {
+    var name = localStorage.router_tab;
+    if (name != undefined) {
+        $('.tabselected').removeClass('active');
+        $("." + name).addClass("active");
+        $('.t_info').removeClass("in active");
+        $('.' + name + '_info').addClass("in active");
+
+    }
     //------------------概况start
     var id_extNet = window.location.href.split("?")[1];
     var id = id_extNet.split("&")[0];

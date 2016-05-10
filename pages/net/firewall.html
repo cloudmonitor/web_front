@@ -2,15 +2,16 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="desc">防火墙</div>
     <ul id="myTab" class="nav nav-tabs">
-        <li class="active"><a data-target="#abstract" data-toggle="tab">防火墙</a></li>
-        <li><a data-target="#strategy" data-toggle="tab">防火墙策略</a></li>
-        <li><a data-target="#rule" data-toggle="tab">防火墙规则</a></li>
+        <li class="active tabselected t1" name="t1"><a data-target="#abstract" data-toggle="tab">防火墙</a></li>
+        <li class="tabselected t2" name="t2"><a data-target="#strategy" data-toggle="tab">防火墙策略</a></li>
+        <li class="tabselected t3" name="t3"><a data-target="#rule" data-toggle="tab">防火墙规则</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <!-- 防火墙 -->
-        <div class="tab-pane fade in active" id="abstract">
+        <div class="tab-pane fade in active t1_info t_info" id="abstract">
             <div class="row">
                 <li class="li-btn">
+                    <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
                     <button type="button" class="btn btn-primary create_fireWallButton" data-toggle="modal" data-target="#modal_create_firewall"><i class="fa fa-plus-square"></i>创建防火墙</button>
                     <button type="button" class="btn btn-danger delete_fireWalls" disabled><i class="fa fa-times"></i>删除防火墙</button>
                 </li>
@@ -39,9 +40,10 @@
             </div>
         </div>
         <!-- 防火墙策略 -->
-        <div class="tab-pane fade" id="strategy">
+        <div class="tab-pane fade t2_info t_info" id="strategy">
             <div class="row">
                 <li class="li-btn">
+                    <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
                     <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modal_create_strategy"><i class="fa fa-plus-square "></i>增加策略</button>
                     <button type="button" class="btn btn-danger delete_policy" disabled><i class="fa fa-times"></i>删除策略</button>
                 </li>
@@ -96,9 +98,10 @@
             </div>
         </div>
         <!-- 防火墙规则 -->
-        <div class="tab-pane fade rulePage" id="rule">
+        <div class="tab-pane fade rulePage t3_info t_info" id="rule">
             <div class="row">
                 <li class="li-btn">
+                    <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_create_rule"><i class="fa fa-plus-square"></i>添加规则</button>
                     <button type="button" class="btn btn-danger" id="rule_del" disabled><i class="fa fa-times"></i>删除规则</button>
                 </li>

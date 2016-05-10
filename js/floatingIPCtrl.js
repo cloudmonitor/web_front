@@ -3,7 +3,7 @@ var floatingIPApp = angular.module('floatingIPApp', []);
 floatingIPApp.controller('floatingIPCtrl', floatingIPCtrl);
 
 // 浮动IP控制器
-function floatingIPCtrl($scope, $http) {
+function floatingIPCtrl($scope, $http, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("head title").text("浮动IP");
@@ -23,8 +23,10 @@ function floatingIPCtrl($scope, $http) {
             "background-color": "transparent"
         });
     });
-
-    // 模态框可拖动
+    $scope.refresh = function() {
+            $route.reload();
+        }
+        // 模态框可拖动
     $('.modal.draggable>.modal-dialog').draggable({
         cursor: 'move',
         handle: '.modal-header'

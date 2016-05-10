@@ -8,6 +8,16 @@ var policy_len = 0;
 var fireWall_len = 0;
 var router_FreeNum = 0;
 $(function() {
+    if (localStorage.fireWall_tab_flag == 'true') {
+        var name = localStorage.fireWall_tab;
+        if (name != undefined) {
+            $('.tabselected').removeClass('active');
+            $("." + name).addClass("active");
+            $('.t_info').removeClass("in active");
+            $('.' + name + '_info').addClass("in active");
+        }
+    }
+    localStorage.fireWall_tab_flag = "";
     $.ajax({
         type: "GET",
         url: config["host"] + "/routers?token=" + window.localStorage.token,

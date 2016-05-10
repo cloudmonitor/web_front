@@ -1,10 +1,13 @@
 // 计算 -- 概览页面js
 var index_flag = 0;
 var abstractApp = angular.module('abstractApp', []);
-abstractApp.controller('abstractCtrl', function($scope, $http) {
+abstractApp.controller('abstractCtrl', function($scope, $http, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/index.js');
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $("head title").text("概览");
     $(".nav-sidebar a[href='#/compute/abstract']").css({
         "color": "#fff",

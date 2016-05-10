@@ -2,12 +2,13 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div class="desc">路由</div>
     <form class="form-inline form-btn" role="form">
-        <div class="form-group">
-            <input id="search-input" type="text" class="form-control" placeholder="Filter" tabindex="1">
-            <label for="search-input" class="control-label input-addon"><i class="fa fa-search"></i></label>
-        </div>
+<!--         <div class="form-group">
+    <input id="search-input" type="text" class="form-control" placeholder="Filter" tabindex="1">
+    <label for="search-input" class="control-label input-addon"><i class="fa fa-search"></i></label>
+</div> -->
         &nbsp;
         <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
             <button type="button" class="btn btn-primary create_router" tabindex="1" data-toggle="modal" data-target="#modal_create_router"><span class="fa fa-plus-square"></span> 创建路由</button>
             <button type="button" class="btn btn-danger delete_router" disabled tabindex="1"><span class="fa fa-times"></span> 删除路由</button>
         </div>

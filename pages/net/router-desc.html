@@ -30,15 +30,16 @@
         </li>
     </div>
     <ul id="myTab" class="nav nav-tabs">
-        <li class="active"><a data-target="#abstract" data-toggle="tab">概况</a></li>
-        <li><a data-target="#interface" data-toggle="tab">接口</a></li>
-        <li><a data-target="#static_routerTable" data-toggle="tab">静态路由表</a></li>
+        <li class="active tabselected t1" name="t1"><a data-target="#abstract" data-toggle="tab">概况</a></li>
+        <li class="tabselected t2" name="t2"><a data-target="#interface" data-toggle="tab">接口</a></li>
+        <li class="tabselected t3" name="t3"><a data-target="#static_routerTable" data-toggle="tab">静态路由表</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
         <!-- 静态路由表 -->
-        <div class="tab-pane fade" id="static_routerTable">
+        <div class="tab-pane fade t3_info t_info" id="static_routerTable">
             <form class="form-inline form-btn" role="form">
                 <div class="form-group">
+                    <button type="button" class="btn btn-primary tab3" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
                     <button type="button" class="btn btn-primary addRouterTable" data-toggle="modal" data-target="#modal_create_routerTable"><i class="fa fa-plus-square"></i>添加路由表</button>
                     <button type="button" class="btn btn-danger deleteRouteTables" disabled>删除静态路由表</button>
                 </div>
@@ -65,7 +66,7 @@
             </div>
         </div>
         <!-- 概况 -->
-        <div class="tab-pane fade in active" id="abstract">
+        <div class="tab-pane fade in active t1_info t_info" id="abstract">
             <table>
                 <tbody>
                     <tr>
@@ -119,9 +120,10 @@
             </table>
         </div>
         <!-- 接口 -->
-        <div class="tab-pane fade" id="interface">
+        <div class="tab-pane fade t2_info t_info" id="interface">
             <form class="form-inline form-btn" role="form">
                 <div class="form-group">
+                    <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
                     <button type="button" class="btn btn-primary addport" data-toggle="modal" data-target="#modal_create_interface"><i class="fa fa-plus-square"></i>增加接口</button>
                     <button type="button" class="btn btn-danger deleteport" disabled tabindex="1"><span class="fa fa-times"></span> 删除接口</button>
                 </div>

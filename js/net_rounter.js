@@ -1,4 +1,5 @@
 $(function() {
+    localStorage.router_tab = 't1';
     $.ajax({
         type: "GET",
         url: config["host"] + "/all_networks?token=" + window.localStorage.token,

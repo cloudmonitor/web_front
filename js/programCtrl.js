@@ -3,7 +3,7 @@ var programApp = angular.module('programApp', []);
 programApp.controller('programCtrl', programCtrl);
 
 // 项目控制器函数
-function programCtrl($scope, $http) {
+function programCtrl($scope, $http, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -13,6 +13,9 @@ function programCtrl($scope, $http) {
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $("head title").text("项目");
     $(".nav-sidebar a[href='#/info/program']").css({
         "color": "#fff",

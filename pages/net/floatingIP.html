@@ -3,6 +3,7 @@
     <div class="desc">浮动IP</div>
     <div class="row">
         <li class="li-btn li-btn-bottom">
+            <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
             <button class="btn btn-primary" data-toggle="modal" data-target="#newIP" ng-click="allocIPModal()" ng-disabled="allocIPDis"><i class="fa fa-link"></i>分配IP给项目</button>
             <button class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm" ng-click="confirmDel()" ng-disabled="freeIP"><i class="fa fa-chain-broken"></i>释放浮动IP</button>
         </li>

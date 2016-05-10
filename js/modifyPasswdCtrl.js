@@ -1,6 +1,6 @@
 var modifyPasswdApp = angular.module('modifyPasswdApp', []);
 
-modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($scope, $http) {
+modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', '$route', function($scope, $http, $route) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -10,6 +10,9 @@ modifyPasswdApp.controller('modifyPasswdCtrl', ['$scope', '$http', function($sco
         location.href = "#/";
         location.reload();
     });
+    $scope.refresh = function() {
+        $route.reload();
+    }
     $("head title").text("修改密码");
     $(".nav-sidebar a[href='#/info/modify-passwd']").css({
         "color": "#fff",

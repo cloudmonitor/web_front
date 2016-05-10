@@ -3,6 +3,7 @@
     <div class="desc">密钥对</div>
     <p></p>
     <div class="row" id="btn-group-right">
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
         <button class="btn btn-primary" data-toggle="modal" data-target="#createKey-modal" ng-click="initKeyModal()"><i class="fa fa-plus-square"></i>创建密钥</button>
         <button class="btn btn-danger" data-toggle="modal" data-target="#deleteKey-modal" ng-disabled="delBtnDis" ng-click="delKeyBtn()"><span class="fa fa-times"></span> 删除</button>
     </div>
