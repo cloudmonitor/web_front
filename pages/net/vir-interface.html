@@ -16,7 +16,7 @@
         </div>
     </form>
     <br>
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <thead>
             <tr>
                 <th>
@@ -31,7 +31,7 @@
                 <th>安全限制</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="virNet_body">
             <tr>
                 <td>
                     <input type="checkbox">
@@ -45,7 +45,11 @@
                 <td>enable(disable)</td>
             </tr>
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+            <tr class="active tfoot-dsp virNet_footer">
+                <td colspan="8">Displaying <span class='image_num'></span> items</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 <!-- 创建虚拟网卡模态框 -->

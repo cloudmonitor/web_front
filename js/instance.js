@@ -230,7 +230,7 @@ $(document).on("click", ".bind_Inteface", function() {
     servers_id = this.id;
     $.ajax({
         type: "GET",
-        url: config["host"] + "/new_subnets?token=" + window.localStorage.token,
+        url: config["host"] + "/subnets?token=" + window.localStorage.token,
         success: function(data) {
             // console.error(data);
             var subnets = JSON.parse(data)['subnets'];
@@ -733,7 +733,7 @@ function createInstanceFun() {
         //----------子网的选择
         $.ajax({
             type: "GET",
-            url: config["host"] + "/new_subnets?token=" + window.localStorage.token,
+            url: config["host"] + "/subnets?token=" + window.localStorage.token,
             success: function(data) {
                 var subnet_infos = JSON.parse(data)['subnets'];
                 $.ajax({
@@ -771,9 +771,10 @@ $(document).on("click", ".tabel", function() {
         $(this).next().next().slideToggle();
         setTimeout(function() {
             first_slog = 0;
-        }, 2000);
+        }, 300);
     }
 });
+
 //-----------增加移除处理
 $(document).on("click", ".net_add", function() {
     var node = document.getElementById("selected_subnet");

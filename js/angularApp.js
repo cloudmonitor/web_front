@@ -404,6 +404,37 @@ myApp.controller('portnetDesc', function($scope) {
     });
 });
 
+//虚拟网卡
+myApp.controller('virInterfaceCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+    $scope.$parent.loadScript('js/config.js');
+    $scope.$parent.loadScript('js/vir_net.js');
+    $("head title").text("虚拟网卡");
+    $(".nav-sidebar a[href='#/net/virInterface']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/net/virInterface']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
+    });
+    var linkEle = $(".nav-sidebar li a[href!='#/net/virInterface']");
+    linkEle.click(function() {
+        $(".nav-sidebar li a").css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
+    });
+});
+
 // 网络与安全 -- 安全组
 myApp.controller('secGroupCtrl', function($scope) {
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
