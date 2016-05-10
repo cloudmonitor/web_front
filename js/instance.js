@@ -546,10 +546,11 @@ function setInstanceAjax(data, url) {
 function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
     var str = "<tbody><tr><td><input type='checkbox' class='instance_checks' id='" + data.id + "'></td>" +
         "<td><a href='#/compute/instance_desc?" + i + "_" + num + "&" + data["OS-EXT-AZ:availability_zone"] + "'>" + data.name + "</a></td><td>" + addrs + "</td>" +
+        "<td class='" + data.id + "'>" + data.image.image_name + "</td>" +
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
         "<td class='" + data.id + "'>" + status1 + "</td>" +
-        "<td class='" + data.id + "'>" + data.image.image_name + "</td>" +
+
         //"<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
         //"<td>" + "无" + "</td>" +
         //"<td class='" + data.id + "'>" + status + "</td>" +

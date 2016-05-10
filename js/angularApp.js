@@ -18,6 +18,11 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/compute/instance.html',
             controller: 'instanceCtrl'
         })
+        // 计算 -- 镜像
+        .when('/compute/image', {
+            templateUrl: 'pages/compute/image.html',
+            controller: 'imageCtrl'
+        })
         // 计算 -- 实例详情
         .when('/compute/instance_desc', {
             templateUrl: 'pages/compute/instance_desc.html',
@@ -207,6 +212,37 @@ myApp.controller('instanceDescCtrl', function($scope) {
         })
     });
     var linkEle = $(".nav-sidebar li a[href!='#/compute/instance']");
+    linkEle.click(function() {
+        $(".nav-sidebar li a").css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
+    });
+});
+//镜像
+myApp.controller('imageCtrl', function($scope) {
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+    $scope.$parent.loadScript('js/config.js');
+    $scope.$parent.loadScript('js/config.js');
+    $scope.$parent.loadScript('js/image.js');
+    $("head title").text("镜像");
+    $(".nav-sidebar a[href='#/compute/image']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/compute/image']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
+    });
+    var linkEle = $(".nav-sidebar li a[href!='#/compute/image']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",
