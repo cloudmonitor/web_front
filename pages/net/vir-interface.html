@@ -6,13 +6,16 @@
             <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-virInterface-modal"><i class="fa fa-plus-square"></i>创建虚拟网卡</button>
+            <button type="button" class="btn btn-primary create_virNet" data-toggle="modal" data-target="#create-virInterface-modal"><i class="fa fa-plus-square"></i>创建虚拟网卡</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#binding-host-modal"><i class="fa fa-pencil-square-o "></i>绑定云主机</button>
+            <button type="button" class="btn btn-danger sg_del deleteVirNet" disabled><i class="fa fa-trash"></i>删除虚拟网卡</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-default sg_del"><i class="fa fa-trash"></i>从云主机卸载</button>
+            <button type="button" class="btn btn-default bindInstance" data-toggle="modal" data-target="#binding-host-modal" disabled><i class="fa fa-pencil-square-o "></i>绑定云主机</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-danger sg_del deleteFromInstance" disabled><i class="fa fa-trash"></i>从云主机卸载</button>
         </div>
     </form>
     <br>
@@ -20,7 +23,7 @@
         <thead>
             <tr>
                 <th>
-                    <input type="checkbox">
+                    <input type="checkbox" class="all_virCheck">
                 </th>
                 <th>名称</th>
                 <th>IP地址</th>
@@ -32,22 +35,10 @@
             </tr>
         </thead>
         <tbody class="virNet_body">
-            <tr>
-                <td>
-                    <input type="checkbox">
-                </td>
-                <td>name-desc</td>
-                <td>192.168.0.0</td>
-                <td>subnet-name</td>
-                <td>wan-IP</td>
-                <td>关联云主机</td>
-                <td>status(enable, disable)</td>
-                <td>enable(disable)</td>
-            </tr>
         </tbody>
         <tfoot>
             <tr class="active tfoot-dsp virNet_footer">
-                <td colspan="8">Displaying <span class='image_num'></span> items</td>
+                <td colspan="8">Displaying <span class='virNet_num'></span> items</td>
             </tr>
         </tfoot>
     </table>
@@ -68,7 +59,7 @@
                             <input type="text" class="form-control" id="interface-name">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group subNet_Div">
                         <label for="subnet-set" class="col-sm-3 control-label">选择子网</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="subnet-set" value="1">
@@ -83,19 +74,17 @@
                             <input type="text" class="form-control" id="ip-address" placeholder="如不填系统会自动分配">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group sec_Div">
                         <label for="sec-group" class="col-sm-3 control-label">安全组</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="sec-group" value="1">
-                                <option value="1">default</option>
-                                <option value="2">sec-group-name</option>
                             </select>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">创建</button>
+                <button type="button" class="btn btn-primary create_virNetOK" data-dismiss="modal">创建</button>
             </div>
         </div>
     </div>
@@ -113,13 +102,14 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">虚拟网卡</label>
                         <div class="col-sm-9 vertical-align-bottom">
-                            <span>virtual-interface-name(IP--address)</span>
+                            <span class='virNet_name'></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">云主机</label>
-                        <div class="col-sm-9 vertical-align-bottom">
-                            <span><small>没有可用的云主机</small></span>
+                        <div class="col-sm-7 vertical-align-bottom">
+                            <select class="form-control" id="instance_set" value="1">
+                            </select>
                         </div>
                     </div>
                     <div id="myAlert" class="alert alert-warning">
@@ -128,8 +118,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary submit_bindINfo" data-dismiss="modal">保存</button>
             </div>
         </div>
     </div>

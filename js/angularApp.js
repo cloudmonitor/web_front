@@ -1,6 +1,7 @@
 var myApp = angular.module('myApp', ['ngRoute', 'abstractApp', 'floatingIPApp', 'keyPairApp', 'programApp', 'modifyPasswdApp']);
 
 // 路由跳转
+var router_all;
 myApp.config(function($routeProvider) {
     $routeProvider
     // 默认加载的主页  计算--概览
@@ -430,6 +431,7 @@ myApp.controller('portnetDesc', function($scope, $route) {
 
 //网络与安全 --虚拟网卡
 myApp.controller('virInterfaceCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -442,7 +444,7 @@ myApp.controller('virInterfaceCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/config.js');
-    /*  $scope.$parent.loadScript('js/vir_net.js');*/
+    $scope.$parent.loadScript('js/vir_net.js');
     $("head title").text("虚拟网卡");
     $(".nav-sidebar a[href='#/net/virInterface']").css({
         "color": "#fff",

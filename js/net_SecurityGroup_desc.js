@@ -1,4 +1,8 @@
 $(function() {
+    $(".nav-sidebar a[href!='#/net/secGroup']").css({
+        "color": "#337ab7",
+        "background-color": "transparent"
+    })
     var rules_len = 0;
     var id = window.location.href.split("?")[1];
     // if (localStorage.securitys_temp == undefined||localStorage.securitys_temp == "undefined") {
