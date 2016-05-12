@@ -769,7 +769,7 @@ tfoot .tfoot-dsp {
     top: 0;
     height: 50%;
     width: 100%;
-    background: #2B2B2B;
+    background: #404040;
     z-index: 1
 }
 
@@ -786,7 +786,8 @@ tfoot .tfoot-dsp {
     position: relative;
     margin: 0px;
     padding: 0px;
-    /* top: -43px; */
+    /*
+top: -43px; */
     text-align: center;
 }
 
