@@ -830,3 +830,7 @@ top: -43px; */
     position: relative;
     margin-top: 0px;
 }
+
+.login_out_show:hover {
+    cursor: pointer
+}
