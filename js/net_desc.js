@@ -297,7 +297,7 @@ function createSubnetAJAX(subnet) {
                 console.log(data);
                 createAndHideAlert("请检查子网配置格式！");
             } else {
-                window.location.reload();
+                location.reload();
                 window.location.href = "#/net/net";
             }
         }

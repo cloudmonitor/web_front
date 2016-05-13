@@ -246,7 +246,7 @@ $('.submit_bindINfo').unbind('click').on('click', function() {
             if (JSON.parse(data)['NeutronError'] != undefined || JSON.parse(data)['badRequest'] != undefined) {
                 createAndHideAlert(data);
             } else {
-                window.location.reload();
+                router_all.reload();
             }
         }
     });
@@ -270,7 +270,7 @@ $('.deleteFromInstance').unbind('click').on('click', function() {
             if (info != undefined)
                 createAndHideAlert(info.message);
             else {
-                window.location.reload();
+                router_all.reload();
             }
         }
     });

@@ -175,36 +175,41 @@ function deleteInstance_AJAX(servers) {
         url: config['host'] + "/servers/delete?token=" + window.localStorage.token,
         success: function(data) {
             setTimeout(function() {
-                window.location.reload();
-            }, 800);
-
+                location.reload();
+            }, 1000);
         }
     });
 }
 //----------浮动IP的处理
 var servers_id;
 var flag_type;
+var ip_time = 0;
 $(document).on("click", ".bind_floatIp", function() {
-    flag_type = "floatIP";
-    $(".IP_select").empty();
-    $(".show_info0").text("管理浮动IP的关联");
-    $(".show_info1").html("IP地址");
-    $(".show_info2").html("请为选中的云主机或端口选择要绑定的IP地址。");
-    $(".IP_select").append('<option value="test">请选择一个IP地址</option>');
-    servers_id = this.id;
-    $.ajax({
-        type: "GET",
-        url: config["host"] + "/dis_floatingips?token=" + window.localStorage.token,
-        success: function(data) {
-            // console.error(data);
-            var IPs = JSON.parse(data)['floatingips'];
-            var ip_str = "";
-            for (var i = 0; i < IPs.length; i++) {
-                ip_str += '<option value="' + IPs[i].floating_ip_address + '">' + IPs[i].floating_ip_address + '</option>';
+    if (ip_time++ == 0) {
+        flag_type = "floatIP";
+        $(".IP_select").empty();
+        $(".show_info0").text("管理浮动IP的关联");
+        $(".show_info1").html("IP地址");
+        $(".show_info2").html("请为选中的云主机或端口选择要绑定的IP地址。");
+        $(".IP_select").append('<option value="test">请选择一个IP地址</option>');
+        servers_id = this.id;
+        $.ajax({
+            type: "GET",
+            url: config["host"] + "/dis_floatingips?token=" + window.localStorage.token,
+            success: function(data) {
+                var IPs = JSON.parse(data)['floatingips'];
+                var ip_str = "";
+                for (var i = 0; i < IPs.length; i++) {
+                    ip_str += '<option value="' + IPs[i].floating_ip_address + '">' + IPs[i].floating_ip_address + '</option>';
+                }
+                $(".IP_select").append(ip_str);
             }
-            $(".IP_select").append(ip_str);
-        }
-    });
+        });
+        setTimeout(function() {
+            ip_time = 0;
+        }, 800);
+
+    }
 });
 $(document).on("click", ".unbind_floatIp", function() {
     var ip = $(this).attr("IP_id").replace("<br></li>", "").replace("<br/>", "");
@@ -217,8 +222,6 @@ $(document).on("click", ".unbind_floatIp", function() {
     IP_selected['removeFloatingIp'].address = ip;
     setInstanceAjax(IP_selected, "/servers_action/");
 });
-
-
 //-------接口的处理
 $(document).on("click", ".bind_Inteface", function() {
     flag_type = "inteface";
@@ -374,7 +377,6 @@ $(".sg_keep").unbind('click').click(function() {
         setInstanceAjax(server, "/servers/update/");
         temp_name = null;
     }
-
 });
 //------------------中止实例
 $(document).on("click", ".pause_instance", function() {
@@ -479,7 +481,6 @@ $(document).on("click", ".create_start", function() {
     $(".create_start").removeClass("create_start");
     $(".create_start").html("创建快照");
 });
-
 //-------------------启动实例
 var time_num = 0;
 $(document).on("click", ".show_cmd", function() {
@@ -504,10 +505,11 @@ $(document).on("click", ".show_cmd", function() {
             }
         });
     }
-
-
 });
 //-----------------------------------------------------------提交数据
+$('.IP_select').change(function() {
+    $('.floatIP_Div').removeClass('has-error');
+});
 $(".add_IP").click(function() {
     if (flag_type == "floatIP") {
         var IP_selected = {
@@ -515,7 +517,12 @@ $(".add_IP").click(function() {
                 "address": "172.24.4.4"
             }
         };
-        IP_selected['addFloatingIp'].address = $(".IP_select").val();
+        if ($(".IP_select").val() == 'test') {
+            $('.floatIP_Div').addClass('has-error');
+            return false;
+        } else {
+            IP_selected['addFloatingIp'].address = $(".IP_select").val();
+        }
         setInstanceAjax(IP_selected, "/servers_action/");
     } else if (flag_type == "inteface") {
         var inteface = { "interface": { "network_id": "", "subnet_id": "" } };
@@ -536,9 +543,10 @@ function setInstanceAjax(data, url) {
         contentType: "application/json",
         url: config['host'] + url + servers_id + "?token=" + window.localStorage.token,
         success: function(data) {
+            $('#instance_security').modal('hide');
             setTimeout(function() {
-                window.location.reload();
-            }, 2000);
+                location.reload();
+            }, 600);
         }
     });
 }
@@ -546,7 +554,7 @@ function setInstanceAjax(data, url) {
 function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
     var str = "<tbody><tr><td><input type='checkbox' class='instance_checks' id='" + data.id + "'></td>" +
         "<td><a href='#/compute/instance_desc?" + i + "_" + num + "&" + data["OS-EXT-AZ:availability_zone"] + "'>" + data.name + "</a></td><td>" + addrs + "</td>" +
-        "<td class='" + data.id + "'>" + data.image.image_name + "</td>" +
+        "<td >" + data.image.image_name + "</td>" +
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
         "<td class='" + data.id + "'>" + status1 + "</td>" +
@@ -945,11 +953,11 @@ function instance_info(json_array) {
         contentType: "application/json",
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
-            // console.error(data);
+            $('#start-host').modal('hide')
             setTimeout(function() {
                 $(".info_tip").remove();
                 $("#loading_monitor,#background_monitor").hide();
-                window.location.reload();
+                location.reload();
             }, 4000);
 
         },

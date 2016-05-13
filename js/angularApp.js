@@ -160,6 +160,7 @@ myApp.run(function($rootScope, $location, $templateCache) {
 
 // 计算 -- 实例
 myApp.controller('instanceCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -194,6 +195,7 @@ myApp.controller('instanceCtrl', function($scope, $route) {
 });
 // 计算 -- 实例详情
 myApp.controller('instanceDescCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -228,6 +230,7 @@ myApp.controller('instanceDescCtrl', function($scope, $route) {
 });
 //镜像
 myApp.controller('imageCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -263,6 +266,7 @@ myApp.controller('imageCtrl', function($scope, $route) {
 
 // 网络与安全 -- 拓扑
 myApp.controller('topologyCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -299,6 +303,7 @@ myApp.controller('topologyCtrl', function($scope, $route) {
 
 // 网络与安全 -- 网络
 myApp.controller('netCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -333,6 +338,7 @@ myApp.controller('netCtrl', function($scope, $route) {
 });
 // 计算 -- 网络详情
 myApp.controller('netDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -366,6 +372,7 @@ myApp.controller('netDesc', function($scope, $route) {
 
 // 网络与安全 -- 子网详情
 myApp.controller('subnetDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -398,6 +405,7 @@ myApp.controller('subnetDesc', function($scope, $route) {
 });
 // 网络与安全 -- 端口详情
 myApp.controller('portnetDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -466,6 +474,7 @@ myApp.controller('virInterfaceCtrl', function($scope, $route) {
 
 // 网络与安全 -- 安全组
 myApp.controller('secGroupCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -499,6 +508,7 @@ myApp.controller('secGroupCtrl', function($scope, $route) {
 });
 // 网络与安全 -- 安全组详情
 myApp.controller('secGroupDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -532,6 +542,7 @@ myApp.controller('secGroupDesc', function($scope, $route) {
 
 // 网络与安全 -- 防火墙
 myApp.controller('firewallCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -568,6 +579,7 @@ myApp.controller('firewallCtrl', function($scope, $route) {
 });
 // 网络与安全 -- 防火墙详情
 myApp.controller('firewallDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -600,6 +612,7 @@ myApp.controller('firewallDesc', function($scope, $route) {
 });
 // 网络与安全 -- 防火墙策略详情
 myApp.controller('firewallstrategyDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -632,6 +645,7 @@ myApp.controller('firewallstrategyDesc', function($scope, $route) {
 });
 // 网络与安全 -- 防火墙规则详情
 myApp.controller('firewallruleDesc', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -664,6 +678,7 @@ myApp.controller('firewallruleDesc', function($scope, $route) {
 });
 // 网络与安全 -- 路由器
 myApp.controller('routerCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -696,6 +711,7 @@ myApp.controller('routerCtrl', function($scope, $route) {
 });
 // 网络与安全 -- 路由器详情
 myApp.controller('routerdescCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -730,6 +746,7 @@ myApp.controller('routerdescCtrl', function($scope, $route) {
 });
 // 网络与安全 -- 主机监控
 myApp.controller('monitorCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -765,6 +782,7 @@ myApp.controller('monitorCtrl', function($scope, $route) {
 });
 // 信息 -- 基本信息
 myApp.controller('base-infoCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {
@@ -797,6 +815,7 @@ myApp.controller('base-infoCtrl', function($scope, $route) {
 });
 // 信息 -- 账户信息
 myApp.controller('account-infoCtrl', function($scope, $route) {
+    router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
     $("#lagout").unbind('click').click(function() {

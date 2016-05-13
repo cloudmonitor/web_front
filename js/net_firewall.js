@@ -927,7 +927,7 @@ $(".addFireWall_OK").click(function() {
         contentType: "application/json",
         url: config["host"] + "/firewall/create" + "?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         },
         error: function(data) {
             createAndHideAlert("信息获取失败");
@@ -1082,7 +1082,7 @@ $(".update_FireWall_OK").click(function() {
         contentType: "application/json",
         url: config["host"] + "/firewall/update/" + fireWall_updateId + "?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         }
     });
 
@@ -1155,7 +1155,7 @@ $(document).on("click", ".delete_fireWallRouter", function() {
                     url: config["host"] + "/firewall/update/" + curr_fireWallId + "?token=" + window.localStorage.token,
                     success: function(data) {
                         //console.log(data);
-                        window.location.reload();
+                       location.reload();
                     }
                 });
             });
@@ -1246,7 +1246,7 @@ $(document).on("click", ".add_fireWallRouter", function() {
                     url: config["host"] + "/firewall/update/" + curr_fireWallId + "?token=" + window.localStorage.token,
                     success: function(data) {
                         //console.log(data);
-                        window.location.reload();
+                        location.reload();
                     }
                 });
 

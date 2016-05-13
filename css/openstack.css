@@ -676,7 +676,8 @@ tfoot .tfoot-dsp {
 
 /* 网络与安全  -- 防火墙 -- 模态框 -- 添加防火墙*/
 
-.modal-size {
+.modal-size
+ {
     width: 500px;
     padding-left: 20px;
     padding-right: 20px;

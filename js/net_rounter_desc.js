@@ -175,7 +175,7 @@ $(function() {
             contentType: "application/json",
             url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
             success: function(data) {
-                window.location.reload();
+                location.reload();
             }
         });
     });
@@ -302,7 +302,7 @@ function deleteAjax(data) {
         contentType: "application/json",
         url: config["host"] + "/router/" + router_id + "/remove_router_interface?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+           location.reload();
         }
     });
 }
@@ -339,7 +339,7 @@ $(document).on('click', ".delExtNetdesc", function() {
             contentType: "application/json",
             url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
             success: function(data) {
-                window.location.reload();
+                location.reload();
             }
         });
     }

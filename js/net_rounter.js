@@ -205,7 +205,7 @@ $(document).on('click', ".addExtNet_ok", function() {
             /*            var name = $(".setoutNet_selected").find("option:selected").text();
                         $("td[id='" + router_id + "']").text(name);
                         $(".setoutNet_selected").empty();*/
-            window.location.reload();
+            location.reload();
         }
     });
 });
@@ -224,7 +224,7 @@ $(document).on('click', ".delExtNet", function() {
             contentType: "application/json",
             url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
             success: function(data) {
-                window.location.reload();
+                location.reload();
             }
         });
     }
@@ -259,7 +259,7 @@ $(".editRouter_ok").click(function() {
         contentType: "application/json",
         url: config["host"] + "/router/update/" + router_id + "?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         }
     });
 

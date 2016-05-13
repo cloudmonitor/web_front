@@ -78,7 +78,7 @@ function createNetAjax(network_json) {
         contentType: "application/json",
         url: config['host'] + "/network/create?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         }
     });
 }
@@ -132,7 +132,7 @@ function deleteNetAjax(nets) {
         contentType: "application/json",
         url: config['host'] + "/network/delete?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         }
     });
 }
@@ -168,7 +168,7 @@ function updateNetAjax(net, id) {
         contentType: "application/json",
         url: config['host'] + "/network/update/" + id + "?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.reload();
+            location.reload();
         }
     });
 }
@@ -315,7 +315,7 @@ function createSubnetAJAX(subnet) {
                 console.log(data);
                 createAndHideAlert("请检查子网配置格式！");
             } else
-                window.location.reload();
+                location.reload();
         }
     });
 }
