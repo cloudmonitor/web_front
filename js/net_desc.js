@@ -213,7 +213,7 @@ $(".sub_checks").change(function() {
         $(".all_check").prop("checked", false);
     }
 });
-$(".delete_subnetInfo").click(function() {
+$(".delete_subnetInfo").on('click', function() {
     var subnets = { "subnet_ids": [] };
     var i = 0;
     $(".sub_checks:checked").each(function() {
@@ -229,13 +229,24 @@ $(document).on("click", ".delete_subnetSimple", function() {
 });
 
 function deletesubnetAjax(subnets) {
+    console.error(JSON.stringify(subnets));
     $.ajax({
         type: "POST",
         data: JSON.stringify(subnets),
         contentType: "application/json",
         url: config['host'] + "/subnet/delete?token=" + window.localStorage.token,
         success: function(data) {
-            window.location.href = "#/net/net";
+            console.error(data);
+            data = JSON.parse(data);
+            var subnets_id = subnets['subnet_ids'];
+            for (var i = 0; i < subnets_id.length; i++) {
+                if (data[subnets_id[i]] == 204) {
+                    router_all.reload();
+                } else {
+                    createAndHideAlert(data[subnets_id[i]]['NeutronError']['message']);
+                }
+            }
+            //   window.location.href = "#/net/net";
         }
     });
 }
@@ -297,8 +308,9 @@ function createSubnetAJAX(subnet) {
                 console.log(data);
                 createAndHideAlert("请检查子网配置格式！");
             } else {
-                location.reload();
-                window.location.href = "#/net/net";
+                router_all.reload();
+                /*                location.reload();
+                                window.location.href = "#/net/net";*/
             }
         }
     });
