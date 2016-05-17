@@ -241,12 +241,13 @@ function deletesubnetAjax(subnets) {
             var subnets_id = subnets['subnet_ids'];
             for (var i = 0; i < subnets_id.length; i++) {
                 if (data[subnets_id[i]] == 204) {
-                    router_all.reload();
+                    location.reload();
+                    window.location.href = "#/net/net";
                 } else {
                     createAndHideAlert(data[subnets_id[i]]['NeutronError']['message']);
                 }
             }
-            //   window.location.href = "#/net/net";
+            //   
         }
     });
 }
@@ -308,9 +309,8 @@ function createSubnetAJAX(subnet) {
                 console.log(data);
                 createAndHideAlert("请检查子网配置格式！");
             } else {
-                router_all.reload();
-                /*                location.reload();
-                                window.location.href = "#/net/net";*/
+                location.reload();
+                window.location.href = "#/net/net";
             }
         }
     });
