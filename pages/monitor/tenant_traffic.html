@@ -2,21 +2,19 @@
 <div id="background_monitor" class="background" style="display: none;"></div>
 <!-- 内容显示界面 -->
 <!-- 内容显示界面 -->
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content_wj">
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tenant_traffic">
     <div class="desc">
-        主机监控
-        <select class="form-control monitor-device monitors_wj" style="width:140px">
-        </select>
+        租户流量监控
         <!-- 按钮选项 -->
         <div class="btn-group form-btn ">
             <label class="btn btn-primary btn-sm active" id="option1">
-                按分钟
+                最近10分钟
             </label>
             <label class="btn btn-primary btn-sm" id="option2">
-                按小时
+                最近10小时
             </label>
             <label class="btn btn-primary btn-sm" id="option3">
-                按 天
+                最近10天
             </label>
         </div>
     </div>
@@ -27,22 +25,8 @@
 <input type="hidden" name="temp2" id="temp2">
 <input type="hidden" name="temp3" id="temp3"> -->
     <div class="row">
-        <div id="chart1" class="col-md-12 monitor-chart"></div>
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div id="chart2" class="col-md-12 monitor-chart"></div>
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div id="chart3" class="col-md-12 monitor-chart"></div>
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div id="chart4" class="col-md-12 monitor-chart"></div>
+        <div id="top_instance" class="col-md-6 monitor-chart"></div>
+        <div id="top_insta" class="col-md-6 monitor-chart"></div>
     </div>
     <br>
     <br>

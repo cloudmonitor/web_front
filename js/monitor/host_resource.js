@@ -114,7 +114,7 @@ function setAjax(id, curr_type, meter_name, arr) {
     //---------CPU监控信息
     $.ajax({
         type: "GET",
-        url: config["host"] + "/v1.0/monitor/" + id + "/" + meter_name + "/" + curr_type + "?limit=15&token=" + window.localStorage.token,
+        url: config["host"] + "/v1.0/monitor/" + id + "/" + meter_name + "/" + curr_type + "?limit=50&token=" + window.localStorage.token,
         success: function(data) {
             var meter_datas = JSON.parse(data)[meter_name];
             if (meter_datas[0] != null && meter_datas[0] != "") {

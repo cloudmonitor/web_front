@@ -73,15 +73,20 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/floatingIP.html',
             controller: 'floatingIPCtrl'
         })
-        // 监控 -- 主机
-        .when('/monitor/host', {
-            templateUrl: 'pages/monitor/host.html',
-            controller: 'monitorHostCtrl'
+        // 监控 -- 主机资源
+        .when('/monitor/host_resource', {
+            templateUrl: 'pages/monitor/host_resource.html',
+            controller: 'monitorHostResourceCtrl'
         })
-        // 监控 -- 流量
-        .when('/monitor/traffic', {
-            templateUrl: 'pages/monitor/traffic.html',
-            controller: 'monitorTrafficCtrl'
+        // 监控 -- 主机流量
+        .when('/monitor/host_traffic', {
+            templateUrl: 'pages/monitor/host_traffic.html',
+            controller: 'monitorHostTrafficCtrl'
+        })
+        // 监控 -- 租户流量
+        .when('/monitor/tenant_traffic', {
+            templateUrl: 'pages/monitor/tenant_traffic.html',
+            controller: 'monitorTenantTrafficCtrl'
         })
         // 信息 -- 项目信息
         .when('/info/program', {
@@ -751,7 +756,7 @@ myApp.controller('routerdescCtrl', function($scope, $route) {
 });
 
 // 监控 -- 主机监控
-myApp.controller('monitorHostCtrl', function($scope, $route) {
+myApp.controller('monitorHostResourceCtrl', function($scope, $route) {
     router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -767,18 +772,18 @@ myApp.controller('monitorHostCtrl', function($scope, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/monitor/monitor_host.js');
-    $("head title").text("主机监控");
-    $(".nav-sidebar a[href='#/monitor/host']").css({
+    $scope.$parent.loadScript('js/monitor/host_resource.js');
+    $("head title").text("主机资源监控");
+    $(".nav-sidebar a[href='#/monitor/host_resource']").css({
         "color": "#fff",
         "background-color": "#428bca"
     }).click(function() {
-        $(".nav-sidebar a[href='#/monitor/host']").css({
+        $(".nav-sidebar a[href='#/monitor/host_resource']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
-    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host']");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host_resource']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",
@@ -786,8 +791,8 @@ myApp.controller('monitorHostCtrl', function($scope, $route) {
         });
     });
 });
-// 监控 -- 流量监控
-myApp.controller('monitorTrafficCtrl', function($scope, $route) {
+// 监控 -- 主机流量
+myApp.controller('monitorHostTrafficCtrl', function($scope, $route) {
     router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -803,18 +808,54 @@ myApp.controller('monitorTrafficCtrl', function($scope, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/monitor/monitor_traffic.js');
-    $("head title").text("流量监控");
-    $(".nav-sidebar a[href='#/monitor/traffic']").css({
+    $scope.$parent.loadScript('js/monitor/host_traffic.js');
+    $("head title").text("主机流量监控");
+    $(".nav-sidebar a[href='#/monitor/host_traffic']").css({
         "color": "#fff",
         "background-color": "#428bca"
     }).click(function() {
-        $(".nav-sidebar a[href='#/monitor/traffic']").css({
+        $(".nav-sidebar a[href='#/monitor/host_traffic']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
-    var linkEle = $(".nav-sidebar li a[href!='#/monitor/traffic']");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host_traffic']");
+    linkEle.click(function() {
+        $(".nav-sidebar li a").css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
+    });
+});
+// 监控 -- 租户流量
+myApp.controller('monitorTenantTrafficCtrl', function($scope, $route) {
+    router_all = $route;
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+    $scope.refresh = function() {
+        $route.reload();
+    }
+    $scope.$parent.loadScript('js/lib/echarts.min.js');
+    $scope.$parent.loadScript('js/lib/moment.min.js');
+    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/monitor/tenant_traffic.js');
+    $("head title").text("租户流量监控");
+    $(".nav-sidebar a[href='#/monitor/tenant_traffic']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/monitor/tenant_traffic']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
+    });
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/tenant_traffic']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",

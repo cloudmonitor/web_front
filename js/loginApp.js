@@ -43,8 +43,8 @@ function formValidCtrl($scope, $http) {
                     window.localStorage.token = JSON.stringify(data.access.token);
                     window.localStorage.user = JSON.stringify(data.access.user);
                     window.localStorage.password = password;
-                    console.info("当前用户:", window.localStorage.user);
-                    console.info("当前密码:", window.localStorage.password);
+                    // console.info("当前用户:", window.localStorage.user);
+                    // console.info("当前密码:", window.localStorage.password);
                     window.location.href = window.location.href.replace("login.html", "");
 
                 },

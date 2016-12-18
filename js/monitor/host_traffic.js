@@ -25,20 +25,20 @@ $(function() {
                         mac_addr =  addresses[key][0]["OS-EXT-IPS-MAC:mac_addr"].replace(/:/g, "").toUpperCase();
                     }
                     var id_mac_addr = servers[i].id + " " + mac_addr;
-                    $(".monitor_traffic").append('<option value="' + id_mac_addr  + '">' + servers[i].name + '</option>');
+                    $(".host_traffic_select").append('<option value="' + id_mac_addr  + '">' + servers[i].name + '</option>');
                 }
                 cur_id = servers[0].id;
                 if (monitor_id != 'undefined' && monitor_id != undefined) {
                     cur_id = monitor_id;
-                    $(".monitor_traffic option[value='" + cur_id + "']").attr("selected", true);
+                    $(".host_traffic_select option[value='" + cur_id + "']").attr("selected", true);
                 }
                 setTimeout("ajaxbg.hide()", 2000);
                 set_net_meter(cur_id, "network.incoming.bytes.rate", arr);
                 set_net_meter(cur_id, "network.outgoing.bytes.rate", arr);
             } else {
-                $('.monitor_traffic').css("display", "none");
+                $('.host_traffic_select').css("display", "none");
                 var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".content_traffic").html(show_info);
+                $(".host_traffic").html(show_info);
             }
         },
         error: function(data) {
@@ -46,7 +46,7 @@ $(function() {
         }
     });
     //select事件
-    $('.monitor_traffic').change(function() {
+    $('.host_traffic_select').change(function() {
         ajaxbg.show();
         var id_mac = $(this).children('option:selected').val().split(" ");
         cur_id = id_mac[0];
@@ -108,7 +108,7 @@ function get_net_meter(id, meter_name) {
 function set_net_meter(id, meter_name, arr) {
     $.ajax({
         type: "GET",
-        url: config["host"] + "/v1.0/monitor/" + id + "/" + meter_name + "/minute?limit=15&token=" + window.localStorage.token,
+        url: config["host"] + "/v1.0/monitor/" + id + "/" + meter_name + "/minute?limit=50&token=" + window.localStorage.token,
         success: function(data) {
             // console.log(data);
             var meter_datas = JSON.parse(data)[meter_name];
@@ -142,10 +142,10 @@ function set_net_meter(id, meter_name, arr) {
             }
             else {
                 var show_info = '<div id="content" class="col-md-12 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:40%;top:100px;z-index:0"><b>暂时没有数据!</b></div>';
-                var option = "rt_traffic";
+                var option = "host_traffic_rt";
                 var title = "网络监控信息";
                 showInfo_disk_Net(option, title);
-                $("#rt_traffic").append(show_info);
+                $("#host_traffic_rt").append(show_info);
             }
         },
         error: function(data) {
@@ -187,7 +187,7 @@ function showInfo_disk_Net(option, title) {
 
 //-------设置网络
 function set_net_traffic(id, net_ins, net_outs) {
-    var rt_traffic = echarts.init(document.getElementById('rt_traffic'));
+    var host_traffic_rt = echarts.init(document.getElementById('host_traffic_rt'));
     // 3.网络监控信息
     var option4 = {
         title: {
@@ -273,7 +273,7 @@ function set_net_traffic(id, net_ins, net_outs) {
                 })()
         }]
     };
-    rt_traffic.setOption(option4);
+    host_traffic_rt.setOption(option4);
     setInterval(function () {
         var meter_data1 = get_net_meter(id, "network.incoming.bytes.rate");
         var meter_data2 = get_net_meter(id, "network.outgoing.bytes.rate");
@@ -287,6 +287,6 @@ function set_net_traffic(id, net_ins, net_outs) {
         data1.push(last_data2.counter_volume);
         option4.xAxis[0].data.shift();
         option4.xAxis[0].data.push(last_data1.timestamp);
-        rt_traffic.setOption(option4);
+        host_traffic_rt.setOption(option4);
     }, 10000);
 }
