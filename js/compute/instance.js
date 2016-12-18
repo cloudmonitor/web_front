@@ -55,7 +55,7 @@ $(function() {
                                 break;
                             }
                         }
-                        console.error("server:", server);
+                        // console.error("server:", server);
                         setList(i, num, server, addrs, isntance_status, status, time_str, peizhi);
 
                     };
@@ -953,7 +953,7 @@ function instance_info(json_array) {
         contentType: "application/json",
         url: config["host"] + "/servers/create?token=" + window.localStorage.token,
         success: function(data) {
-            $('#start-host').modal('hide')
+            $('#start-monitor').modal('hide')
             setTimeout(function() {
                 $(".info_tip").remove();
                 $("#loading_monitor,#background_monitor").hide();

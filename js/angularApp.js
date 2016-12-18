@@ -73,10 +73,15 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/floatingIP.html',
             controller: 'floatingIPCtrl'
         })
-        // 主机监控
-        .when('/monitor', {
-            templateUrl: 'pages/host/monitor.html',
-            controller: 'monitorCtrl'
+        // 监控 -- 主机
+        .when('/monitor/host', {
+            templateUrl: 'pages/monitor/host.html',
+            controller: 'monitorHostCtrl'
+        })
+        // 监控 -- 流量
+        .when('/monitor/traffic', {
+            templateUrl: 'pages/monitor/traffic.html',
+            controller: 'monitorTrafficCtrl'
         })
         // 信息 -- 项目信息
         .when('/info/program', {
@@ -174,7 +179,7 @@ myApp.controller('instanceCtrl', function($scope, $route) {
     }
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/instance.js');
+    $scope.$parent.loadScript('js/compute/instance.js');
     $("head title").text("云主机");
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
@@ -244,7 +249,7 @@ myApp.controller('imageCtrl', function($scope, $route) {
     }
     $scope.$parent.loadScript('js/config.js');
     $scope.$parent.loadScript('js/config.js');
-    $scope.$parent.loadScript('js/image.js');
+    $scope.$parent.loadScript('js/compute/image.js');
     $("head title").text("镜像");
     $(".nav-sidebar a[href='#/compute/image']").css({
         "color": "#fff",
@@ -744,8 +749,9 @@ myApp.controller('routerdescCtrl', function($scope, $route) {
         });
     });
 });
-// 网络与安全 -- 主机监控
-myApp.controller('monitorCtrl', function($scope, $route) {
+
+// 监控 -- 主机监控
+myApp.controller('monitorHostCtrl', function($scope, $route) {
     router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -761,18 +767,54 @@ myApp.controller('monitorCtrl', function($scope, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/monitor.js');
+    $scope.$parent.loadScript('js/monitor/monitor_host.js');
     $("head title").text("主机监控");
-    $(".nav-sidebar a[href='#/monitor']").css({
+    $(".nav-sidebar a[href='#/monitor/host']").css({
         "color": "#fff",
         "background-color": "#428bca"
     }).click(function() {
-        $(".nav-sidebar a[href='#/monitor']").css({
+        $(".nav-sidebar a[href='#/monitor/host']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
-    var linkEle = $(".nav-sidebar li a[href!='#/monitor']");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host']");
+    linkEle.click(function() {
+        $(".nav-sidebar li a").css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
+    });
+});
+// 监控 -- 流量监控
+myApp.controller('monitorTrafficCtrl', function($scope, $route) {
+    router_all = $route;
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+    $scope.refresh = function() {
+        $route.reload();
+    }
+    $scope.$parent.loadScript('js/lib/echarts.min.js');
+    $scope.$parent.loadScript('js/lib/moment.min.js');
+    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/monitor/monitor_traffic.js');
+    $("head title").text("流量监控");
+    $(".nav-sidebar a[href='#/monitor/traffic']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/monitor/traffic']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
+    });
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/traffic']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",

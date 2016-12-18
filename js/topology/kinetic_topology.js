@@ -123,7 +123,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                             router['external_gateway_info'] = null;
                         }
                         //--------------数据的提交
-                        console.error(JSON.stringify(router_create));
+                        // console.error(JSON.stringify(router_create));
                         submit_routerInfo(router_create, that, device);
 
                     });
@@ -177,7 +177,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 contentType: "application/json",
                 url: config["host"] + "/router/delete?token=" + window.localStorage.token,
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
@@ -244,7 +244,7 @@ Kinetic.Topology = Kinetic.Class.extend({
                 contentType: "application/json",
                 url: config['host'] + "/subnet/delete?token=" + window.localStorage.token,
                 success: function(data) {
-                    console.error(data);
+                    // console.error(data);
                     var id_status = JSON.parse(data);
                     for (var x in id_status) {
                         if (id_status[x] == 204) {
@@ -369,7 +369,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         for (var i = 0; i < this.lines.length; i++) {
             var line = this.lines[i];
             var config = line.getConfig();
-            console.error("line351", line);
+            // console.error("line351", line);
             var srcDeviceId = config.srcDevice.getId();
             var dstDeviceId = config.dstDevice.getId();
             var stroke = config.stroke;
@@ -403,7 +403,7 @@ Kinetic.Topology = Kinetic.Class.extend({
         this.lines = [];
     },
     load: function(jsonStr) {
-        console.error(jsonStr);
+        // console.error(jsonStr);
         lines_temp = JSON.parse(jsonStr).lines;
         this.loading = true;
         $(".temp_divs").remove();
@@ -877,14 +877,14 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
         //--------拖拽开始时触发
         this.deviceImage.on("dragstart", function(evt) {
             //  console.error("start", "x:" + config.data.x + "   y:" + config.data.y);
-            console.error(">>>", instance.getLines());
+            // console.error(">>>", instance.getLines());
             hide_tip(config.data.id);
             var lines = instance.getLines();
             for (var i = 0; i < lines.length; i++) {
                 var fixed_ips = lines[i].lineObject.attrs.fixed_ips;
                 if (fixed_ips != "") {
                     for (var x = 0; x < fixed_ips.length; x++) {
-                        console.error("id:", lines[i]);
+                        // console.error("id:", lines[i]);
                         hide_RouterInfo(lines[i].config.id);
                     }
                 }
@@ -917,14 +917,14 @@ Kinetic.Topology.Device = Kinetic.Class.extend({
             });
             shape.getLayer().draw();
             //线上信息与其相关的线重绘后显示
-            console.error("重绘：", instance.getLines());
+            // console.error("重绘：", instance.getLines());
             for (var i = 0; i < instance.getLines().length; i++) {
                 var fixed_ips = instance.getLines()[i].lineObject.attrs.fixed_ips;
                 if (fixed_ips.length > 0) {
                     for (var j = 0; j < fixed_ips.length; j++) {
                         var srcElement = instance.getLines()[i].config.srcDevice.getDeviceImage();
                         var dstElement = instance.getLines()[i].config.dstDevice.getDeviceImage();
-                        console.error(">>>id", instance.getLines()[i]);
+                        // console.error(">>>id", instance.getLines()[i]);
                         show_RouterInfo(srcElement, dstElement, instance.getLines()[i].config.id);
                     }
                 }
@@ -1102,7 +1102,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                 var origin_dev = instance.getDevice();
                 var ori_dev = origin_dev['config']['data'].device_name;
                 var des_dev = dstDevice['config']['data'].device_name;
-                console.error(origin_dev + " : " + dstDevice);
+                // console.error(origin_dev + " : " + dstDevice);
                 flag = false;
                 if ((ori_dev == 'ext_net' && des_dev == "router") || (ori_dev == 'router' && des_dev == "ext_net")) {
                     flag = true;
@@ -1150,7 +1150,7 @@ Kinetic.Topology.Device.Connector = Kinetic.Class.extend({
                 if (flag) {
                     if (dstDevice != null && dstDevice.getId() != instance.getDevice().getId() && !instance.config.topology.loading) { //连线
                         if (!instance.config.topology.containLine(instance.getDevice(), dstDevice)) {
-                            console.error("line1061", instance);
+                            // console.error("line1061", instance);
                             var line = new Kinetic.Topology.Line({
                                 topology: instance.config.topology,
                                 srcDevice: instance.getDevice(),
@@ -1411,13 +1411,13 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                 $(".line_ids").empty();
                 var src_type = instance.config.srcDevice.config.data.device_name;
                 var dts_type = instance.config.dstDevice.config.data.device_name;
-                console.error(instance.config);
+                // console.error(instance.config);
                 var ip_addr = "无",
                     src_name, dst_name;
                 line_type = 0;
                 is_delete = false;
                 //-----显示删除外网和路由间的线
-                console.error("instance:", instance);
+                // console.error("instance:", instance);
                 if (src_type == "ext_net" || dts_type == "ext_net") {
                     line_type = 1;
                     is_delete = instance.config.is_del;
@@ -1443,7 +1443,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                     $(".showLineModel").show();
                     ip_addr = "";
                     for (var i = 0; i < instance.config.fixed_ips.length; i++) {
-                        console.error("ip_addr", instance.config.fixed_ips[i]);
+                        // console.error("ip_addr", instance.config.fixed_ips[i]);
                         ip_addr += instance.config.fixed_ips[i]['ip_address'] + "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                     }
                     if (src_type == "router") {
@@ -1464,7 +1464,7 @@ Kinetic.Topology.Line = Kinetic.Class.extend({
                     $(".showLineModel").show();
                     if (src_type == "subnet") {
                         delete_id = instance.config.dstDevice.id;
-                        console.error(instance.config.srcDevice);
+                        // console.error(instance.config.srcDevice);
                         network_id_temp = instance.config.srcDevice.config.data.network_id;
                         subnet_id_temp = instance.config.srcDevice.config.data.id;
                         src_name = instance.config.srcDevice.deviceImage.attrs.name;
@@ -1687,7 +1687,7 @@ function drop(ev) {
 //-------------------------------事件
 //-------------------------------事件
 function createNetAjax(network_json) {
-    console.log(JSON.stringify(network_json));
+    // console.log(JSON.stringify(network_json));
     $.ajax({
         type: "POST",
         data: JSON.stringify(network_json),
@@ -1700,7 +1700,7 @@ function createNetAjax(network_json) {
 }
 //-------创建子网
 function createSubnetAJAX(subnet) {
-    console.log(JSON.stringify(subnet));
+    // console.log(JSON.stringify(subnet));
     var url_info = "/subnet/create";
     $.ajax({
         type: "POST",
@@ -1720,7 +1720,7 @@ function createSubnetAJAX(subnet) {
 }
 
 function setShowHeader(instance) {
-    console.error(instance);
+    // console.error(instance);
     var status_str = '<br/>&nbsp;&nbsp;&nbsp;&nbsp;<font color="#CDC1C5">STATUS</font>   ' + instance.config.data.status;
     var model_type;
     if (instance.config.data.device_name == "ext_net")
@@ -1928,7 +1928,7 @@ function setSelect() {
         var ram_id_1 = new Number(flavor.ram) / 1024;
         if (ram_id_1 == 0.5)
             ram_id_1 = 512;
-        console.error(ram_id_1 + " : " + ram_id + "   ---   " + flavor.vcpus + '  :  ' + cpu_id);
+        // console.error(ram_id_1 + " : " + ram_id + "   ---   " + flavor.vcpus + '  :  ' + cpu_id);
         if (ram_id_1 == ram_id && flavor.vcpus == cpu_id) {
             $(".peizhi_select option[value='" + flavor.id + "']").prop("selected");
             curr_instance = flavor;
@@ -2201,8 +2201,8 @@ function setFireWallInfo(id_temp, body_str, instance, footer_showInfo) {
 function setRuleInfo(data, policy_rules, rule_str, body_str, instance, footer_showInfo) {
     var fireWallRulers = JSON.parse(data)['firewall_rules'];
     var id = policy_rules[0];
-    console.error("fireWallRulers", fireWallRulers);
-    console.error("id", id);
+    // console.error("fireWallRulers", fireWallRulers);
+    // console.error("id", id);
     for (var i = 0; i < fireWallRulers.length; i++) {
         if (fireWallRulers[i].id == id) {
             var data = fireWallRulers[i];
@@ -2246,7 +2246,7 @@ function setSubnetInfo(instance, body_str, footer_showInfo) {
         url: config["host"] + "/subnets?token=" + window.localStorage.token,
         success: function(data) {
             var subnet_infos = JSON.parse(data)['subnets'];
-            console.error(subnet_infos);
+            // console.error(subnet_infos);
             for (var i = 0; i < subnet_infos.length; i++) {
                 var subnet = subnet_infos[i];
                 if (subnet.id == id) {
@@ -2288,7 +2288,7 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
                         var rule_str = "";
                         //-----------得到当前实例
                         if (server.id == id) {
-                            console.error("选中的虚拟机：", server);
+                            // console.error("选中的虚拟机：", server);
                             var securities_names = server.security_groups;
                             //---------处理重复的
                             //console.error("1::", securities_names);
@@ -2367,7 +2367,7 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
                                         }
                                         rule_str += '</tbody></table>';
                                         body_str += rule_str + "</div>";
-                                        console.error(body_str);
+                                        // console.error(body_str);
                                     }
                                 }
                             }
@@ -2443,12 +2443,12 @@ function setTooltip(data, i) {
 }
 
 function hide_tip(id) {
-    console.error("id", id);
+    // console.error("id", id);
     $("#" + id + "_1").hide();
 }
 
 function delete_tip(id) {
-    console.error($("#" + id));
+    // console.error($("#" + id));
     $("#" + id + "_1").remove();
 }
 
@@ -2599,7 +2599,7 @@ function setRouter_subnetLine(router_id, id) {
     var port_create = {
         "subnet_id": ""
     }
-    console.error(id, router_id);
+    // console.error(id, router_id);
     port_create.subnet_id = id;
     $.ajax({
         type: "POST",
