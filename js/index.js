@@ -87,7 +87,7 @@ function getDevice_info(tenantname) {
                     // console.log(data);
                     localStorage.limits = data;
                     // createAndHideAlert(localStorage.limits);
-                    console.warn("data", data);
+                    // console.warn("data", data);
                     draw_charts(data);
                 },
                 error: function(data) {

@@ -109,7 +109,8 @@ function getTimeLen(date_temp) {
 }
 //-------格式化时间
 function getTimeStr(date_temp) {
-    var UTC8_time = moment.utc(date_temp).zone(-8).format('YYYY-MM-DD HH:mm:ss');
+    // var UTC8_time = moment.utc(date_temp).zone(-8).format('YYYY-MM-DD HH:mm:ss');
+    var UTC8_time = moment.utc(date_temp).utcOffset(+8).format('YYYY-MM-DD HH:mm:ss');
     return UTC8_time;
 }
 //---------移动的实现
@@ -403,4 +404,85 @@ function create_subnetFun() {
         }
         createSubnetAJAX(subnet);
     });
+}
+
+function clear_timer(url, timer_arr) {
+    var curr_url = window.location.href.split("#")[1];
+    if(curr_url != url){
+        for(var i=0; i<timer_arr.length; i++){
+            clearInterval(timer_arr[i]);
+        }
+        return true;
+    }
+    return false;
+}
+
+function clear_timer_when_switch(timer_arr) {
+    for(var i=0; i<timer_arr.length; i++){
+        clearInterval(timer_arr[i]);
+    }
+}
+
+function identify_protocol_port(ip_protocol, src_port_num, dst_port_num) {
+    var protocol = parseInt(ip_protocol);
+    var src_port = parseInt(src_port_num);
+    var dst_port = parseInt(dst_port_num);
+    var ret = "";
+    switch (protocol) {
+        case 6:
+            if(src_port==20 || dst_port==20){
+                ret = "FTP(20)";
+            }else if(src_port==21 || dst_port==21){
+                ret = "FTP(21)";
+            }else if(src_port==23 || dst_port==23){
+                ret = "TELNET(23)";
+            }else if(src_port==25 || dst_port==25){
+                ret = "SMTP(25)";
+            }else if(src_port==80 || dst_port==80){
+                ret = "HTTP(80)";
+            }else if(src_port==110 || dst_port==110){
+                ret = "POP3(110)";
+            }else if(src_port==443 || dst_port==443){
+                ret = "HTTPS(443)";
+            }else {
+                ret = "TCP("+src_port+")";
+            }
+            break;
+        case 17:
+            if(src_port==53 || dst_port==53){
+                ret = "DNS(53)";
+            }else if(src_port==161 || dst_port==161){
+                ret = "SNMP(161)";
+            }else if(src_port==162 || dst_port==162){
+                ret = "SNMP-Trap(162)";
+            }else if(src_port==69 || dst_port==69){
+                ret = "TFTP(69)";
+            }else {
+                ret = "UDP("+src_port+")";
+            }
+            break;
+        case 1:
+            ret = "ICMP(TYPE-"+src_port+")";
+            break;
+        default:
+            ret = "Protocol:"+protocol+"Port："+ src_port;
+    }
+    return ret;
+}
+
+
+function identify_client_server(ip_protocol, ip, port) {
+    var protocol = parseInt(ip_protocol);
+    var ret = "";
+    switch (protocol) {
+        case 6:
+            ret = ip+":"+port;
+            break;
+        case 17:
+            ret = ip+":"+port;
+            break;
+        default:
+            ret = ip;
+    }
+    return ret;
 }

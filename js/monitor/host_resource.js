@@ -3,6 +3,9 @@ var ajaxbg = $("#loading_monitor,#background_monitor");
 ajaxbg.show();
 //createAndHideAlert(ajaxbg);
 setTimeout("ajaxbg.hide()", 2000);
+
+var host_resource_timer_arr = [0, 0, 0, 0];
+
 $(function() {
     $('#option1').click();
     var monitor_id = window.location.href.split('?')[1];
@@ -38,9 +41,11 @@ $(function() {
     //select事件
     $('.monitors_wj').change(function() {
         ajaxbg.show();
+        clear_timer_when_switch(host_resource_timer_arr);
         var id = $(this).children('option:selected').val();
         var arr = [0, 0, 0, 0];
         cur_id = id;
+
         preSetAjax(id, curr_type, arr);
     });
     //天时分改变
@@ -72,7 +77,7 @@ function changeStatus(that) {
         $("#option" + i).removeClass("active");
     $(that).addClass("active");
 }
-//servers[0].id
+
 function preSetAjax(id, curr_type, arr) {
     setTimeout("ajaxbg.hide()", 2000);
     setAjax(id, curr_type, "cpu_util", arr);
@@ -84,6 +89,9 @@ function preSetAjax(id, curr_type, arr) {
 }
 
 function get_one_meter(id, curr_type, meter_name) {
+    if(clear_timer("/monitor/host_resource", host_resource_timer_arr)){
+        return;
+    }
     var meter_data = "";
     $.ajax({
         type: "GET",
@@ -164,7 +172,7 @@ function setAjax(id, curr_type, meter_name, arr) {
                     if (meter_name == "disk.write.bytes.rate")
                         arr[3] = meter_datas;
                     if (arr[2] != 0 && arr[3] != 0)
-                        sertDisk(id, curr_type, arr[2], arr[3]);
+                        setDisk(id, curr_type, arr[2], arr[3]);
                 }
                 else {
                     setMem(id, curr_type, meter_name, meter_datas);
@@ -299,10 +307,6 @@ function showInfo_disk_Net(option, title) {
     myChart3.setOption(option3);
 }
 
-var cpu_timer_id = 0;
-var mem_timer_id = 0;
-var disk_timer_id = 0;
-var net_timer_id = 0;
 
 //---------设置CPU信息
 function setCpu(id, curr_type, meter_name, data) {
@@ -356,6 +360,7 @@ function setCpu(id, curr_type, meter_name, data) {
             name: 'CPU使用率',
             type: 'line',
             stack: '总量',
+            step: 'middle',
             smooth: true,
             data:
                 (function (){
@@ -370,7 +375,7 @@ function setCpu(id, curr_type, meter_name, data) {
     };
     myChart1.setOption(option1);
     if(curr_type == "minute") {
-        cpu_timer_id = setInterval(function () {
+        host_resource_timer_arr[0] = setInterval(function () {
                 var meter_data = get_one_meter(id, curr_type, meter_name);
                 var last_data = JSON.parse(meter_data);
                 var data0 = option1.series[0].data;
@@ -382,7 +387,7 @@ function setCpu(id, curr_type, meter_name, data) {
             }, 10000);
     }
     else {
-        clearInterval(cpu_timer_id);
+        clearInterval(host_resource_timer_arr[0]);
     }
 }
 
@@ -441,6 +446,7 @@ function setMem(id, curr_type, meter_name, data) {
             type: 'line',
             stack: '总量',
             smooth: true,
+            step: 'middle',
             data:
                 // [(data[6].counter_volume / (data[6].resource_metadata == undefined ? -1 : data[6].resource_metadata.memory_mb) * 100).toFixed(2), (data[5].counter_volume / (data[5].resource_metadata == undefined ? -1 : data[5].resource_metadata.memory_mb) * 100).toFixed(2), (data[4].counter_volume / (data[4].resource_metadata == undefined ? -1 : data[4].resource_metadata.memory_mb) * 100).toFixed(2), (data[3].counter_volume / (data[3].resource_metadata == undefined ? -1 : data[3].resource_metadata.memory_mb) * 100).toFixed(2), (data[2].counter_volume / (data[2].resource_metadata == undefined ? -1 : data[2].resource_metadata.memory_mb) * 100).toFixed(2), (data[1].counter_volume / (data[1].resource_metadata == undefined ? -1 : data[1].resource_metadata.memory_mb) * 100).toFixed(2), (data[0].counter_volume / (data[0].resource_metadata == undefined ? -1 : data[0].resource_metadata.memory_mb) * 100).toFixed(2)]
                 (function (){
@@ -455,7 +461,7 @@ function setMem(id, curr_type, meter_name, data) {
     };
     myChart2.setOption(option2);
     if(curr_type == "minute") {
-        mem_timer_id = setInterval(function () {
+        host_resource_timer_arr[1] = setInterval(function () {
             var meter_data = get_one_meter(id, curr_type, meter_name);
             var last_data = JSON.parse(meter_data);
             var data0 = option2.series[0].data;
@@ -467,12 +473,12 @@ function setMem(id, curr_type, meter_name, data) {
         }, 10000);
     }
     else {
-        clearInterval(mem_timer_id);
+        clearInterval(host_resource_timer_arr[1]);
     }
 }
 
 //-----设置磁盘
-function sertDisk(id, curr_type, disk_reads, disk_writes) {
+function setDisk(id, curr_type, disk_reads, disk_writes) {
     //console.log(cpu_utils);
     var myChart3 = echarts.init(document.getElementById('chart3'));
     // 2.磁盘读写信息
@@ -529,6 +535,12 @@ function sertDisk(id, curr_type, disk_reads, disk_writes) {
             type: 'line',
             // stack: '磁盘',
             smooth: true,
+            step: 'middle',
+            lineStyle: {
+                normal: {
+                    width: '2'
+                }
+            },
             data:
                 // [disk_writes[6].counter_volume, disk_writes[5].counter_volume, disk_writes[4].counter_volume, disk_writes[3].counter_volume, disk_writes[2].counter_volume, disk_writes[1].counter_volume, disk_writes[0].counter_volume]
                 (function (){
@@ -543,7 +555,13 @@ function sertDisk(id, curr_type, disk_reads, disk_writes) {
             type: 'line',
             // stack: '磁盘',
             smooth: true,
-            color: '#000',
+            step: 'middle',
+            lineStyle: {
+                normal: {
+                    width: '2',
+                    color: '#0000ff'
+                }
+            },
             data:
                 // [disk_reads[6].counter_volume, disk_reads[5].counter_volume, disk_reads[4].counter_volume, disk_reads[3].counter_volume, disk_reads[2].counter_volume, disk_reads[1].counter_volume, disk_reads[0].counter_volume]
                 (function (){
@@ -557,7 +575,7 @@ function sertDisk(id, curr_type, disk_reads, disk_writes) {
     };
     myChart3.setOption(option3);
     if(curr_type == "minute") {
-        disk_timer_id = setInterval(function () {
+        host_resource_timer_arr[2] = setInterval(function () {
             var meter_data1 = get_one_meter(id, curr_type, "disk.read.bytes.rate");
             var meter_data2 = get_one_meter(id, curr_type, "disk.write.bytes.rate");
             var last_data1 = JSON.parse(meter_data1);
@@ -574,7 +592,7 @@ function sertDisk(id, curr_type, disk_reads, disk_writes) {
         }, 10000);
     }
     else {
-        clearInterval(disk_timer_id);
+        clearInterval(host_resource_timer_arr[2]);
     }
 }
 
@@ -627,7 +645,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
             type: 'value',
             boundaryGap: [0, '20%'],
             axisLabel: {
-                formatter: '{value} bps'
+                formatter: '{value} B/S'
             }
         }],
         series: [{
@@ -635,6 +653,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
             type: 'line',
             // stack: '网速',
             smooth: true,
+            step: 'middle',
             lineStyle: {
                 normal: {
                     width: '2'
@@ -654,6 +673,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
             type: 'line',
             // stack: '网速',
             smooth: true,
+            step: 'middle',
             lineStyle: {
                 normal: {
                     width: '2',
@@ -673,7 +693,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
     };
     myChart4.setOption(option4);
     if(curr_type == "minute"){
-        net_timer_id = setInterval(function () {
+        host_resource_timer_arr[3] = setInterval(function () {
             var meter_data1 = get_one_meter(id, curr_type, "network.incoming.bytes.rate");
             var meter_data2 = get_one_meter(id, curr_type, "network.outgoing.bytes.rate");
             var last_data1 = JSON.parse(meter_data1);
@@ -690,7 +710,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
         }, 10000);
     }
     else {
-        clearInterval(net_timer_id);
+        clearInterval(host_resource_timer_arr[3]);
     }
 }
 

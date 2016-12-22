@@ -183,7 +183,7 @@ myApp.controller('instanceCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
     $scope.$parent.loadScript('js/compute/instance.js');
     $("head title").text("云主机");
     $(".nav-sidebar a[href='#/compute/instance']").css({
@@ -218,8 +218,8 @@ myApp.controller('instanceDescCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/instance_desc.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
+    $scope.$parent.loadScript('js/compute/instance_desc.js');
     $("head title").text("云主机");
     $(".nav-sidebar a[href='#/compute/instance']").css({
         "color": "#fff",
@@ -289,7 +289,7 @@ myApp.controller('topologyCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/config.js', 'text/javascript', 'utf-8');
-    $scope.$parent.loadScript('js/tool.js', 'text/javascript', 'utf-8');
+    $scope.$parent.loadScript('js/tools/tool.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/layout.js', 'text/javascript', 'utf-8');
     $scope.$parent.loadScript('js/topology/topology.js', 'text/javascript', 'utf-8');
     $("head title").text("拓扑");
@@ -326,8 +326,8 @@ myApp.controller('netCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
-    $scope.$parent.loadScript('js/net_netInfo.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
+    $scope.$parent.loadScript('js/network/net_netInfo.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
@@ -360,7 +360,7 @@ myApp.controller('netDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_desc.js');
+    $scope.$parent.loadScript('js/network/net_desc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
@@ -394,7 +394,7 @@ myApp.controller('subnetDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_desc_subNetDesc.js');
+    $scope.$parent.loadScript('js/network/net_desc_subNetDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
@@ -427,7 +427,7 @@ myApp.controller('portnetDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_desc_portDesc.js');
+    $scope.$parent.loadScript('js/network/net_desc_portDesc.js');
     $("head title").text("网络");
     $(".nav-sidebar a[href='#/net/net']").css({
         "color": "#fff",
@@ -462,7 +462,7 @@ myApp.controller('virInterfaceCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/config.js');
-    $scope.$parent.loadScript('js/vir_net.js');
+    $scope.$parent.loadScript('js/network/vir_net.js');
     $("head title").text("虚拟网卡");
     $(".nav-sidebar a[href='#/net/virInterface']").css({
         "color": "#fff",
@@ -497,7 +497,7 @@ myApp.controller('secGroupCtrl', function($scope, $route) {
         $route.reload();
     }
     $scope.$parent.loadScript('js/config.js');
-    $scope.$parent.loadScript('js/net_SecurityGroup.js');
+    $scope.$parent.loadScript('js/network/net_SecurityGroup.js');
     $("head title").text("安全组");
     $(".nav-sidebar a[href='#/net/secGroup']").css({
         "color": "#fff",
@@ -530,7 +530,7 @@ myApp.controller('secGroupDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_SecurityGroup_desc.js');
+    $scope.$parent.loadScript('js/network/net_SecurityGroup_desc.js');
     $("head title").text("安全组");
     $(".nav-sidebar a[href='#/net/secGroup']").css({
         "color": "#fff",
@@ -567,8 +567,8 @@ myApp.controller('firewallCtrl', function($scope, $route) {
         localStorage.fireWall_tab = name;
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_firewall.js');
-    $scope.$parent.loadScript('js/popover-firewall.js');
+    $scope.$parent.loadScript('js/network/net_firewall.js');
+    $scope.$parent.loadScript('js/network/popover-firewall.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
@@ -601,7 +601,7 @@ myApp.controller('firewallDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_firewall_desc.js');
+    $scope.$parent.loadScript('js/network/net_firewall_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
@@ -634,7 +634,7 @@ myApp.controller('firewallstrategyDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_firewall_policy_desc.js');
+    $scope.$parent.loadScript('js/network/net_firewall_policy_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
@@ -667,7 +667,7 @@ myApp.controller('firewallruleDesc', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_firewall_rule_desc.js');
+    $scope.$parent.loadScript('js/network/net_firewall_rule_desc.js');
     $("head title").text("防火墙");
     $(".nav-sidebar a[href='#/net/firewall']").css({
         "color": "#fff",
@@ -700,7 +700,7 @@ myApp.controller('routerCtrl', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_rounter.js');
+    $scope.$parent.loadScript('js/network/net_rounter.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
         "color": "#fff",
@@ -735,7 +735,7 @@ myApp.controller('routerdescCtrl', function($scope, $route) {
         localStorage.router_tab = name;
         $route.reload();
     }
-    $scope.$parent.loadScript('js/net_rounter_desc.js');
+    $scope.$parent.loadScript('js/network/net_rounter_desc.js');
     $("head title").text("路由器");
     $(".nav-sidebar a[href='#/net/router']").css({
         "color": "#fff",
@@ -771,7 +771,7 @@ myApp.controller('monitorHostResourceCtrl', function($scope, $route) {
     }
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
     $scope.$parent.loadScript('js/monitor/host_resource.js');
     $("head title").text("主机资源监控");
     $(".nav-sidebar a[href='#/monitor/host_resource']").css({
@@ -807,7 +807,7 @@ myApp.controller('monitorHostTrafficCtrl', function($scope, $route) {
     }
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
     $scope.$parent.loadScript('js/monitor/host_traffic.js');
     $("head title").text("主机流量监控");
     $(".nav-sidebar a[href='#/monitor/host_traffic']").css({
@@ -843,7 +843,7 @@ myApp.controller('monitorTenantTrafficCtrl', function($scope, $route) {
     }
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
-    $scope.$parent.loadScript('js/tool.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
     $scope.$parent.loadScript('js/monitor/tenant_traffic.js');
     $("head title").text("租户流量监控");
     $(".nav-sidebar a[href='#/monitor/tenant_traffic']").css({
@@ -877,7 +877,7 @@ myApp.controller('base-infoCtrl', function($scope, $route) {
     $scope.refresh = function() {
         $route.reload();
     }
-    $scope.$parent.loadScript('js/user_base_info.js');
+    $scope.$parent.loadScript('js/info/user_base_info.js');
     $("head title").text("基本信息");
     $(".nav-sidebar a[href='#/info/base-info']").css({
         "color": "#fff",
