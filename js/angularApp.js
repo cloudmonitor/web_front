@@ -73,15 +73,15 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/net/floatingIP.html',
             controller: 'floatingIPCtrl'
         })
-        // 监控 -- 主机资源
-        .when('/monitor/host_resource', {
-            templateUrl: 'pages/monitor/host_resource.html',
-            controller: 'monitorHostResourceCtrl'
+        // 监控 -- 云主机资源
+        .when('/monitor/instance_resource', {
+            templateUrl: 'pages/monitor/instance_resource.html',
+            controller: 'monitorInstanceResourceCtrl'
         })
-        // 监控 -- 主机流量
-        .when('/monitor/host_traffic', {
-            templateUrl: 'pages/monitor/host_traffic.html',
-            controller: 'monitorHostTrafficCtrl'
+        // 监控 -- 云主机流量
+        .when('/monitor/instance_traffic', {
+            templateUrl: 'pages/monitor/instance_traffic.html',
+            controller: 'monitorInstanceTrafficCtrl'
         })
         // 监控 -- 租户流量
         .when('/monitor/tenant_traffic', {
@@ -756,7 +756,7 @@ myApp.controller('routerdescCtrl', function($scope, $route) {
 });
 
 // 监控 -- 主机监控
-myApp.controller('monitorHostResourceCtrl', function($scope, $route) {
+myApp.controller('monitorInstanceResourceCtrl', function($scope, $route) {
     router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -772,18 +772,18 @@ myApp.controller('monitorHostResourceCtrl', function($scope, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tools/tool.js');
-    $scope.$parent.loadScript('js/monitor/host_resource.js');
-    $("head title").text("主机资源监控");
-    $(".nav-sidebar a[href='#/monitor/host_resource']").css({
+    $scope.$parent.loadScript('js/monitor/instance_resource.js');
+    $("head title").text("云主机资源监控");
+    $(".nav-sidebar a[href='#/monitor/instance_resource']").css({
         "color": "#fff",
         "background-color": "#428bca"
     }).click(function() {
-        $(".nav-sidebar a[href='#/monitor/host_resource']").css({
+        $(".nav-sidebar a[href='#/monitor/instance_resource']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
-    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host_resource']");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/instance_resource']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",
@@ -791,8 +791,8 @@ myApp.controller('monitorHostResourceCtrl', function($scope, $route) {
         });
     });
 });
-// 监控 -- 主机流量
-myApp.controller('monitorHostTrafficCtrl', function($scope, $route) {
+// 监控 -- 云主机流量
+myApp.controller('monitorInstanceTrafficCtrl', function($scope, $route) {
     router_all = $route;
     $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
     $(".curr_deviceName").html(localStorage.curr_tenant);
@@ -808,18 +808,18 @@ myApp.controller('monitorHostTrafficCtrl', function($scope, $route) {
     $scope.$parent.loadScript('js/lib/echarts.min.js');
     $scope.$parent.loadScript('js/lib/moment.min.js');
     $scope.$parent.loadScript('js/tools/tool.js');
-    $scope.$parent.loadScript('js/monitor/host_traffic.js');
-    $("head title").text("主机流量监控");
-    $(".nav-sidebar a[href='#/monitor/host_traffic']").css({
+    $scope.$parent.loadScript('js/monitor/instance_traffic.js');
+    $("head title").text("云主机流量监控");
+    $(".nav-sidebar a[href='#/monitor/instance_traffic']").css({
         "color": "#fff",
         "background-color": "#428bca"
     }).click(function() {
-        $(".nav-sidebar a[href='#/monitor/host_traffic']").css({
+        $(".nav-sidebar a[href='#/monitor/instance_traffic']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
-    var linkEle = $(".nav-sidebar li a[href!='#/monitor/host_traffic']");
+    var linkEle = $(".nav-sidebar li a[href!='#/monitor/instance_traffic']");
     linkEle.click(function() {
         $(".nav-sidebar li a").css({
             "color": "#337ab7",

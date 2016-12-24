@@ -4,7 +4,7 @@ ajaxbg.show();
 //createAndHideAlert(ajaxbg);
 setTimeout("ajaxbg.hide()", 2000);
 
-var host_resource_timer_arr = [0, 0, 0, 0];
+var instance_resource_timer_arr = [0, 0, 0, 0];
 
 $(function() {
     $('#option1').click();
@@ -41,7 +41,7 @@ $(function() {
     //select事件
     $('.monitors_wj').change(function() {
         ajaxbg.show();
-        clear_timer_when_switch(host_resource_timer_arr);
+        clear_timer_when_switch(instance_resource_timer_arr);
         var id = $(this).children('option:selected').val();
         var arr = [0, 0, 0, 0];
         cur_id = id;
@@ -89,7 +89,7 @@ function preSetAjax(id, curr_type, arr) {
 }
 
 function get_one_meter(id, curr_type, meter_name) {
-    if(clear_timer("/monitor/host_resource", host_resource_timer_arr)){
+    if(clear_timer("/monitor/instance_resource", instance_resource_timer_arr)){
         return;
     }
     var meter_data = "";
@@ -375,7 +375,7 @@ function setCpu(id, curr_type, meter_name, data) {
     };
     myChart1.setOption(option1);
     if(curr_type == "minute") {
-        host_resource_timer_arr[0] = setInterval(function () {
+        instance_resource_timer_arr[0] = setInterval(function () {
                 var meter_data = get_one_meter(id, curr_type, meter_name);
                 var last_data = JSON.parse(meter_data);
                 var data0 = option1.series[0].data;
@@ -387,7 +387,7 @@ function setCpu(id, curr_type, meter_name, data) {
             }, 10000);
     }
     else {
-        clearInterval(host_resource_timer_arr[0]);
+        clearInterval(instance_resource_timer_arr[0]);
     }
 }
 
@@ -461,7 +461,7 @@ function setMem(id, curr_type, meter_name, data) {
     };
     myChart2.setOption(option2);
     if(curr_type == "minute") {
-        host_resource_timer_arr[1] = setInterval(function () {
+        instance_resource_timer_arr[1] = setInterval(function () {
             var meter_data = get_one_meter(id, curr_type, meter_name);
             var last_data = JSON.parse(meter_data);
             var data0 = option2.series[0].data;
@@ -473,7 +473,7 @@ function setMem(id, curr_type, meter_name, data) {
         }, 10000);
     }
     else {
-        clearInterval(host_resource_timer_arr[1]);
+        clearInterval(instance_resource_timer_arr[1]);
     }
 }
 
@@ -575,7 +575,7 @@ function setDisk(id, curr_type, disk_reads, disk_writes) {
     };
     myChart3.setOption(option3);
     if(curr_type == "minute") {
-        host_resource_timer_arr[2] = setInterval(function () {
+        instance_resource_timer_arr[2] = setInterval(function () {
             var meter_data1 = get_one_meter(id, curr_type, "disk.read.bytes.rate");
             var meter_data2 = get_one_meter(id, curr_type, "disk.write.bytes.rate");
             var last_data1 = JSON.parse(meter_data1);
@@ -592,7 +592,7 @@ function setDisk(id, curr_type, disk_reads, disk_writes) {
         }, 10000);
     }
     else {
-        clearInterval(host_resource_timer_arr[2]);
+        clearInterval(instance_resource_timer_arr[2]);
     }
 }
 
@@ -693,7 +693,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
     };
     myChart4.setOption(option4);
     if(curr_type == "minute"){
-        host_resource_timer_arr[3] = setInterval(function () {
+        instance_resource_timer_arr[3] = setInterval(function () {
             var meter_data1 = get_one_meter(id, curr_type, "network.incoming.bytes.rate");
             var meter_data2 = get_one_meter(id, curr_type, "network.outgoing.bytes.rate");
             var last_data1 = JSON.parse(meter_data1);
@@ -710,7 +710,7 @@ function setNet(id, curr_type, net_ins, net_outs) {
         }, 10000);
     }
     else {
-        clearInterval(host_resource_timer_arr[3]);
+        clearInterval(instance_resource_timer_arr[3]);
     }
 }
 

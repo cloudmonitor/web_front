@@ -408,7 +408,7 @@ function create_subnetFun() {
 
 function clear_timer(url, timer_arr) {
     var curr_url = window.location.href.split("#")[1];
-    if(curr_url != url){
+    if(curr_url.slice(0, url.length) != url){
         for(var i=0; i<timer_arr.length; i++){
             clearInterval(timer_arr[i]);
         }

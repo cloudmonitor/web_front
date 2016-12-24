@@ -4,7 +4,7 @@
 var ajaxbg = $("#loading_monitor,#background_monitor");
 ajaxbg.show();
 setTimeout("ajaxbg.hide()", 2000);
-var host_traffic_timer_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+var instance_traffic_timer_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 $(function() {
     $('#option1').click();
     var monitor_id = window.location.href.split('?')[1];
@@ -26,12 +26,12 @@ $(function() {
                     //     mac_addr =  addresses[key][0]["OS-EXT-IPS-MAC:mac_addr"].replace(/:/g, "").toUpperCase();
                     // }
                     // var id_mac_addr = servers[i].id + " " + mac_addr;
-                    $(".host_traffic_select").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
+                    $(".instance_traffic_select").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
                 }
                 cur_id = servers[0].id;
                 if (monitor_id != 'undefined' && monitor_id != undefined) {
                     cur_id = monitor_id;
-                    $(".host_traffic_select option[value='" + cur_id + "']").attr("selected", true);
+                    $(".instance_traffic_select option[value='" + cur_id + "']").attr("selected", true);
                 }
                 setTimeout("ajaxbg.hide()", 2000);
                 set_host_net_meter(cur_id, "network.incoming.bytes.rate", arr);
@@ -46,9 +46,9 @@ $(function() {
                 set_instance_top_session(tenant_id, cur_id, curr_type);
 
             } else {
-                $('.host_traffic_select').css("display", "none");
+                $('.instance_traffic_select').css("display", "none");
                 var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".host_traffic").html(show_info);
+                $(".instance_traffic").html(show_info);
             }
         },
         error: function(data) {
@@ -56,13 +56,13 @@ $(function() {
         }
     });
     //select事件
-    $('.host_traffic_select').change(function() {
+    $('.instance_traffic_select').change(function() {
         ajaxbg.show();
         // var id_mac = $(this).children('option:selected').val().split(" ");
         cur_id = $(this).children('option:selected').val();
         var arr = [0, 0];
         setTimeout("ajaxbg.hide()", 2000);
-        clear_timer_when_switch(host_traffic_timer_arr);
+        clear_timer_when_switch(instance_traffic_timer_arr);
         set_host_net_meter(cur_id, "network.incoming.bytes.rate", arr);
         set_host_net_meter(cur_id, "network.outgoing.bytes.rate", arr);
         set_host_active_flow(cur_id);
@@ -124,7 +124,7 @@ function changeStatus(that) {
 }
 
 function get_host_net_meter(id, meter_name) {
-    if(clear_timer("/monitor/host_traffic", host_traffic_timer_arr)){
+    if(clear_timer("/monitor/instance_traffic", instance_traffic_timer_arr)){
         return;
     }
     var meter_data = "";
@@ -185,10 +185,10 @@ function set_host_net_meter(id, meter_name, arr) {
             }
             else {
                 var show_info = '<div id="content" class="col-md-12 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:40%;top:100px;z-index:0"><b>暂时没有数据!</b></div>';
-                var option = "host_traffic_rt";
+                var option = "instance_traffic_rt";
                 var title = "网络监控信息";
                 showInfo_disk_Net(option, title);
-                $("#host_traffic_rt").append(show_info);
+                $("#instance_traffic_rt").append(show_info);
             }
         },
         error: function(data) {
@@ -229,7 +229,7 @@ function showInfo_disk_Net(option, title) {
 
 //-------设置网络
 function set_host_net_traffic(id, net_ins, net_outs) {
-    var host_traffic_rt = echarts.init(document.getElementById('host_traffic_rt'));
+    var instance_traffic_rt = echarts.init(document.getElementById('instance_traffic_rt'));
     // 3.网络监控信息
     var option4 = {
         title: {
@@ -317,9 +317,9 @@ function set_host_net_traffic(id, net_ins, net_outs) {
                 })()
         }]
     };
-    host_traffic_rt.setOption(option4);
+    instance_traffic_rt.setOption(option4);
 
-    host_traffic_timer_arr[0] = setInterval(function () {
+    instance_traffic_timer_arr[0] = setInterval(function () {
         var meter_data1 = get_host_net_meter(id, "network.incoming.bytes.rate");
         var meter_data2 = get_host_net_meter(id, "network.outgoing.bytes.rate");
         var last_data1 = JSON.parse(meter_data1);
@@ -332,12 +332,12 @@ function set_host_net_traffic(id, net_ins, net_outs) {
         data1.push(last_data2.counter_volume);
         option4.xAxis[0].data.shift();
         option4.xAxis[0].data.push(last_data1.timestamp);
-        host_traffic_rt.setOption(option4);
+        instance_traffic_rt.setOption(option4);
     }, 10000);
 }
 
-function get_host_traffic_meter_data(url) {
-    if(clear_timer("/monitor/host_traffic", host_traffic_timer_arr)){
+function get_instance_traffic_meter_data(url) {
+    if(clear_timer("/monitor/instance_traffic", instance_traffic_timer_arr)){
         return;
     }
     var meter_data = "";
@@ -359,8 +359,9 @@ function set_host_active_flow(id){
     $(".host_active_flow").empty();
     $(".host_active_flow_account").empty();
     var url = config["host"] + "/v1.0/monitor/" + id + "/instance_active_flow?token=" + window.localStorage.token;
-    var host_active_flow = get_host_traffic_meter_data(url);
+    var host_active_flow = get_instance_traffic_meter_data(url);
     var tbody_str = "";
+
     for(var i=0; i< host_active_flow.length; i++){
         var keys = host_active_flow[i].key.split(",");
         tbody_str += "<tr><td>"+ identify_protocol_port(keys[4], keys[5], keys[6]) +"</td>" +
@@ -372,8 +373,8 @@ function set_host_active_flow(id){
     var footer_str = "<tr class='active tfoot-dsp router_tr'><td colspan='8'>Displaying <span id='item_count'>" + host_active_flow.length + "</span> items</td></tr>";
     $(".host_active_flow_account").append(footer_str);
 
-    host_traffic_timer_arr[1] = setInterval(function () {
-        var host_active_flow = get_host_traffic_meter_data(url);
+    instance_traffic_timer_arr[1] = setInterval(function () {
+        var host_active_flow = get_instance_traffic_meter_data(url);
         var tbody_str = "";
         for(var i=0; i< host_active_flow.length; i++){
             var keys = host_active_flow[i].key.split(",");
@@ -392,7 +393,7 @@ function set_host_active_flow(id){
 }
 
 function get_instance_statistics_data(tenant_id, instance_id, data_type, curr_type) {
-    if(clear_timer("/monitor/host_traffic", host_traffic_timer_arr)){
+    if(clear_timer("/monitor/instance_traffic", instance_traffic_timer_arr)){
         return;
     }
     var meter_datas = "";
@@ -467,7 +468,7 @@ function set_instance_top_protocol_port(tenant_id, instance_id, curr_type) {
     };
     instance_top_protocol_port.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[2] = setInterval(function () {
+        instance_traffic_timer_arr[2] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_protocol_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -484,7 +485,7 @@ function set_instance_top_protocol_port(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[2]);
+        clearInterval(instance_traffic_timer_arr[2]);
     }
 }
 
@@ -544,7 +545,7 @@ function set_instance_top_ip_link(tenant_id, instance_id, curr_type) {
     };
     instance_top_ip_link.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[3] = setInterval(function () {
+        instance_traffic_timer_arr[3] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_ip_link", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -561,7 +562,7 @@ function set_instance_top_ip_link(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[3]);
+        clearInterval(instance_traffic_timer_arr[3]);
     }
 }
 
@@ -621,7 +622,7 @@ function set_instance_top_src_ip(tenant_id, instance_id, curr_type) {
     };
     instance_top_src_ip.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[4] = setInterval(function () {
+        instance_traffic_timer_arr[4] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_src_ip", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -638,7 +639,7 @@ function set_instance_top_src_ip(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[4]);
+        clearInterval(instance_traffic_timer_arr[4]);
     }
 }
 
@@ -698,7 +699,7 @@ function set_instance_top_dst_ip(tenant_id, instance_id, curr_type) {
     };
     instance_top_dst_ip.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[5] = setInterval(function () {
+        instance_traffic_timer_arr[5] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_dst_ip", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -715,7 +716,7 @@ function set_instance_top_dst_ip(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[5]);
+        clearInterval(instance_traffic_timer_arr[5]);
     }
 }
 
@@ -775,7 +776,7 @@ function set_instance_top_src_port(tenant_id, instance_id, curr_type) {
     };
     instance_top_src_port.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[6] = setInterval(function () {
+        instance_traffic_timer_arr[6] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_src_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -792,7 +793,7 @@ function set_instance_top_src_port(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[6]);
+        clearInterval(instance_traffic_timer_arr[6]);
     }
 }
 
@@ -852,7 +853,7 @@ function set_instance_top_dst_port(tenant_id, instance_id, curr_type) {
     };
     instance_top_dst_port.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[7] = setInterval(function () {
+        instance_traffic_timer_arr[7] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_dst_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
@@ -869,7 +870,7 @@ function set_instance_top_dst_port(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[7]);
+        clearInterval(instance_traffic_timer_arr[7]);
     }
 }
 
@@ -936,7 +937,7 @@ function set_instance_top_session(tenant_id, instance_id, curr_type) {
     };
     instance_top_session.setOption(option_top);
     if(curr_type == "minute") {
-        host_traffic_timer_arr[8] = setInterval(function () {
+        instance_traffic_timer_arr[8] = setInterval(function () {
             var last_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_session", curr_type);
             var data0 = option_top.series[0].data;
             var yaxis0 = option_top.yAxis[0].data;
@@ -953,6 +954,6 @@ function set_instance_top_session(tenant_id, instance_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(host_traffic_timer_arr[8]);
+        clearInterval(instance_traffic_timer_arr[8]);
     }
 }

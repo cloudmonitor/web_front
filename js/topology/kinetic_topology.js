@@ -2374,13 +2374,15 @@ function setInstanceInfo(instance, body_str, footer_showInfo) {
                             //------是否有安全组
                             if (temp > 0) {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
-                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor/instance_resource?' + instance.deviceImage.attrs.id + '" >查看实例资源监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor/instance_traffic?' + instance.deviceImage.attrs.id + '" >查看实例流量监控</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 $(".footer_str").html(footer_str);
                             } else {
                                 footer_str = '<a class="close_model" href="javascript:void(0)" name="#/compute/instance_desc?' + instance.deviceImage.attrs.id + '" >' + footer_showInfo + '</a>';
-                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor?' + instance.deviceImage.attrs.id + '" >查看主机监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor/instance_resource?' + instance.deviceImage.attrs.id + '" >查看实例资源监控</a>';
+                                footer_str += '&nbsp;&nbsp;&nbsp;&nbsp;<a class="close_model" href="javascript:void(0)" name="#/monitor/instance_traffic?' + instance.deviceImage.attrs.id + '" >查看实例流量监控</a>';
                                 $(".delete_device").attr("id", instance.id);
                                 $(".devicebodyInfo").html(body_str);
                                 rule_str = "<font color='#C4C4C4'><B>暂未分配安全组</B></font>";
