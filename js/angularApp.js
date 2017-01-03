@@ -88,6 +88,11 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/monitor/tenant_traffic.html',
             controller: 'monitorTenantTrafficCtrl'
         })
+        // SDN -- 规则控制
+        .when('/sdn/flow_entries', {
+            templateUrl: 'pages/sdn/flow_entries.html',
+            controller: 'sdnFlowEntriesCtrl'
+        })
         // 信息 -- 项目信息
         .when('/info/program', {
             templateUrl: 'pages/info/programList.html',
@@ -863,6 +868,43 @@ myApp.controller('monitorTenantTrafficCtrl', function($scope, $route) {
         });
     });
 });
+
+// SDN -- 规则控制
+myApp.controller('sdnFlowEntriesCtrl', function($scope, $route) {
+    router_all = $route;
+    $("#curr_userName").html(JSON.parse(window.localStorage.user).username);
+    $(".curr_deviceName").html(localStorage.curr_tenant);
+    $("#lagout").unbind('click').click(function() {
+        $('#myModal').modal('toggle')
+        window.localStorage.clear();
+        location.href = "#/";
+        location.reload();
+    });
+    $scope.refresh = function() {
+        $route.reload();
+    }
+    $scope.$parent.loadScript('js/lib/moment.min.js');
+    $scope.$parent.loadScript('js/tools/tool.js');
+    $scope.$parent.loadScript('js/sdn/flow_entries.js');
+    $("head title").text("SDN--规则控制");
+    $(".nav-sidebar a[href='#/sdn/flow_entries']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    }).click(function() {
+        $(".nav-sidebar a[href='#/sdn/flow_entries']").css({
+            "color": "#fff",
+            "background-color": "#428bca"
+        })
+    });
+    var linkEle = $(".nav-sidebar li a[href!='#/sdn/flow_entries']");
+    linkEle.click(function() {
+        $(".nav-sidebar li a").css({
+            "color": "#337ab7",
+            "background-color": "transparent"
+        });
+    });
+});
+
 // 信息 -- 基本信息
 myApp.controller('base-infoCtrl', function($scope, $route) {
     router_all = $route;

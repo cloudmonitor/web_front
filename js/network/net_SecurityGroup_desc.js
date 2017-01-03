@@ -168,7 +168,7 @@ $(function() {
             contentType: "application/json",
             url: config["host"] + "/sg_rules/create?token=" + window.localStorage.token,
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 var firewallrule = JSON.parse(data)['security_group_rule'];
                 setRule(firewallrule);
                 $(".footerID").remove();

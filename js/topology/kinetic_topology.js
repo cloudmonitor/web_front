@@ -1544,7 +1544,7 @@ Kinetic.Topology.Toolbar = Kinetic.Class.extend({
         return this.config;
     },
     getHtml: function() {
-        var html = "<div id='" + this.config.toolbar.container + "_topology' >";
+        var html = "<div id='" + this.config.toolbar.container + "_topology' style='text-align: center;'  >";
         html += "</div>";
         return html;
     }
@@ -1570,7 +1570,7 @@ Kinetic.Topology.Toolbar.Toolkit = Kinetic.Class.extend({
         return this.config;
     },
     getHtml: function() {
-        var html = "<div id='" + this.config.data.id + "_div' style='float:left'><img id='" + this.config.data.id + "' src='" + this.config.data.image + "' width='" + this.config.data.width + "px' height='" + this.config.data.height + "px' style='padding:2px;position:relative;z-index:100;border:solid white 1px' title='" + this.config.data.name + "'/>";
+        var html = "<div id='" + this.config.data.id + "_div' style='float:left'><img id='" + this.config.data.id + "' src='" + this.config.data.image + "' width='" + this.config.data.width + "' height='" + this.config.data.height + "' style='padding:2px;position:relative;z-index:100;border:solid white 1px' title='" + this.config.data.name + "'/>";
         if (this.config.data.name == "ROUTER")
             html += '<span>路由器</span></div>';
         else if (this.config.data.name == "server")

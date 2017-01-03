@@ -15,6 +15,7 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/instances?token=" + window.localStorage.token,
                 success: function(data) {
+                    console.log(data);
                     localStorage.server_tempInfo = data;
                     var servers = JSON.parse(data);
                     for (var i = servers['servers'].length - 1; i >= 0; i--) {

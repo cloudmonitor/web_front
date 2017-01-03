@@ -83,10 +83,14 @@ function pretty_adrr1(addrs_temp) {
 }
 //----时间的长度计算
 function getTimeLen(date_temp) {
-    var UTC8_time = moment(date_temp).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
-    var now = moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
+    // var UTC8_time = moment(date_temp).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
+    // var now = moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss');
+    var UTC8_time = moment(date_temp).utc().utcOffset(+8).format('YYYY-MM-DD HH:mm:ss');
+    var now = moment(new Date()).utc().utcOffset(+8).format('YYYY-MM-DD HH:mm:ss');
     //createAndHideAlert(UTC8_time+"==="+now);
-    var time = moment.utc((moment(moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss'))).diff(UTC8_time)).zone(-8) / 1000; //.format("DD天 HH小时");
+    // var time = moment.utc((moment(moment(new Date()).utc().zone(-8).format('YYYY-MM-DD HH:mm:ss'))).diff(UTC8_time)).zone(-8) / 1000; //.format("DD天 HH小时");
+    var time = moment.utc((moment(moment(new Date()).utc().utcOffset(+8).format('YYYY-MM-DD HH:mm:ss'))).diff(UTC8_time)).utcOffset(+8) / 1000; //.format("DD天 HH小时");
+
     var weekend = parseInt(time / (60 * 60 * 24 * 7));
     var zday = parseInt(time / (60 * 60 * 24)) - weekend * 7;
     var zhour = parseInt(time / (60 * 60)) - zday * 24 - weekend * 7 * 24;

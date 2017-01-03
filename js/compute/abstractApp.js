@@ -34,7 +34,7 @@ abstractApp.controller('abstractCtrl', function($scope, $http, $route) {
             "nameZH": ["子网", "网络", "浮动IP", "内存", "安全组规则", "云主机数", "虚拟内核", "安全组", "路由", "端口"]
         };
         // console.info("名字对象", nameHybid);
-        var userID = JSON.parse(localStorage.token).tenant.id;
+        // var userID = JSON.parse(localStorage.token).tenant.id;
         // console.info("用户ID:", userID);
         // var url = config.monitor + "/tenant_quota?token=" + window.localStorage.token;
         var url = config.host + "/tenant_used_quota?token=" + window.localStorage.token;
@@ -77,6 +77,7 @@ abstractApp.controller('abstractCtrl', function($scope, $http, $route) {
     if (index_flag == 0) {
         setTimeout(getResList, 1200);
         index_flag++;
-    } else
+    } else{
         getResList();
+    }
 });

@@ -16,10 +16,10 @@ $(function() {
         toolbar: {
             container: 'toolbar',
             data: [
-                { id: 'router', name: 'ROUTER', image: './icon/device/router.png', width: 42, height: 42 },
-                { id: 'server', name: 'server', image: './icon/device/server.png', width: 42, height: 42 },
-                { id: 'network', name: 'network', image: './icon/device/network.png', width: 42, height: 42 },
-                { id: 'subnet', name: 'subnet', image: './icon/device/subnet.png', width: 42, height: 42 }
+                { id: 'router', name: 'ROUTER', image: './icon/device/router.png', width: '85%', height: '85%' },
+                { id: 'server', name: 'server', image: './icon/device/server.png', width: '85%', height: '85%' },
+                { id: 'network', name: 'network', image: './icon/device/network.png', width: '85%', height: '85%' },
+                { id: 'subnet', name: 'subnet', image: './icon/device/subnet.png', width: '85%', height: '85%' }
             ]
         }
     });

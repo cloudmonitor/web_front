@@ -1,0 +1,172 @@
+<!-- 内容显示界面 -->
+<div id="loading_monitor1" style="display: none;">删除中，请稍等...<img src="./icon/preloader.gif" alt="loading.." /></div>
+<div id="background_monitor1" class="background" style="display: none;"></div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- 实例 -->
+    <div class="desc">规则控制</div>
+    <form class="form-inline form-btn" role="form">
+        <!--         <div class="form-group">
+    <input id="search-input" type="text" class="form-control" placeholder="Filter" tabindex="1">
+    <label for="search-input" class="control-label input-addon"><i class="fa fa-search"></i></label>
+</div> -->
+        &nbsp;
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+            <button type="button" class="btn btn-primary create_flow_entry" tabindex="1" data-toggle="modal" data-target="#create_flow_entry_modal"><span class="fa fa-plus-square"></span>增加规则</button>
+            <button type="button" class="btn btn-danger delete_flow_entries" disabled tabindex="1"><span class="fa fa-times"></span>删除规则</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" class="flow_entries_check">
+            </th>
+            <th>Name</th>
+            <th>Cookie</th>
+            <th>Priority</th>
+            <th>Match</th>
+            <th>Actions</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody class="flow_entries_body">
+        </tbody>
+        <tfoot class="flow_entries_footer">
+        </tfoot>
+    </table>
+</div>
+<!-- 模态框：创建规则 -->
+<div class="modal fade" id="create_flow_entry_modal">
+    <div class="modal-dialog" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><B>增加规则</B></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group flow_entry_name_div">
+                        <label for="flow_entry_name" class="col-sm-6 control-label"><font color="red">*</font>Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_entry_name">
+                        </div>
+                    </div>
+                    <div class="form-group cloud_instance_div">
+                        <label for="cloud_instances" class="col-sm-6 control-label"><font color="red">*</font>云主机</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="cloud_instances" value="1">
+                                <option value="1">subnet</option>
+                                <option value="1-1">subnet-name-1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_entry_cookie" class="col-sm-6 control-label">Cookie</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_entry_cookie">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_entry_priority" class="col-sm-6 control-label">Priority</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_entry_priority">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Layer 2</label>
+                        <br />
+                        <hr style="width: 92%; height:1px; background : #CCCCCC;" />
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_ethernet_type" class="col-sm-6 control-label">Ethernet Type</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_ethernet_type">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_src_mac" class="col-sm-6 control-label">Source MAC Address</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_src_mac">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_dst_mac" class="col-sm-6 control-label">Destination MAC Address</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_dst_mac">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Layer 3</label>
+                        <br />
+                        <hr style="width: 92%; height:1px; background : #CCCCCC;" />
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_ip_protocol" class="col-sm-6 control-label">IP Protocol</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_ip_protocol">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_src_ip" class="col-sm-6 control-label">Source IP Address</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_src_ip">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_dst_ip" class="col-sm-6 control-label">Destination IP Address</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_dst_ip">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_ip_tos" class="col-sm-6 control-label">IP TOS</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_ip_tos">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Layer 4</label>
+                        <br />
+                        <hr style="width: 92%; height:1px; background : #CCCCCC;" />
+                    </div>
+                    <!--openflow 1.5+ 支持tcp flags-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="flow_tcp_flags" class="col-sm-2 control-label">TCP Flags</label>-->
+                        <!--<div class="col-sm-10">-->
+                            <!--<input type="text" class="form-control" id="flow_tcp_flags">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label for="flow_src_port" class="col-sm-6 control-label">Source PORT</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_src_port">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_dst_port" class="col-sm-6 control-label">Destination PORT</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_dst_port">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Actions</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="flow_actions">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default create_flow_entryCancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary create_flow_entryOk" data-dismiss="modal">增加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
