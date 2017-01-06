@@ -20,7 +20,7 @@ $(function() {
         setInfo(serverInfo, id, curr_flavor);
     } else {
         var id_num = window.location.href.split('?')[1];
-        console.info("id_num: ", id_num);
+        // console.info("id_num: ", id_num);
         $.ajax({
             type: "GET",
             url: config["host"] + "/flavors?token=" + window.localStorage.token,
@@ -91,6 +91,7 @@ function setInfo(serverInfo, id, curr_flavor) {
     $("#server_Name").html(serverInfo['servers'][id].name);
     $("#server_ID").html(serverInfo['servers'][id].id);
     $("#server_Status").html(serverInfo['servers'][id].status == "ACTIVE" ? "运行中" : "未运行");
+    $("#server_AvailabilityZone").html(serverInfo['servers'][id]["OS-EXT-AZ:availability_zone"]);
 
     $("#server_Created").html(serverInfo['servers'][id].created);
 

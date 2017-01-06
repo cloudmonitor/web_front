@@ -15,7 +15,7 @@ $(function() {
                 type: "GET",
                 url: config["host"] + "/instances?token=" + window.localStorage.token,
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     localStorage.server_tempInfo = data;
                     var servers = JSON.parse(data);
                     for (var i = servers['servers'].length - 1; i >= 0; i--) {
@@ -558,6 +558,7 @@ function setList(i, num, data, addrs, status1, status, UTC8_time, peizhi) {
         "<td >" + data.image.image_name + "</td>" +
         "<td>" + peizhi + "</td>" +
         "<td>" + "-" + "</td>" +
+        "<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +
         "<td class='" + data.id + "'>" + status1 + "</td>" +
 
         //"<td>" + data["OS-EXT-AZ:availability_zone"] + "</td>" +

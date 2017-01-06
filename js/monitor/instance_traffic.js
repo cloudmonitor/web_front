@@ -413,7 +413,7 @@ function get_instance_statistics_data(tenant_id, instance_id, data_type, curr_ty
 
 function set_instance_top_protocol_port(tenant_id, instance_id, curr_type) {
     var meter_datas = get_instance_statistics_data(tenant_id, instance_id, "instance_top_protocol_port", curr_type);
-    console.log(meter_datas);
+    // console.log(meter_datas);
     var instance_top_protocol_port = echarts.init(document.getElementById("instance_top_protocol_port"));
     var option_top = {
         title : {

@@ -640,9 +640,15 @@ tfoot .tfoot-dsp {
 
 /* ：设备多选列表 */
 
+.main .desc .select_device {
+    margin-left: 25%;
+    font-size: 18px;
+    display: inline;
+}
+
+
 .main .desc .monitor-device {
     margin-top: -15px;
-    margin-left: 30%;
     width: 8%;
     display: inline;
 }

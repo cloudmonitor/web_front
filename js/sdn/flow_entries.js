@@ -121,6 +121,7 @@ $(function() {
 function set_flow_entries(flow_entry){
     var str = '<tr><td><input type="checkbox" class="flow_entry_check" id="' + flow_entry.flow_entry_name + '" /></td>' +
         '<td>' + flow_entry.flow_entry_name + '</td>' +
+        '<td>' + flow_entry.instance_name + '</td>' +
         '<td>' + flow_entry["cookie"] + '</td>' +
         '<td>' + flow_entry["priority"] + '</td>' +
         '<td>' + JSON.stringify(flow_entry["match"]) + '</td>' +
