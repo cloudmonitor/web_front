@@ -50,8 +50,8 @@ function formValidCtrl($scope, $http) {
                 },
                 function(response) {
                     // 请求失败
-                    var data = response.data;
-                    console.error("请求失败:", data.statusText);
+                    // var data = response.data;
+                    console.error("请求失败:", response);
 
                 });
         }();
