@@ -501,7 +501,7 @@ $(document).on("click", ".show_cmd", function() {
             success: function(data) {
                 //console.error(data);
                 var url = JSON.parse(data).console.url;
-                url = url.replace("controller", window.location.host);
+                url = url.replace("controller", window.location.hostname);
                 window.open(url, "_blank");
                 time_num = 0;
             }

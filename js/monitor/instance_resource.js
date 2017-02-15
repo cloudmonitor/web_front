@@ -29,9 +29,7 @@ $(function() {
                 }
                 preSetAjax(cur_id, curr_type, arr);
             } else {
-                $('.monitors_wj').css("display", "none");
-                var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".content_wj").html(show_info);
+                createAndHideAlert("该租户当前没有虚拟机^.^！");
             }
         },
         error: function(data) {

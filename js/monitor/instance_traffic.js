@@ -20,12 +20,6 @@ $(function() {
             var servers = JSON.parse(data)['servers'];
             if (servers.length != 0) {
                 for (var i = 0; i < servers.length; i++){
-                    // var addresses = servers[i].addresses;
-                    // var mac_addr = "";
-                    // for(var key in addresses){
-                    //     mac_addr =  addresses[key][0]["OS-EXT-IPS-MAC:mac_addr"].replace(/:/g, "").toUpperCase();
-                    // }
-                    // var id_mac_addr = servers[i].id + " " + mac_addr;
                     $(".instance_traffic_select").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
                 }
                 cur_id = servers[0].id;
@@ -46,9 +40,7 @@ $(function() {
                 set_instance_top_session(tenant_id, cur_id, curr_type);
 
             } else {
-                $('.instance_traffic_select').css("display", "none");
-                var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".instance_traffic").html(show_info);
+                createAndHideAlert("该租户当前没有虚拟机^.^！");
             }
         },
         error: function(data) {
