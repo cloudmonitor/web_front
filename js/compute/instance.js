@@ -489,8 +489,8 @@ $(document).on("click", ".show_cmd", function() {
     if (time_num == 1) {
         servers_id = this.id;
         var info = {
-            "os-getVNCConsole": {
-                "type": "novnc"
+            "os-getSPICEConsole": {
+                "type": "spice-html5"
             }
         };
         $.ajax({
