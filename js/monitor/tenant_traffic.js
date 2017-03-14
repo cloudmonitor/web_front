@@ -4,17 +4,13 @@
 var ajaxbg = $("#loading_monitor,#background_monitor");
 ajaxbg.show();
 setTimeout("ajaxbg.hide()", 2000);
-var tenant_traffic_timer_arr =  [0, 0, 0, 0, 0];
+var tenant_traffic_timer_arr =  [0, 0, 0, 0, 0, 0, 0, 0];
 
 $(function () {
     $('#option1').click();
     var curr_type = "minute";
     var tenant_id = JSON.parse(window.localStorage.token).tenant.id;
-    set_tenant_top_instance(tenant_id, curr_type);
-    set_tenant_top_ip(tenant_id, curr_type);
-    set_tenant_top_protocol_port(tenant_id, curr_type);
-    set_tenant_top_ip_link(tenant_id, curr_type);
-    set_tenant_top_session(tenant_id, curr_type);
+    tenant_monitor_statistics(tenant_id, curr_type);
 
     //天时分改变
     $('#option1').click(function() {
@@ -22,33 +18,21 @@ $(function () {
         ajaxbg.show();
         curr_type = "minute";
         setTimeout("ajaxbg.hide()", 2000);
-        set_tenant_top_instance(tenant_id, curr_type);
-        set_tenant_top_ip(tenant_id, curr_type);
-        set_tenant_top_protocol_port(tenant_id, curr_type);
-        set_tenant_top_ip_link(tenant_id, curr_type);
-        set_tenant_top_session(tenant_id, curr_type);
+        tenant_monitor_statistics(tenant_id, curr_type);
     });
     $('#option2').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "hour";
         setTimeout("ajaxbg.hide()", 2000);
-        set_tenant_top_instance(tenant_id, curr_type);
-        set_tenant_top_ip(tenant_id, curr_type);
-        set_tenant_top_protocol_port(tenant_id, curr_type);
-        set_tenant_top_ip_link(tenant_id, curr_type);
-        set_tenant_top_session(tenant_id, curr_type);
+        tenant_monitor_statistics(tenant_id, curr_type);
     });
     $('#option3').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "day";
         setTimeout("ajaxbg.hide()", 2000);
-        set_tenant_top_instance(tenant_id, curr_type);
-        set_tenant_top_ip(tenant_id, curr_type);
-        set_tenant_top_protocol_port(tenant_id, curr_type);
-        set_tenant_top_ip_link(tenant_id, curr_type);
-        set_tenant_top_session(tenant_id, curr_type);
+        tenant_monitor_statistics(tenant_id, curr_type);
     });
 });
 
@@ -56,6 +40,17 @@ function changeStatus(that) {
     for (var i = 1; i < 4; i++)
         $("#option" + i).removeClass("active");
     $(that).addClass("active");
+}
+
+function tenant_monitor_statistics(tenant_id, curr_type) {
+    set_tenant_top_instance(tenant_id, curr_type);
+    set_tenant_top_protocol_port(tenant_id, curr_type);
+    set_tenant_top_ip_link(tenant_id, curr_type);
+    set_tenant_top_src_ip(tenant_id, curr_type);
+    set_tenant_top_dst_ip(tenant_id, curr_type);
+    set_tenant_top_src_port(tenant_id, curr_type);
+    set_tenant_top_dst_port(tenant_id, curr_type);
+    set_tenant_top_session(tenant_id, curr_type);
 }
 
 function get_tenant_statistics_data(tenant_id, data_type, curr_type) {
@@ -82,7 +77,7 @@ function set_tenant_top_instance(tenant_id, curr_type) {
     var tenant_top_instance = echarts.init(document.getElementById("tenant_top_instance"));
     var option_top = {
         title : {
-            text: '虚拟机流量--TOP 5',
+            text: '虚拟机流量--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -158,7 +153,7 @@ function set_tenant_top_ip_link(tenant_id, curr_type) {
     var tenant_top_ip_link = echarts.init(document.getElementById("tenant_top_ip_link"));
     var option_top = {
         title : {
-            text: '流量协议端口--TOP 10',
+            text: '流量源IP-目的IP--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -307,12 +302,12 @@ function set_tenant_top_protocol_port(tenant_id, curr_type) {
     }
 }
 
-function set_tenant_top_ip(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_ip", curr_type);
-    var tenant_top_ip = echarts.init(document.getElementById("tenant_top_ip"));
+function set_tenant_top_src_ip(tenant_id, curr_type) {
+    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_ip", curr_type);
+    var tenant_top_src_ip = echarts.init(document.getElementById("tenant_top_src_ip"));
     var option_top = {
         title : {
-            text: '流量IP分布--TOP 10',
+            text: '流量源IP分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -361,10 +356,10 @@ function set_tenant_top_ip(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_ip.setOption(option_top);
+    tenant_top_src_ip.setOption(option_top);
     if(curr_type == "minute") {
         tenant_traffic_timer_arr[3] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_ip", curr_type);
+            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_ip", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -376,11 +371,242 @@ function set_tenant_top_ip(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]);
             }
-            tenant_top_ip.setOption(option_top);
+            tenant_top_src_ip.setOption(option_top);
         }, 5000);
     }
     else {
         clearInterval(tenant_traffic_timer_arr[3]);
+    }
+}
+
+function set_tenant_top_dst_ip(tenant_id, curr_type) {
+    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_ip", curr_type);
+    var tenant_top_dst_ip = echarts.init(document.getElementById("tenant_top_dst_ip"));
+    var option_top = {
+        title : {
+            text: '流量目的IP分布--TOP 10',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'right',
+            padding: [30, 10, 0, 0],
+            data:
+                (function () {
+                    var res = [];
+                    for(var i=0; i<meter_datas.length; i++){
+                        res.push(meter_datas[i]["_id"]);
+                    }
+                    return res;
+                })()
+        },
+        series : [
+            {
+                name: 'IP',
+                type: 'pie',
+                radius : [15, 90],
+                center: ['40%', '65%'],
+                roseType: "radius",
+                data:
+                    (function () {
+                        var res = [];
+                        for(var i=0; i<meter_datas.length; i++){
+                            res.push({
+                                name: meter_datas[i]["_id"],
+                                value: meter_datas[i]["count"]
+                            });
+                        }
+                        return res;
+                    })()
+                ,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    tenant_top_dst_ip.setOption(option_top);
+    if(curr_type == "minute") {
+        tenant_traffic_timer_arr[4] = setInterval(function () {
+            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_ip", curr_type);
+            var data0 = option_top.series[0].data;
+            var legend0 = option_top.legend.data;
+            data0.splice(0, data0.length);
+            legend0.splice(0, legend0.length);
+            for (var i = 0; i < last_datas.length; i++) {
+                data0.push({
+                    name: last_datas[i]["_id"],
+                    value: last_datas[i]["count"]
+                });
+                legend0.push(last_datas[i]["_id"]);
+            }
+            tenant_top_dst_ip.setOption(option_top);
+        }, 5000);
+    }
+    else {
+        clearInterval(tenant_traffic_timer_arr[4]);
+    }
+}
+
+function set_tenant_top_src_port(tenant_id, curr_type) {
+    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_port", curr_type);
+    var tenant_top_src_port = echarts.init(document.getElementById("tenant_top_src_port"));
+    var option_top = {
+        title : {
+            text: '流量源端口分布--TOP 10',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'right',
+            padding: [30, 10, 0, 0],
+            data:
+                (function () {
+                    var res = [];
+                    for(var i=0; i<meter_datas.length; i++){
+                        res.push(meter_datas[i]["_id"]);
+                    }
+                    return res;
+                })()
+        },
+        series : [
+            {
+                name: 'IP',
+                type: 'pie',
+                radius : [15, 90],
+                center: ['40%', '65%'],
+                roseType: "radius",
+                data:
+                    (function () {
+                        var res = [];
+                        for(var i=0; i<meter_datas.length; i++){
+                            res.push({
+                                name: meter_datas[i]["_id"],
+                                value: meter_datas[i]["count"]
+                            });
+                        }
+                        return res;
+                    })()
+                ,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    tenant_top_src_port.setOption(option_top);
+    if(curr_type == "minute") {
+        tenant_traffic_timer_arr[5] = setInterval(function () {
+            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_port", curr_type);
+            var data0 = option_top.series[0].data;
+            var legend0 = option_top.legend.data;
+            data0.splice(0, data0.length);
+            legend0.splice(0, legend0.length);
+            for (var i = 0; i < last_datas.length; i++) {
+                data0.push({
+                    name: last_datas[i]["_id"],
+                    value: last_datas[i]["count"]
+                });
+                legend0.push(last_datas[i]["_id"]);
+            }
+            tenant_top_src_port.setOption(option_top);
+        }, 5000);
+    }
+    else {
+        clearInterval(tenant_traffic_timer_arr[5]);
+    }
+}
+
+function set_tenant_top_dst_port(tenant_id, curr_type) {
+    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_port", curr_type);
+    var tenant_top_dst_port = echarts.init(document.getElementById("tenant_top_dst_port"));
+    var option_top = {
+        title : {
+            text: '流量目的端口分布--TOP 10',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'right',
+            padding: [30, 10, 0, 0],
+            data:
+                (function () {
+                    var res = [];
+                    for(var i=0; i<meter_datas.length; i++){
+                        res.push(meter_datas[i]["_id"]);
+                    }
+                    return res;
+                })()
+        },
+        series : [
+            {
+                name: 'IP',
+                type: 'pie',
+                radius : [15, 90],
+                center: ['40%', '65%'],
+                roseType: "radius",
+                data:
+                    (function () {
+                        var res = [];
+                        for(var i=0; i<meter_datas.length; i++){
+                            res.push({
+                                name: meter_datas[i]["_id"],
+                                value: meter_datas[i]["count"]
+                            });
+                        }
+                        return res;
+                    })()
+                ,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    tenant_top_dst_port.setOption(option_top);
+    if(curr_type == "minute") {
+        tenant_traffic_timer_arr[6] = setInterval(function () {
+            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_port", curr_type);
+            var data0 = option_top.series[0].data;
+            var legend0 = option_top.legend.data;
+            data0.splice(0, data0.length);
+            legend0.splice(0, legend0.length);
+            for (var i = 0; i < last_datas.length; i++) {
+                data0.push({
+                    name: last_datas[i]["_id"],
+                    value: last_datas[i]["count"]
+                });
+                legend0.push(last_datas[i]["_id"]);
+            }
+            tenant_top_dst_port.setOption(option_top);
+        }, 5000);
+    }
+    else {
+        clearInterval(tenant_traffic_timer_arr[6]);
     }
 }
 
@@ -447,7 +673,7 @@ function set_tenant_top_session(tenant_id, curr_type) {
     };
     tenant_top_session.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[4] = setInterval(function () {
+        tenant_traffic_timer_arr[7] = setInterval(function () {
             var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_session", curr_type);
             var data0 = option_top.series[0].data;
             var yaxis0 = option_top.yAxis[0].data;
@@ -464,9 +690,10 @@ function set_tenant_top_session(tenant_id, curr_type) {
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[4]);
+        clearInterval(tenant_traffic_timer_arr[7]);
     }
 }
 
 
 
+1
