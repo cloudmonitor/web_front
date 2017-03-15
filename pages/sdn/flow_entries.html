@@ -26,8 +26,9 @@
             </th>
             <th>Name</th>
             <th>云主机</th>
-            <th>Cookie</th>
             <th>Priority</th>
+            <th>IdleTimeoutSec</th>
+            <th>HardTimeoutSec</th>
             <th>Match</th>
             <th>Actions</th>
             <th>Delete</th>
@@ -65,15 +66,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="flow_entry_cookie" class="col-sm-6 control-label">Cookie</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="flow_entry_cookie">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="flow_entry_priority" class="col-sm-6 control-label">Priority</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="flow_entry_priority">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_entry_idle_timeout" class="col-sm-6 control-label">IdleTimeoutSec</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_entry_idle_timeout">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="flow_entry_hard_timeout" class="col-sm-6 control-label">HardTimeoutSec</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="flow_entry_hard_timeout">
                         </div>
                     </div>
                     <div class="form-group">

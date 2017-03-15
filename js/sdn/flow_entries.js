@@ -122,8 +122,9 @@ function set_flow_entries(flow_entry){
     var str = '<tr><td><input type="checkbox" class="flow_entry_check" id="' + flow_entry.flow_entry_name + '" /></td>' +
         '<td>' + flow_entry.flow_entry_name + '</td>' +
         '<td>' + flow_entry.instance_name + '</td>' +
-        '<td>' + flow_entry["cookie"] + '</td>' +
         '<td>' + flow_entry["priority"] + '</td>' +
+        '<td>' + flow_entry["idleTimeoutSec"] + '</td>' +
+        '<td>' + flow_entry["hardTimeoutSec"] + '</td>' +
         '<td>' + JSON.stringify(flow_entry["match"]) + '</td>' +
         '<td>' + JSON.stringify(flow_entry["instructions"]) + '</td>' +
         '<td><a href="javascript:void(0)" class="btn btn-primary delete_flow_entry" style="background: white"><font style="color: black">' + "删除规则" +
@@ -133,10 +134,11 @@ function set_flow_entries(flow_entry){
 
 
 $('.create_flow_entry').unbind('click').on('click', function() {
-    $('#flow_entry_name').val('');
+    $('#flow_entry_name').attr('placeholder', "flow-name-1");
     $('#cloud_instances').empty();
-    $('#flow_entry_cookie').attr('placeholder', "0");
     $('#flow_entry_priority').attr('placeholder', "32768");
+    $('#flow_entry_idle_timeout').attr('placeholder', "0");
+    $('#flow_entry_hard_timeout').attr('placeholder', "0");
     $('#flow_ethernet_type').val('');
     $('#flow_src_mac').val('');
     $('#flow_dst_mac').val('');
@@ -186,10 +188,12 @@ $('.create_flow_entryOk').unbind('click').on('click', function() {
     }
     var flow_entry = {};
     flow_entry["name"] = flow_entry_name_val;
-    if($('#flow_entry_cookie').val() != "")
-        flow_entry["cookie"] = $('#flow_entry_cookie').val();
     if($('#flow_entry_priority').val() != "")
         flow_entry["priority"] = $('#flow_entry_priority').val();
+    if($('#flow_entry_idle_timeout').val() != "")
+        flow_entry["idle_timeout"] = $('#flow_entry_idle_timeout').val();
+    if($('#flow_entry_hard_timeout').val() != "")
+        flow_entry["hard_timeout"] = $('#flow_entry_hard_timeout').val();
     if($('#flow_ethernet_type').val() != "")
         flow_entry["eth_type"] = $('#flow_ethernet_type').val();
     if($('#flow_src_mac').val() != "")
